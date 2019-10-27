@@ -37,9 +37,17 @@ public class Camera {
 	public Vector3f getPosition() {
 		return position;
 	}
+	
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
 
 	public float getPitch() {
 		return pitch;
+	}
+	
+	public void setPitch(float pitch) {
+		this.pitch = pitch;
 	}
 
 	public float getYaw() {
