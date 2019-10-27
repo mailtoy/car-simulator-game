@@ -7,7 +7,6 @@ import java.util.Random;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import engineTester.Controller;
 import engineTester.Simulator;
 import entities.Camera;
 import entities.Entity;
