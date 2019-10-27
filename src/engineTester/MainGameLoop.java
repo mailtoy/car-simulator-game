@@ -63,10 +63,12 @@ public class MainGameLoop {
 		Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
 
 		Camera camera = new Camera();
+		Camera camera2 = new Camera();		
 		MasterRenderer renderer = new MasterRenderer();
-
+		
 		while (!Display.isCloseRequested()) {
 			camera.move();
+			camera2.move();
 
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
