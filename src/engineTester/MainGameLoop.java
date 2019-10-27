@@ -76,11 +76,8 @@ public class MainGameLoop {
 			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
-
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
-
 	}
-
 }
