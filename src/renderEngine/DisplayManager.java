@@ -27,7 +27,6 @@ public class DisplayManager {
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-
 		GL11.glViewport(0, 0, WIDTH, HEIGHT);
 		lastFramTime = getCurrentTime();
 	}
@@ -51,5 +50,4 @@ public class DisplayManager {
 	private static long getCurrentTime(){
 		return Sys.getTime()*1000/Sys.getTimerResolution();
 	}
-
 }

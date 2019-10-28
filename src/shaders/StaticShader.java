@@ -8,11 +8,11 @@ import toolbox.Maths;
 import entities.Camera;
 import entities.Light;
 
-public class StaticShader extends ShaderProgram{
-	
+public class StaticShader extends ShaderProgram {
+
 	private static final String VERTEX_FILE = "src/shaders/vertexShader.txt";
 	private static final String FRAGMENT_FILE = "src/shaders/fragmentShader.txt";
-	
+
 	private int location_transformationMatrix;
 	private int location_projectionMatrix;
 	private int location_viewMatrix;
@@ -46,38 +46,36 @@ public class StaticShader extends ShaderProgram{
 		location_useFakeLighting = super.getUniformLocation("useFakeLighting");
 		location_skyColour = super.getUniformLocation("skyColour");
 	}
-	
-	public void loadSkyColour(float r, float g, float b){
+
+	public void loadSkyColour(float r, float g, float b) {
 		super.loadVector(location_skyColour, new Vector3f(r, g, b));
 	}
-	
+
 	public void loadFakeLightingVariable(boolean useFake) {
 		super.loadBoolean(location_useFakeLighting, useFake);
 	}
-	
-	public void loadShineVariables(float damper,float reflectivity){
+
+	public void loadShineVariables(float damper, float reflectivity) {
 		super.loadFloat(location_shineDamper, damper);
 		super.loadFloat(location_reflectivity, reflectivity);
 	}
-	
-	public void loadTransformationMatrix(Matrix4f matrix){
+
+	public void loadTransformationMatrix(Matrix4f matrix) {
 		super.loadMatrix(location_transformationMatrix, matrix);
 	}
-	
-	public void loadLight(Light light){
+
+	public void loadLight(Light light) {
 		super.loadVector(location_lightPosition, light.getPosition());
 		super.loadVector(location_lightColour, light.getColour());
 	}
-	
-	public void loadViewMatrix(Camera camera){
+
+	public void loadViewMatrix(Camera camera) {
 		Matrix4f viewMatrix = Maths.createViewMatrix(camera);
 		super.loadMatrix(location_viewMatrix, viewMatrix);
 	}
-	
-	public void loadProjectionMatrix(Matrix4f projection){
+
+	public void loadProjectionMatrix(Matrix4f projection) {
 		super.loadMatrix(location_projectionMatrix, projection);
 	}
-	
-	
 
 }

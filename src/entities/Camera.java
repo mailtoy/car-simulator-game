@@ -5,15 +5,17 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
+
 	
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
 	
 	private Vector3f position = new Vector3f(0,5,0);
+
 	private float pitch = 10;
-	private float yaw ;
+	private float yaw;
 	private float roll;
-	
+
 	private Player player;
 	
 	public Camera(Player player){
@@ -43,17 +45,24 @@ public class Camera {
 		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
 			position.y+=0.2f;
 		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-			position.y-=0.2f;
-		}
 	}
+
+
 
 	public Vector3f getPosition() {
 		return position;
 	}
+	
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
 
 	public float getPitch() {
 		return pitch;
+	}
+	
+	public void setPitch(float pitch) {
+		this.pitch = pitch;
 	}
 
 	public float getYaw() {
@@ -100,7 +109,4 @@ public class Camera {
 		}
 	}
 	
-	
-	
-
 }
