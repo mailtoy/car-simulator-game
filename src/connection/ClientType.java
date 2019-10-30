@@ -23,7 +23,7 @@ import terrains.Terrain;
 import textures.ModelTexture;
 
 public abstract class ClientType {
-	protected Camera camera = new Camera();
+//	protected Camera camera = new Camera();
 
 	public ClientType() {
 		initComponent();
@@ -72,14 +72,14 @@ public abstract class ClientType {
 		MasterRenderer renderer = new MasterRenderer();
 
 		while (!Display.isCloseRequested()) {
-			camera.move();
+//			camera.move();
 
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			for (Entity entity : entities) {
 				renderer.processEntity(entity);
 			}
-			renderer.render(light, camera);
+//			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 		renderer.cleanUp();
@@ -89,8 +89,8 @@ public abstract class ClientType {
 
 	private void setCamera() {
 		if (this.getClass().equals(Simulator.class)) {
-			camera.setPosition(new Vector3f(100, 200, -100));
-			camera.setPitch(90);
+//			camera.setPosition(new Vector3f(100, 200, -100));
+//			camera.setPitch(90);
 		}
 	}
 
