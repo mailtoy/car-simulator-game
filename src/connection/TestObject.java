@@ -3,15 +3,23 @@ package connection;
 import java.io.Serializable;
 
 public class TestObject implements Serializable {
-	int value;
-	String id;
+	private String sendType, clientType, message;
 
-	public TestObject(int v, String s) {
-		this.value = v;
-		this.id = s;
+	public TestObject(String sendType, String clientType, String message) {
+		this.sendType = sendType;
+		this.clientType = clientType;
+		this.message = message;
 	}
 	
-	public String getId() {
-		return this.id;
+	public String getSendType() {
+		return this.sendType;
+	}
+	
+	public String getClientType() {
+		return this.clientType;
+	}
+	
+	public String getMessage() {
+		return this.message;
 	}
 }

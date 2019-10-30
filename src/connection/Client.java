@@ -13,9 +13,6 @@ public class Client {
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
 
-	public Client() {
-	}
-
 	public Client(ClientType type) {
 		this.clientType = type;
 	}
@@ -27,7 +24,7 @@ public class Client {
 
 			InputStream inputStream = serverSocket.getInputStream();
 			objectInputStream = new ObjectInputStream(inputStream);
-			
+
 			objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
 
 			sendConnect();
@@ -41,16 +38,12 @@ public class Client {
 
 	public String typeSpecify() {
 		String type = clientType.toString();
-		return type.charAt(5) == 'C' ? type.substring(5, 15) : type.substring(5, 14);
+		return type.charAt(5) == 'C' ? type.substring(13, 24) : type.substring(13, 23);
 	}
 
 	public void sendConnect() throws Exception {
-		objectOutputStream.writeObject(new TestObject(1, "object from client"));
+		objectOutputStream.writeObject(new TestObject("Connect", typeSpecify(), "has connected."));
 		objectOutputStream.flush();
-	}
-
-	public static void main(String[] args) {
-		new Client().connect();
 	}
 }
 
@@ -68,7 +61,14 @@ class IncomingInput implements Runnable {
 		TestObject object;
 		try {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
-				System.out.println(object.getId());
+				switch (object.getSendType()) {
+				case "Connect":
+					client.write(object.getClientType() + " " + object.getMessage());
+					break;
+
+				default:
+					break;
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -79,6 +79,7 @@ class ClientHandler implements Runnable {
 		TestObject object;
 		try {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
+				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(), object.getMessage());
 				broadcast(object);
 			}
 		} catch (Exception e) {
@@ -94,7 +95,7 @@ class ClientHandler implements Runnable {
 				objectOutputStream.writeObject(object);
 				objectOutputStream.flush();
 
-				System.out.println("Sending: " + object);
+				System.out.println("Sent: " + object);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -14,7 +14,7 @@ public class Controller extends ClientType {
 
 	@Override
 	public void write(String message) {
-		// TODO Auto-generated method stub	
+		System.out.println(message);
 	}
 
 }
