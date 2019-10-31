@@ -80,7 +80,7 @@ public class MainGameLoop {
 		  TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
 
 		  // Vector3f(0, 0, -60) is position of bunny.
-		  Player player = new Player(stanfordBunny, new Vector3f(0, 0, -40), 0, 180, 0, 0.6f);
+		  Player player = new Player(stanfordBunny, new Vector3f(100, 0, -700), 0, 180, 0, 0.6f);
 		  Camera camera = new Camera(player);
 	
 		  while (!Display.isCloseRequested()) {
