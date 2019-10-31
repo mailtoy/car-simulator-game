@@ -3,8 +3,6 @@ package connection;
 import java.io.*;
 import java.net.*;
 
-import entities.Player;
-
 /**
  * Client creates a TCP socket to Server.
  * 
@@ -13,7 +11,7 @@ import entities.Player;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "203.246.112.148";
+	private String serverIP = "10.223.115.18";
 
 	private Socket serverSocket;
 	private ClientType clientType;
@@ -55,15 +53,12 @@ public class Client {
 	}
 
 	public void sendDisconnect() throws Exception {
-		objectOutputStream.writeObject(new TestObject("Disconnect", typeSpecify(), "has connected."));
+		objectOutputStream.writeObject(new TestObject("Disconnect", typeSpecify(), "has disconnected."));
 		objectOutputStream.flush();
-
-		serverSocket.close();
-	}
-	
-	public void sendSelectCar(Player player) throws Exception {
-		objectOutputStream.writeObject(new TestObject("SelectCar", typeSpecify(), player));
-		objectOutputStream.flush();
+		
+//		objectOutputStream.close();
+//		objectInputStream.close();
+//		serverSocket.close();
 	}
 }
 
@@ -87,16 +82,16 @@ class IncomingInput implements Runnable {
 		TestObject object;
 		try {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
-				switch (object.getSendType()) {
-				case "Connect":
-				case "Disconnect":
-					client.write(object.getClientType() + " " + object.getMessage());
-					break;
-				case "SelectCar":
-					break;
-				default:
-					break;
-				}
+				
+//				switch (object.getSendType()) {
+//				case "Connect":
+//				case "Disconnect":
+//					client.write(object.getClientType() + " " + object.getMessage());
+//					break;
+//				default:
+//					break;
+//				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

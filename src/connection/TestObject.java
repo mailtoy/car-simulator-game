@@ -15,12 +15,6 @@ public class TestObject implements Serializable {
 		this.message = message;
 	}
 	
-	public TestObject(String sendType, String clientType, Player player) {
-		super();
-		this.message = "car is selected";
-		this.player = player;
-	}
-	
 	public String getSendType() {
 		return this.sendType;
 	}
@@ -31,9 +25,5 @@ public class TestObject implements Serializable {
 	
 	public String getMessage() {
 		return this.message;
-	}
-	
-	public Player getPlayer() {
-		return this.player;
 	}
 }

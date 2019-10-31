@@ -26,13 +26,6 @@ public class Controller extends ClientType {
 	public void setCar(TexturedModel carModel) {
 		player = new Player(carModel, new Vector3f(0, 0, -40), 0, 180, 0, 0.6f);
 		camera = new Camera(player);
-		
-//		try {
-//			client.sendSelectCar(player);
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
 	}
 	
 	public void run() {
@@ -52,15 +45,15 @@ public class Controller extends ClientType {
 			DisplayManager.updateDisplay();
 		}
 		
-//		try {
-//			client.sendDisconnect();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-		
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
+		
+		try {
+			client.sendDisconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
