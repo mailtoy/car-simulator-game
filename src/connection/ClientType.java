@@ -21,6 +21,8 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public abstract class ClientType {
 	protected Camera camera = new Camera();
@@ -32,6 +34,16 @@ public abstract class ClientType {
 	public void initComponent() {
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
+		
+		
+		//*********Terrain TextureStaff***********
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+		
+		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture ,bTexture);
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
 		// RawModel model = OBJLoader.loadObjModel("tree", loader);
 		ModelData data = OBJFileLoader.loadOBJ("tree");
@@ -66,8 +78,8 @@ public abstract class ClientType {
 
 		setCamera();
 
-		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
+		Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
 
 		MasterRenderer renderer = new MasterRenderer();
 
