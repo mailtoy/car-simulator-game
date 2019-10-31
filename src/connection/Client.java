@@ -3,6 +3,8 @@ package connection;
 import java.io.*;
 import java.net.*;
 
+import engineTester.Simulator;
+
 /**
  * Client creates a TCP socket to Server.
  * 
@@ -11,7 +13,7 @@ import java.net.*;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "10.223.115.18";
+	private String serverIP = "203.246.112.148";
 
 	private Socket serverSocket;
 	private ClientType clientType;
@@ -55,10 +57,15 @@ public class Client {
 	public void sendDisconnect() throws Exception {
 		objectOutputStream.writeObject(new TestObject("Disconnect", typeSpecify(), "has disconnected."));
 		objectOutputStream.flush();
-		
+
 //		objectOutputStream.close();
 //		objectInputStream.close();
 //		serverSocket.close();
+	}
+
+	public void sendKeyInput(int keyInput) throws Exception {
+		objectOutputStream.writeObject(new TestObject("KeyInput", typeSpecify(), Integer.toString(keyInput)));
+		objectOutputStream.flush();
 	}
 }
 
@@ -82,16 +89,21 @@ class IncomingInput implements Runnable {
 		TestObject object;
 		try {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
-				
-//				switch (object.getSendType()) {
-//				case "Connect":
-//				case "Disconnect":
-//					client.write(object.getClientType() + " " + object.getMessage());
-//					break;
-//				default:
-//					break;
-//				}
-				
+
+				switch (object.getSendType()) {
+				case "Connect":
+				case "Disconnect":
+					client.printConnection(object.getClientType() + " " + object.getMessage());
+					break;
+				case "KeyInput":
+					if (client.getClass().equals(Simulator.class)) {
+						client.checkKeyInput(Integer.parseInt(object.getMessage()));
+					}
+					break;
+				default:
+					break;
+				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

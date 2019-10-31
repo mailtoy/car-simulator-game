@@ -83,8 +83,15 @@ public abstract class ClientType {
 
 		bunnyModel = OBJLoader.loadObjModel("stanfordBunny", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
+
+		player = new Player(stanfordBunny, new Vector3f(0, 0, -40), 0, 180, 0, 0.6f);
+		camera = new Camera(player);
 	}
 
-	public void write(String message) {
+	public void printConnection(String connectionStatus) {
+		System.out.println(connectionStatus);
+	}
+
+	public void checkKeyInput(int keyInput) {
 	}
 }

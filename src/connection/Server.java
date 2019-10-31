@@ -85,15 +85,10 @@ class ClientHandler implements Runnable {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
 				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
 						object.getMessage());
-				
-				switch (object.getSendType()) {
-				case "Disconnect":
+
+				if (object.getSendType().equals("Disconnect")) {
 					server.removeClient(objectOutputStream);
-					break;
-				default:
-					break;
 				}
-				
 				broadcast(object);
 			}
 		} catch (Exception e) {
