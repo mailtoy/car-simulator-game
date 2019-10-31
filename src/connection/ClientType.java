@@ -87,15 +87,11 @@ public abstract class ClientType {
 
 		Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
-<<<<<<< HEAD
+
 		setCamera();
 
 		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
 		Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
-=======
-		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-		Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
->>>>>>> 5e7bcf1e2eb57d3961b4ec0f5920f8ac8eb0a061
 
 		MasterRenderer renderer = new MasterRenderer();
 		RawModel bunnyModel = OBJLoader.loadObjModel("stanfordBunny", loader);
