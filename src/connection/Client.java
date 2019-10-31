@@ -3,6 +3,8 @@ package connection;
 import java.io.*;
 import java.net.*;
 
+import entities.Player;
+
 /**
  * Client creates a TCP socket to Server.
  * 
@@ -58,6 +60,11 @@ public class Client {
 
 		serverSocket.close();
 	}
+	
+	public void sendSelectCar(Player player) throws Exception {
+		objectOutputStream.writeObject(new TestObject("SelectCar", typeSpecify(), player));
+		objectOutputStream.flush();
+	}
 }
 
 /**
@@ -85,7 +92,8 @@ class IncomingInput implements Runnable {
 				case "Disconnect":
 					client.write(object.getClientType() + " " + object.getMessage());
 					break;
-
+				case "SelectCar":
+					break;
 				default:
 					break;
 				}

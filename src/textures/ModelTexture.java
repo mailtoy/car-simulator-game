@@ -1,7 +1,6 @@
 package textures;
 
 public class ModelTexture {
-
 	private int textureID;
 
 	private float shineDamper = 1;
