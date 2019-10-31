@@ -11,7 +11,8 @@ public abstract class ClientType {
 		initComponent();
 	}
 
-	public void initComponent() {}
+	public void initComponent() {
+	}
 
 	public void write(String message) {}
 }

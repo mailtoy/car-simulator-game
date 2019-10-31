@@ -3,6 +3,12 @@ package connection;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Client creates a TCP socket to Server.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public class Client {
 	private final int remoteServerPort = 3001;
 	private String serverIP = "203.246.112.148";
@@ -38,15 +44,28 @@ public class Client {
 
 	public String typeSpecify() {
 		String type = clientType.toString();
-		return type.charAt(5) == 'C' ? type.substring(13, 24) : type.substring(13, 23);
+		return type.charAt(13) == 'C' ? type.substring(13, 23) : type.substring(13, 22);
 	}
 
 	public void sendConnect() throws Exception {
 		objectOutputStream.writeObject(new TestObject("Connect", typeSpecify(), "has connected."));
 		objectOutputStream.flush();
 	}
+
+	public void sendDisconnect() throws Exception {
+		objectOutputStream.writeObject(new TestObject("Disconnect", typeSpecify(), "has connected."));
+		objectOutputStream.flush();
+
+		serverSocket.close();
+	}
 }
 
+/**
+ * Handler incoming any inputs echoing from Server.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 class IncomingInput implements Runnable {
 	private ObjectInputStream objectInputStream;
 	private ClientType client;
@@ -63,6 +82,7 @@ class IncomingInput implements Runnable {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
 				switch (object.getSendType()) {
 				case "Connect":
+				case "Disconnect":
 					client.write(object.getClientType() + " " + object.getMessage());
 					break;
 

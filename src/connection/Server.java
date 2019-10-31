@@ -8,7 +8,7 @@ import java.util.*;
  * Server acts as the central clearing house of all interactions. Server will
  * start listening on the default port as 3001, waiting for a connection.
  * 
- * @author boranorben
+ * @author Issaree Srisomboon
  *
  */
 public class Server implements Runnable {
@@ -43,6 +43,10 @@ public class Server implements Runnable {
 		return this.clients;
 	}
 
+	public synchronized void removeClient(ObjectOutputStream ObjectOutputStream) {
+		this.clients.remove(ObjectOutputStream);
+	}
+
 	public static void main(String[] args) {
 		Thread thread = new Thread(new Server());
 		thread.start();
@@ -53,7 +57,7 @@ public class Server implements Runnable {
 /**
  * ClientHandler handles each one of clients connecting to the server.
  * 
- * @author boranorben
+ * @author Issaree Srisomboon
  *
  */
 class ClientHandler implements Runnable {
@@ -79,7 +83,16 @@ class ClientHandler implements Runnable {
 		TestObject object;
 		try {
 			while ((object = (TestObject) objectInputStream.readObject()) != null) {
-				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(), object.getMessage());
+				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
+						object.getMessage());
+
+//				switch (object.getSendType()) {
+//				case "Disconnect":
+//					break;
+//				default:
+//					break;
+//				}
+
 				broadcast(object);
 			}
 		} catch (Exception e) {
