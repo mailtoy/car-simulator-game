@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.swing.JButton;
+import javax.swing.JFrame;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -11,6 +14,7 @@ import engineTester.Simulator;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
+import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import objConverter.ModelData;
@@ -25,13 +29,20 @@ import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
 public abstract class ClientType {
-	protected Camera camera = new Camera();
+	Camera camera;
 
 	public ClientType() {
 		initComponent();
 	}
 
 	public void initComponent() {
+		JFrame f = new JFrame("Button Example");
+		JButton b = new JButton("Click Here");
+		b.setBounds(50, 100, 95, 30);
+		f.add(b);
+		f.setSize(400, 400);
+		f.setLayout(null);
+		f.setVisible(true);
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
 		
@@ -76,16 +87,30 @@ public abstract class ClientType {
 
 		Light light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
+<<<<<<< HEAD
 		setCamera();
 
 		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
 		Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
+=======
+		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+		Terrain terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+>>>>>>> 5e7bcf1e2eb57d3961b4ec0f5920f8ac8eb0a061
 
 		MasterRenderer renderer = new MasterRenderer();
+		RawModel bunnyModel = OBJLoader.loadObjModel("stanfordBunny", loader);
+	
+		TexturedModel stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("white")));
+		Player player = new Player(stanfordBunny, new Vector3f(0, 0, -40), 0, 180, 0, 0.6f);
+		camera = new Camera(player);
+		// Vector3f(0, 0, -60) is position of bunny.
+		
+		setCamera();
 
 		while (!Display.isCloseRequested()) {
 			camera.move();
-
+			player.move();
+			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			for (Entity entity : entities) {
