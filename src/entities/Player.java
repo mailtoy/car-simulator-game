@@ -1,18 +1,11 @@
 package entities;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
 public class Player extends Entity {
-
-	private static final float RUN_SPEED = 20;
-	private static final float TURN_SPEED = 160;
-	private static final float GRAVITY = -50;
-	private static final float JUMP_POWER = 30;
-
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
 
@@ -21,7 +14,6 @@ public class Player extends Entity {
 	}
 
 	public void move() {
-		checkInputs();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -29,46 +21,33 @@ public class Player extends Entity {
 		super.increasePosition(dx, 0, dz);
 	}
 
-	public void checkInputs() {
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			this.currentSpeed = RUN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			this.currentSpeed = -RUN_SPEED;
-		} else {
-			this.currentSpeed = 0;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
-		}
-
+	public void setCurrentSpeed(float currentSpeed) {
+		this.currentSpeed = currentSpeed;
 	}
-	
 
-	public void checkInputsClick(int check) {
-		if (check == 1) {
-			this.currentSpeed = RUN_SPEED;
-			super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
-			float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
-			float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
-			float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
-			super.increasePosition(dx, 0, dz);
-		} else {
-			this.currentSpeed = 0;
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
-		}
-
+	public void setCurrentTurnSpeed(float currentTurnSpeed) {
+		this.currentTurnSpeed = currentTurnSpeed;
 	}
+
+//	public void checkInputsClick(int check) {
+//		if (check == 1) {
+//			this.currentSpeed = RUN_SPEED;
+//			super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+//			float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
+//			float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
+//			float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
+//			super.increasePosition(dx, 0, dz);
+//		} else {
+//			this.currentSpeed = 0;
+//		}
+//
+//		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+//			this.currentTurnSpeed = -TURN_SPEED;
+//		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+//			this.currentTurnSpeed = TURN_SPEED;
+//		} else {
+//			this.currentTurnSpeed = 0;
+//		}
+//	}
 
 }

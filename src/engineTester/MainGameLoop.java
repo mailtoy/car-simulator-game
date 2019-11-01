@@ -194,15 +194,15 @@ public class MainGameLoop extends JFrame {
 		while (!Display.isCloseRequested()) {
 			camera.move();
 			player.move();
-			if (east.isSelected()) {
-				east.addActionListener(new ActionListener() {
-
-				    @Override
-				    public void actionPerformed(ActionEvent e) {
-				        player.checkInputsClick(1);
-				    }
-				});
-			}
+//			if (east.isSelected()) {
+//				east.addActionListener(new ActionListener() {
+//
+//				    @Override
+//				    public void actionPerformed(ActionEvent e) {
+//				        player.checkInputsClick(1);
+//				    }
+//				});
+//			}
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);

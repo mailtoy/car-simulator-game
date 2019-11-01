@@ -5,19 +5,19 @@ import java.net.*;
 import java.util.*;
 
 /**
- * Server acts as the central clearing house of all interactions.
- * Server will start listening on the default port as 3001, waiting for a connection.
+ * Server acts as the central clearing house of all interactions. Server will
+ * start listening on the default port as 3001, waiting for a connection.
  * 
- * @author boranorben
+ * @author Issaree Srisomboon
  *
  */
 public class Server implements Runnable {
 	private final int remoteServerPort = 3001;
 	private ServerSocket serverSocket;
-	private ArrayList<PrintWriter> clients;
-	
+	private ArrayList<ObjectOutputStream> clients;
+
 	public Server() {
-		clients = new ArrayList<PrintWriter>();
+		clients = new ArrayList<ObjectOutputStream>();
 	}
 
 	@Override
@@ -25,25 +25,28 @@ public class Server implements Runnable {
 		try {
 			serverSocket = new ServerSocket(remoteServerPort);
 			System.out.println("Waiting for connections...");
-			
+
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
-				PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
-				clients.add(writer);
-//				System.out.println("Connect with client: " + writer);
-				
-				Thread listener = new Thread(new ClientHandler(this, clientSocket, writer));
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
+				clients.add(objectOutputStream);
+
+				Thread listener = new Thread(new ClientHandler(this, clientSocket, objectOutputStream));
 				listener.start();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	public synchronized ArrayList<PrintWriter> getClients() {
+
+	public synchronized ArrayList<ObjectOutputStream> getClients() {
 		return this.clients;
 	}
-	
+
+	public synchronized void removeClient(ObjectOutputStream ObjectOutputStream) {
+		this.clients.remove(ObjectOutputStream);
+	}
+
 	public static void main(String[] args) {
 		Thread thread = new Thread(new Server());
 		thread.start();
@@ -54,22 +57,22 @@ public class Server implements Runnable {
 /**
  * ClientHandler handles each one of clients connecting to the server.
  * 
- * @author boranorben
+ * @author Issaree Srisomboon
  *
  */
 class ClientHandler implements Runnable {
 	private Server server;
 	private Socket socket;
-	private BufferedReader reader;
-	private PrintWriter writer;
-	
-	public ClientHandler(Server server, Socket clientSocket, PrintWriter writer) {
+	private ObjectInputStream objectInputStream;
+	private ObjectOutputStream objectOutputStream;
+
+	public ClientHandler(Server server, Socket clientSocket, ObjectOutputStream objectOutputStream) {
 		this.server = server;
-		this.writer = writer;
+		this.objectOutputStream = objectOutputStream;
 		try {
 			this.socket = clientSocket;
-			InputStreamReader isReader = new InputStreamReader(this.socket.getInputStream());
-			this.reader = new BufferedReader(isReader);
+			InputStream inputStream = this.socket.getInputStream();
+			this.objectInputStream = new ObjectInputStream(inputStream);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -77,41 +80,34 @@ class ClientHandler implements Runnable {
 
 	@Override
 	public void run() {
-		String stream = null, messageType = null, client = null, message = null;
-		String[] messageArray = null;
-		
+		ParseObject object;
 		try {
-			// modify here
-			while ((stream = reader.readLine()) != null) {
-				messageArray = stream.split(":");
-				
-				messageType = messageArray[0];
-				client = messageArray[1];
-				message = messageArray[2];
-				System.out.printf("Received: [%s] %s %s \n", messageType, client, message);	
-				
-				broadcast(stream);
+			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
+				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
+						object.getMessage());
+
+				if (object.getSendType().equals("Disconnect")) {
+					server.removeClient(objectOutputStream);
+				}
+				broadcast(object);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void broadcast(String message) {
-		Iterator<PrintWriter> iterator = server.getClients().iterator();
-		
-		// modify logic send-back here
+
+	private void broadcast(ParseObject object) {
+		Iterator<ObjectOutputStream> iterator = server.getClients().iterator();
 		while (iterator.hasNext()) {
 			try {
-				writer = (PrintWriter) iterator.next();
-				writer.println(message);
-				writer.flush();
-				
-				System.out.println("Sending: " + message);
+				objectOutputStream = iterator.next();
+				objectOutputStream.writeObject(object);
+				objectOutputStream.flush();
+
+				System.out.println("Sent: " + object);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
 }
