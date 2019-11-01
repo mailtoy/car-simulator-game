@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.opengl.Display;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -23,20 +23,18 @@ import terrains.Terrain;
 import textures.ModelTexture;
 
 public abstract class ClientType {
-	protected Loader loader;
+	private Loader loader;
 	private ModelData data;
 	private RawModel treeModel, bunnyModel;
-	private TexturedModel staticModel, grassModel, fernModel;
-	protected Light light;
-	protected Terrain terrain, terrain2;
-	protected MasterRenderer renderer;
+	private TexturedModel staticModel, grassModel, fernModel, stanfordBunny;
+	private Light light;
+	private Terrain terrain, terrain2;
+	private MasterRenderer renderer;
+	private List<Entity> entities;
 
 	protected Client client;
 	protected Player player; // Change to Car later
-	protected TexturedModel stanfordBunny;
 	protected Camera camera;
-
-	protected List<Entity> entities;
 
 	public ClientType() {
 		this.client = new Client(this);
@@ -88,10 +86,57 @@ public abstract class ClientType {
 		camera = new Camera(player);
 	}
 
-	public void printConnection(String connectionStatus) {
-		System.out.println(connectionStatus);
+	public void render() {
+		renderer.processEntity(player);
+		renderer.processTerrain(terrain);
+		renderer.processTerrain(terrain2);
+
+		for (Entity entity : entities) {
+			renderer.processEntity(entity);
+		}
+
+		renderer.render(light, camera);
+		DisplayManager.updateDisplay();
 	}
 
-	public void checkKeyInput(int keyInput) {
+	public void closeRequest() {
+		renderer.cleanUp();
+		loader.cleanUp();
+		DisplayManager.closeDisplay();
+
+		try {
+			client.sendDisconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void move(String message) {
+		String[] messageArr = message.split(":");
+		int keyInput = Integer.parseInt(messageArr[0]);
+		float speed = Float.parseFloat(messageArr[1]);
+
+		if (keyInput == Keyboard.KEY_UP || keyInput == Keyboard.KEY_DOWN) {
+			player.setCurrentSpeed(speed);
+		} else {
+			player.setCurrentSpeed(0);
+		}
+
+		if (keyInput == Keyboard.KEY_RIGHT || keyInput == Keyboard.KEY_LEFT) {
+			player.setCurrentTurnSpeed(speed);
+		} else {
+			player.setCurrentTurnSpeed(0);
+		}
+
+		try {
+			camera.move();
+			player.move();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void printConnection(String connectionStatus) {
+		System.out.println(connectionStatus);
 	}
 }

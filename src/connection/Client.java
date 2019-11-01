@@ -3,6 +3,7 @@ package connection;
 import java.io.*;
 import java.net.*;
 
+import engineTester.Controller;
 import engineTester.Simulator;
 
 /**
@@ -63,8 +64,8 @@ public class Client {
 //		serverSocket.close();
 	}
 
-	public void sendKeyInput(int keyInput) throws Exception {
-		objectOutputStream.writeObject(new TestObject("KeyInput", typeSpecify(), Integer.toString(keyInput)));
+	public void sendKeyInput(int keyInput, float speed) throws Exception {
+		objectOutputStream.writeObject(new TestObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
 		objectOutputStream.flush();
 	}
 }
@@ -96,9 +97,7 @@ class IncomingInput implements Runnable {
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
 				case "KeyInput":
-					if (client.getClass().equals(Simulator.class)) {
-						client.checkKeyInput(Integer.parseInt(object.getMessage()));
-					}
+					client.move(object.getMessage());
 					break;
 				default:
 					break;
