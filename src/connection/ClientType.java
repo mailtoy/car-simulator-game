@@ -21,6 +21,8 @@ import renderEngine.MasterRenderer;
 import renderEngine.OBJLoader;
 import terrains.Terrain;
 import textures.ModelTexture;
+import textures.TerrainTexture;
+import textures.TerrainTexturePack;
 
 public abstract class ClientType {
 	private Loader loader;
@@ -46,6 +48,15 @@ public abstract class ClientType {
 	public void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
+
+		// Terrain TextureStaff
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+
+		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
 
 		data = OBJFileLoader.loadOBJ("tree");
 		treeModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
@@ -74,8 +85,8 @@ public abstract class ClientType {
 
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
-		terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grass")));
-		terrain2 = new Terrain(1, 0, loader, new ModelTexture(loader.loadTexture("grass")));
+		terrain = new Terrain(0, 0, loader, texturePack, blendMap);
+		terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
 
 		renderer = new MasterRenderer();
 
