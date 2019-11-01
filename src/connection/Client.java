@@ -14,7 +14,7 @@ import engineTester.Simulator;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "203.246.112.148";
+	private String serverIP = "10.223.115.18";
 
 	private Socket serverSocket;
 	private ClientType clientType;
@@ -51,12 +51,12 @@ public class Client {
 	}
 
 	public void sendConnect() throws Exception {
-		objectOutputStream.writeObject(new TestObject("Connect", typeSpecify(), "has connected."));
+		objectOutputStream.writeObject(new ParseObject("Connect", typeSpecify(), "has connected."));
 		objectOutputStream.flush();
 	}
 
 	public void sendDisconnect() throws Exception {
-		objectOutputStream.writeObject(new TestObject("Disconnect", typeSpecify(), "has disconnected."));
+		objectOutputStream.writeObject(new ParseObject("Disconnect", typeSpecify(), "has disconnected."));
 		objectOutputStream.flush();
 
 //		objectOutputStream.close();
@@ -65,7 +65,7 @@ public class Client {
 	}
 
 	public void sendKeyInput(int keyInput, float speed) throws Exception {
-		objectOutputStream.writeObject(new TestObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
+		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
 		objectOutputStream.flush();
 	}
 }
@@ -87,9 +87,9 @@ class IncomingInput implements Runnable {
 
 	@Override
 	public void run() {
-		TestObject object;
+		ParseObject object;
 		try {
-			while ((object = (TestObject) objectInputStream.readObject()) != null) {
+			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
 
 				switch (object.getSendType()) {
 				case "Connect":

@@ -80,9 +80,9 @@ class ClientHandler implements Runnable {
 
 	@Override
 	public void run() {
-		TestObject object;
+		ParseObject object;
 		try {
-			while ((object = (TestObject) objectInputStream.readObject()) != null) {
+			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
 				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
 						object.getMessage());
 
@@ -96,7 +96,7 @@ class ClientHandler implements Runnable {
 		}
 	}
 
-	private void broadcast(TestObject object) {
+	private void broadcast(ParseObject object) {
 		Iterator<ObjectOutputStream> iterator = server.getClients().iterator();
 		while (iterator.hasNext()) {
 			try {
