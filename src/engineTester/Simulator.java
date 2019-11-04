@@ -5,6 +5,13 @@ import org.lwjgl.util.vector.Vector3f;
 
 import connection.ClientType;
 
+/**
+ * Simulator receives the movement commands from Controller. Showing from the
+ * top view of the car.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public class Simulator extends ClientType {
 
 	public Simulator() {
@@ -24,7 +31,7 @@ public class Simulator extends ClientType {
 		camera.setPosition(new Vector3f(100, 100, -100));
 		camera.setPitch(90);
 	}
-	
+
 	public static void main(String[] args) {
 		new Simulator();
 	}
