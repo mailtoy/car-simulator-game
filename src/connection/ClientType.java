@@ -24,6 +24,12 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
+/**
+ * ClientType gathers all the functions that Client should have.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public abstract class ClientType {
 	private Loader loader;
 	private ModelData data;
