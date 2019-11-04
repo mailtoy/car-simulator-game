@@ -3,17 +3,21 @@ package connection;
 import java.io.*;
 import java.net.*;
 
-//import view.ControllerController;
-//import view.SimulatorController;
-
+/**
+ * Client creates a TCP socket to Server.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "192.168.0.246";
+	private String serverIP = "192.168.0.35";
 
 	private Socket serverSocket;
-	private BufferedReader reader;
-	private PrintWriter writer;
 	private ClientType clientType;
+
+	private ObjectInputStream objectInputStream;
+	private ObjectOutputStream objectOutputStream;
 
 	public Client(ClientType type) {
 		this.clientType = type;
@@ -24,15 +28,14 @@ public class Client {
 			InetAddress remoteServerInetAddress = InetAddress.getByName(serverIP);
 			serverSocket = new Socket(remoteServerInetAddress, remoteServerPort);
 
-			InputStreamReader streamReader = new InputStreamReader(serverSocket.getInputStream());
-			reader = new BufferedReader(streamReader);
+			InputStream inputStream = serverSocket.getInputStream();
+			objectInputStream = new ObjectInputStream(inputStream);
 
-			writer = new PrintWriter(serverSocket.getOutputStream());
+			objectOutputStream = new ObjectOutputStream(serverSocket.getOutputStream());
 
-			writer.println("Connect:" + typeSpecify() + ":has connected.");
-			writer.flush();
+			sendConnect();
 
-			Thread thread = new Thread(new IncomingReader(reader, clientType));
+			Thread thread = new Thread(new IncomingInput(objectInputStream, clientType));
 			thread.start();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,71 +44,62 @@ public class Client {
 
 	public String typeSpecify() {
 		String type = clientType.toString();
-		return type.charAt(5) == 'C' ? type.substring(5, 15) : type.substring(5, 14);
+		return type.charAt(13) == 'C' ? type.substring(13, 23) : type.substring(13, 22);
 	}
 
-	public void sendCommand(String command) {
-		writer.println("Command:" + typeSpecify() + ":" + command);
-		writer.flush();
+	public void sendConnect() throws Exception {
+		objectOutputStream.writeObject(new ParseObject("Connect", typeSpecify(), "has connected."));
+		objectOutputStream.flush();
 	}
 
-	public void sendResponse(String response) {
-		writer.println("Response:" + typeSpecify() + ":" + response);
-		writer.flush();
+	public void sendDisconnect() throws Exception {
+		objectOutputStream.writeObject(new ParseObject("Disconnect", typeSpecify(), "has disconnected."));
+		objectOutputStream.flush();
+
+//		objectOutputStream.close();
+//		objectInputStream.close();
+//		serverSocket.close();
 	}
 
-	public void disconnect() {
-		try {
-			writer.println("Disconnect:" + typeSpecify() + ":has disconnected.");
-			this.serverSocket.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void sendKeyInput(int keyInput, float speed) throws Exception {
+		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
+		objectOutputStream.flush();
 	}
 }
 
-class IncomingReader implements Runnable {
-	private BufferedReader reader;
+/**
+ * Handler incoming any inputs echoing from Server.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
+class IncomingInput implements Runnable {
+	private ObjectInputStream objectInputStream;
 	private ClientType client;
 
-	public IncomingReader(BufferedReader reader, ClientType client) {
-		this.reader = reader;
+	public IncomingInput(ObjectInputStream objectInputStream, ClientType client) {
+		this.objectInputStream = objectInputStream;
 		this.client = client;
 	}
 
 	@Override
 	public void run() {
-		String stream, messageType, clientType, message;
-		String[] messageArray = null;
+		ParseObject object;
 		try {
+			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
 
-			// modify here
-			while ((stream = reader.readLine()) != null) {
-				System.out.println(stream);
-				messageArray = stream.split(":");
-
-				messageType = messageArray[0];
-				clientType = messageArray[1];
-				message = messageArray[2];
-
-				switch (messageType) {
+				switch (object.getSendType()) {
 				case "Connect":
 				case "Disconnect":
-					client.write(clientType + " " + message);
+					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
-				case "Command":
-//					if (client.getClass().equals(SimulatorController.class)) {
-//						client.write(message);
-//					}
-//					break;
-				case "Response":
-//					if (client.getClass().equals(ControllerController.class)) {
-//						client.write(message);
-//					}
-//					break;
+				case "KeyInput":
+					client.move(object.getMessage());
+					break;
 				default:
 					break;
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
