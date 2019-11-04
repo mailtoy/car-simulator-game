@@ -1,5 +1,7 @@
 package engineTester;
 
+import java.awt.event.KeyEvent;
+
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -28,4 +30,5 @@ public class Simulator extends ClientType {
 	public static void main(String[] args) {
 		new Simulator();
 	}
+
 }
