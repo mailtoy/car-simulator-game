@@ -2,6 +2,8 @@ package connection;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -14,7 +16,6 @@ import org.lwjgl.util.vector.Vector3f;
 public class Client {
 	private final int remoteServerPort = 3001;
 	private String serverIP = "10.223.115.18";
-
 	private Socket serverSocket;
 	private ClientType clientType;
 
@@ -97,12 +98,11 @@ class IncomingInput implements Runnable {
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
 				case "Position":
-					// add this later
+//					client.updatePosition(object);
 					break;
 				default:
 					break;
 				}
-
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

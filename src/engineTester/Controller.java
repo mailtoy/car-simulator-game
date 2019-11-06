@@ -1,5 +1,6 @@
 package engineTester;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import connection.ClientType;
@@ -23,7 +24,9 @@ public class Controller extends ClientType {
 				player.move();
 				camera.move();
 				
-				client.sendPosition(player.getPosition());
+				if (Keyboard.next()) {
+					client.sendPosition(player.getPosition());
+				}
 				render();
 			} catch (Exception e) {
 				e.printStackTrace();
