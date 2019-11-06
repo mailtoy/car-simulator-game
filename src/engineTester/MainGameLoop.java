@@ -207,7 +207,6 @@ public class MainGameLoop extends JFrame implements KeyListener {
 				try {
 					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 			}
