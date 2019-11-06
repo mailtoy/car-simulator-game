@@ -15,28 +15,36 @@ public class Server implements Runnable {
 	private final int remoteServerPort = 3001;
 	private ServerSocket serverSocket;
 	private ArrayList<ObjectOutputStream> clients;
+	private boolean running;
 
 	public Server() {
 		clients = new ArrayList<ObjectOutputStream>();
+		System.out.println("Waiting for connections...");
+
+		try {
+			serverSocket = new ServerSocket(remoteServerPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			serverSocket = new ServerSocket(remoteServerPort);
-			System.out.println("Waiting for connections...");
+		running = true;
 
-			while (true) {
+		while (running) {
+			try {
 				Socket clientSocket = serverSocket.accept();
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 				clients.add(objectOutputStream);
 
 				Thread listener = new Thread(new ClientHandler(this, clientSocket, objectOutputStream));
 				listener.start();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		shutdown();
 	}
 
 	public synchronized ArrayList<ObjectOutputStream> getClients() {
@@ -45,6 +53,16 @@ public class Server implements Runnable {
 
 	public synchronized void removeClient(ObjectOutputStream ObjectOutputStream) {
 		this.clients.remove(ObjectOutputStream);
+	}
+
+	public void shutdown() {
+		running = false;
+
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -71,8 +89,7 @@ class ClientHandler implements Runnable {
 		this.objectOutputStream = objectOutputStream;
 		try {
 			this.socket = clientSocket;
-			InputStream inputStream = this.socket.getInputStream();
-			this.objectInputStream = new ObjectInputStream(inputStream);
+			this.objectInputStream = new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -80,9 +97,9 @@ class ClientHandler implements Runnable {
 
 	@Override
 	public void run() {
-		ParseObject object;
+		Packet object;
 		try {
-			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
+			while ((object = (Packet) objectInputStream.readObject()) != null) {
 				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
 						object.getMessage());
 
@@ -96,7 +113,7 @@ class ClientHandler implements Runnable {
 		}
 	}
 
-	private void broadcast(ParseObject object) {
+	private void broadcast(Packet object) {
 		Iterator<ObjectOutputStream> iterator = server.getClients().iterator();
 		while (iterator.hasNext()) {
 			try {

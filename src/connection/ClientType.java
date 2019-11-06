@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -33,8 +32,8 @@ import textures.TerrainTexturePack;
 public abstract class ClientType {
 	private Loader loader;
 	private ModelData data;
-	private RawModel treeModel, bunnyModel;
-	private TexturedModel staticModel, grassModel, fernModel, stanfordBunny;
+	private RawModel treeModel, carModel;
+	private TexturedModel staticModel, grassModel, fernModel, car;
 	private Light light;
 	private Terrain terrain, terrain2;
 	private MasterRenderer renderer;
@@ -96,12 +95,14 @@ public abstract class ClientType {
 
 		renderer = new MasterRenderer();
 
-		bunnyModel = OBJLoader.loadObjModel("car", loader);
-		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("color")));
+		carModel = OBJLoader.loadObjModel("Car", loader);
+		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("color")));
 
-		player = new Player(stanfordBunny, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f);
-		camera = new Camera(player);
+		player = new Player(car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f);
+		setCamera();
 	}
+	
+	public void setCamera() {}
 
 	public void render() {
 		renderer.processEntity(player);
@@ -127,30 +128,9 @@ public abstract class ClientType {
 			e.printStackTrace();
 		}
 	}
-
-	public void move(String message) {
-		String[] messageArr = message.split(":");
-		int keyInput = Integer.parseInt(messageArr[0]);
-		float speed = Float.parseFloat(messageArr[1]);
-
-		if (keyInput == Keyboard.KEY_UP || keyInput == Keyboard.KEY_DOWN) {
-			player.setCurrentSpeed(speed);
-		} else {
-			player.setCurrentSpeed(0);
-		}
-
-		if (keyInput == Keyboard.KEY_RIGHT || keyInput == Keyboard.KEY_LEFT) {
-			player.setCurrentTurnSpeed(speed);
-		} else {
-			player.setCurrentTurnSpeed(0);
-		}
-
-		try {
-			camera.move();
-			player.move();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	
+	public void updatePosition() {
+		
 	}
 
 	public void printConnection(String connectionStatus) {

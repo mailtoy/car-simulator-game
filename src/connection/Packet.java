@@ -2,12 +2,12 @@ package connection;
 
 import java.io.Serializable;
 
-public class ParseObject implements Serializable {
+public class Packet implements Serializable {
 	private static final long serialVersionUID = 6390509500910281747L;
 	private String sendType, clientType, message;
 	private int keyInput;
 	
-	public ParseObject(String sendType, String clientType, String message) {
+	public Packet(String sendType, String clientType, String message) {
 		this.sendType = sendType;
 		this.clientType = clientType;
 		this.message = message;

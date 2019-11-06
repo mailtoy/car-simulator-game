@@ -3,6 +3,8 @@ package connection;
 import java.io.*;
 import java.net.*;
 
+import org.lwjgl.util.vector.Vector3f;
+
 /**
  * Client creates a TCP socket to Server.
  * 
@@ -11,7 +13,7 @@ import java.net.*;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "10.30.116.19";
+	private String serverIP = "10.223.115.18";
 
 	private Socket serverSocket;
 	private ClientType clientType;
@@ -48,12 +50,12 @@ public class Client {
 	}
 
 	public void sendConnect() throws Exception {
-		objectOutputStream.writeObject(new ParseObject("Connect", typeSpecify(), "has connected."));
+		objectOutputStream.writeObject(new Packet("Connect", typeSpecify(), "has connected."));
 		objectOutputStream.flush();
 	}
 
 	public void sendDisconnect() throws Exception {
-		objectOutputStream.writeObject(new ParseObject("Disconnect", typeSpecify(), "has disconnected."));
+		objectOutputStream.writeObject(new Packet("Disconnect", typeSpecify(), "has disconnected."));
 		objectOutputStream.flush();
 
 //		objectOutputStream.close();
@@ -61,8 +63,9 @@ public class Client {
 //		serverSocket.close();
 	}
 
-	public void sendKeyInput(int keyInput, float speed) throws Exception {
-		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
+	public void sendPosition(Vector3f position) throws Exception {
+		objectOutputStream.writeObject(
+				new Packet("Position", typeSpecify(), position.getX() + ":" + position.getY() + ":" + position.getY()));
 		objectOutputStream.flush();
 	}
 }
@@ -84,17 +87,17 @@ class IncomingInput implements Runnable {
 
 	@Override
 	public void run() {
-		ParseObject object;
+		Packet object;
 		try {
-			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
+			while ((object = (Packet) objectInputStream.readObject()) != null) {
 
 				switch (object.getSendType()) {
 				case "Connect":
 				case "Disconnect":
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
-				case "KeyInput":
-					client.move(object.getMessage());
+				case "Position":
+					// add this later
 					break;
 				default:
 					break;
