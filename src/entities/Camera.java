@@ -42,8 +42,20 @@ public class Camera {
 //		if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)){
 //			position.x-=0.2f;
 //		}
-		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)){
+//		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) || zoom == "in"){
+//			position.y+=0.2f;
+//		}
+//		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || zoom == "out"){
+//			position.y-=0.2f;
+//		}
+	}
+	
+	public void zoom (String zoom) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_SPACE) || zoom == "in"){
 			position.y+=0.2f;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || zoom == "out"){
+			position.y-=0.2f;
 		}
 	}
 
