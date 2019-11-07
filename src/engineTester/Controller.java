@@ -47,7 +47,7 @@ import javafx.scene.image.ImageView;
 public class Controller extends ClientType implements KeyListener {
 
 	private static final float RUN_SPEED = 20;
-	private static final float TURN_SPEED = 160;
+	private static final float TURN_SPEED = 70;
 
 	private static JFrame f = new JFrame();
 	public static JButton north;
