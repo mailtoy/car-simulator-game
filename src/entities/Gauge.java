@@ -26,7 +26,7 @@ public class Gauge {
 		};
 
 		final Radial gauge = new Radial();
-		gauge.setTitle("Demo title");
+		gauge.setTitle("Gauge");
 		gauge.setUnitString("Some units");
 
 		panel.setLayout(new BorderLayout());

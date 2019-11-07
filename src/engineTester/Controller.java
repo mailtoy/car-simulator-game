@@ -13,8 +13,6 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.event.ActionEvent;
@@ -36,9 +34,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import connection.ClientType;
-import javafx.scene.control.ComboBox;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * Controller controls the movement of the car, then sends it through Server to
@@ -50,7 +45,9 @@ import javafx.scene.image.ImageView;
 public class Controller extends ClientType implements KeyListener, ActionListener {
 
 	private static final float RUN_SPEED = 20;
-	private static final float TURN_SPEED = 80;
+	private static final float TURN_SPEED = 70;
+
+
 
 	private static JFrame f = new JFrame();
 	private JTextArea text = new JTextArea();

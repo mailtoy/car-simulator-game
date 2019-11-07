@@ -7,12 +7,16 @@ import org.lwjgl.util.vector.Vector3f;
 public class Camera {
 
 	
-	private float distanceFromPlayer = 50;
+	private float distanceFromPlayer = 5;
 	private float angleAroundPlayer = 0;
 	
+<<<<<<< HEAD
 	private Vector3f position = new Vector3f(0,2,0);
+=======
+	private Vector3f position = new Vector3f(0,50,0);
+>>>>>>> 6108c6b1a8676696b9f6939d9bfa54db2526fec5
 
-	private float pitch = 10;
+	private float pitch = 0;
 	private float yaw;
 	private float roll;
 
@@ -95,11 +99,13 @@ public class Camera {
 	}
 	
 	private float calculateHorizontalDistance() {
-		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
+//		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
+		return (float) -3;
 	}
 	
 	private float calculateVerticalDistance() {
-		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
+//		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
+		return (float) 3;
 	}
 	
 	private void calculateZoom(){
