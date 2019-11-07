@@ -10,7 +10,7 @@ public class Camera {
 	private float distanceFromPlayer = 5;
 	private float angleAroundPlayer = 0;
 	
-	private Vector3f position = new Vector3f(0,50,0);
+	private Vector3f position = new Vector3f(110, 3, -23);
 
 	private float pitch = 0;
 	private float yaw;

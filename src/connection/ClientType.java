@@ -99,6 +99,7 @@ public abstract class ClientType {
 		bunnyModel = OBJLoader.loadObjModel("car", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture")));
 
+
 		player = new Player(stanfordBunny, new Vector3f(110, 0, -20), 0, 180, 0, 0.6f);
 		camera = new Camera(player);
 	}

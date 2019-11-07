@@ -1,3 +1,4 @@
+// จะทดลองไม่ใช้Grid
 package engineTester;
 
 import java.awt.event.KeyEvent;
@@ -12,9 +13,9 @@ import java.awt.BorderLayout;
 import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -34,8 +35,6 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import connection.ClientType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 /**
  * Controller controls the movement of the car, then sends it through Server to
@@ -44,7 +43,7 @@ import javafx.scene.image.ImageView;
  * @author Issaree Srisomboon
  *
  */
-public class Controller extends ClientType implements KeyListener, ActionListener{
+public class Controller extends ClientType implements KeyListener, ActionListener {
 
 	private static final float RUN_SPEED = 20;
 	private static final float TURN_SPEED = 70;
@@ -53,6 +52,15 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	private static JFrame f = new JFrame();
 	private JTextArea text = new JTextArea();
+	
+
+	
+	String[] cars = { "Car1", "Car2", "Car3", "Car4"};
+	String[] maps = { "blueMap", "reaMap", "roadMap"};
+	
+	JComboBox<String> carList = new JComboBox<>(cars);
+	JComboBox<String> mapList = new JComboBox<>(maps);
+	
 
 	JPanel p;
 	// Individual keyboard rows
@@ -80,22 +88,13 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	public void keyReleased(KeyEvent evt) {
 
 	}
-	
-	
 
 	public Controller() {
 		super();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		// set non resizable
 		f.setResizable(false);
-		// super.setSize(500,300);
-		// set size of the content pane ie frame
-		// show text
-		f.getContentPane().setPreferredSize(new Dimension(900, 500));
-		// super.getContentPane().setSize(800,400);
-		// set location for the frame
+		f.getContentPane().setPreferredSize(new Dimension(900, 200));
 		f.setLocation(10, 550);
-		// init and paint frame
 		initWidgets();
 		f.setVisible(true);
 		run();
@@ -129,6 +128,17 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		// set the bold font for info
 		info.setFont(new Font("Verdana", Font.BOLD, 14));
 
+		/** combobox **/
+		// create labels
+		JLabel selectCar = new JLabel("select your city: ");
+		selectCar.setForeground(Color.red);
+		JLabel selectMap = new JLabel("select your map: ");
+		selectMap.setForeground(Color.blue);
+		
+		box(cars, carList);
+		box(maps, mapList);
+		/** end combobox **/
+
 		/* set the layout and place compomnet in place and pack it */
 		f.setLayout(new BorderLayout());
 		/* Various panel for the layout */
@@ -141,13 +151,16 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		f.add(jpNote);
 		f.add(jpCenter, BorderLayout.CENTER);
 		f.add(jpKeyboard, BorderLayout.SOUTH);
+		
 
-		jpNorth.setLayout(new BorderLayout());
-		jpNorth.add(info, BorderLayout.WEST);
-		jpNorth.add(info, BorderLayout.SOUTH);
+		jpNorth.setLayout(new FlowLayout());
+		jpNorth.add(selectCar);
+		jpNorth.add(carList);
+		jpNorth.add(selectMap);
+		jpNorth.add(mapList);
+//		jpNorth.add(info, BorderLayout.SOUTH);
 
 		jpCenter.setLayout(new BorderLayout());
-		jpCenter.add(text, BorderLayout.WEST);
 		jpCenter.add(text, BorderLayout.CENTER);
 
 		// add(text,BorderLayout.WEST);
@@ -202,18 +215,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		jpKeyboard.add(p);
 
 		checkButtonPress();
-		
-		
-		/**combobox**/
-		String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
 
-		//Create the combo box, select item at index 4.
-		//Indices start at 0, so 4 specifies the pig.
-		JComboBox petList = new JComboBox(petStrings);
-		petList.setSelectedIndex(4);
-		petList.addActionListener(this);
-		jpKeyboard.add(petList);
-		
 	} // end of initWidgets
 
 	public static void main(String[] args) {
@@ -253,7 +255,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 				try {
 					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 
@@ -296,12 +297,19 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	public void keyTyped(KeyEvent e) {
 
 	}
+	
+	public void box(String name[], JComboBox<String> nameList) {
+		// Create the combo box, select item at index 0.
+		nameList = new JComboBox(name);
+		nameList.setSelectedIndex(0);
+		nameList.addActionListener(this);
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		 JComboBox cb = (JComboBox)e.getSource();
-	        String petName = (String)cb.getSelectedItem();
-	        text.setText(petName);
+		JComboBox cb = (JComboBox) e.getSource();
+		String petName = (String) cb.getSelectedItem();
+		text.setText(petName);
 	}
 
 }
