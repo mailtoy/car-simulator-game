@@ -44,32 +44,23 @@ import javafx.scene.image.ImageView;
  * @author Issaree Srisomboon
  *
  */
-public class Controller extends ClientType implements KeyListener {
+public class Controller extends ClientType implements KeyListener, ActionListener{
 
 	private static final float RUN_SPEED = 20;
 	private static final float TURN_SPEED = 70;
 
-	private static JFrame f = new JFrame();
-	public static JButton north;
-	public static JButton east;
-	JTextArea text = new JTextArea();
 
-	private JButton pressedBtn;
+
+	private static JFrame f = new JFrame();
+	private JTextArea text = new JTextArea();
 
 	JPanel p;
 	// Individual keyboard rows
-	// String fourthRow[] = { "Shift", "Z", "X", "C", "V", "B", "N", "M", ",",
-	// ".", "?", " ^" };
 	String fourthRow[] = { "^" };
-	String fifthRow[] = { "<", "v", ">" };
-
-	// all keys without shift key press
-	String noShift = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./";
-	// special charactors on keyboard that has to be addressed duing keypress
-	String specialChars = "~-+[]\\;',.?";
+	String fifthRow[] = { "accelerate", "break", "stop", "<", "v", ">" };
 
 	// Jbuttons corresponting to each individual rows
-	JButton first[], second[], third[], fourth[], fifth[];
+	JButton fourth[], fifth[];
 
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
@@ -89,6 +80,8 @@ public class Controller extends ClientType implements KeyListener {
 	public void keyReleased(KeyEvent evt) {
 
 	}
+	
+	
 
 	public Controller() {
 		super();
@@ -98,7 +91,7 @@ public class Controller extends ClientType implements KeyListener {
 		// super.setSize(500,300);
 		// set size of the content pane ie frame
 		// show text
-		f.getContentPane().setPreferredSize(new Dimension(1250, 200));
+		f.getContentPane().setPreferredSize(new Dimension(900, 500));
 		// super.getContentPane().setSize(800,400);
 		// set location for the frame
 		f.setLocation(10, 550);
@@ -125,7 +118,7 @@ public class Controller extends ClientType implements KeyListener {
 	 */
 	private void initWidgets() {
 		// set the text area on top
-		text.setPreferredSize(new Dimension(800, 200));
+		text.setPreferredSize(new Dimension(600, 50));
 		// JScrollPane scrollPane = new JScrollPane(text);
 		// scrollPane.setPreferredSize(new Dimension(800, 200));
 
@@ -161,7 +154,7 @@ public class Controller extends ClientType implements KeyListener {
 		// add(scrollPane,BorderLayout.CENTER);
 
 		// layout for keyboard
-		jpKeyboard.setLayout(new GridLayout(2, 1));
+		jpKeyboard.setLayout(new GridLayout(3, 1));
 		// pack the components
 		f.pack();
 
@@ -192,7 +185,7 @@ public class Controller extends ClientType implements KeyListener {
 			if (i == 1) // space bar panel
 			{
 				JButton b = new JButton(fifthRow[i]);
-				b.setPreferredSize(new Dimension(400, 10));
+				b.setPreferredSize(new Dimension(400, 20));
 				b.setBounds(10, 10, 10, 100);
 				fifth[i] = b;
 			} else {
@@ -209,16 +202,25 @@ public class Controller extends ClientType implements KeyListener {
 		jpKeyboard.add(p);
 
 		checkButtonPress();
+		
+		
+		/**combobox**/
+		String[] petStrings = { "Bird", "Cat", "Dog", "Rabbit", "Pig" };
 
+		//Create the combo box, select item at index 4.
+		//Indices start at 0, so 4 specifies the pig.
+		JComboBox petList = new JComboBox(petStrings);
+		petList.setSelectedIndex(4);
+		petList.addActionListener(this);
+		jpKeyboard.add(petList);
+		
 	} // end of initWidgets
 
 	public static void main(String[] args) {
-		// f.setVisible(true);
 		new Controller();
 	}
 
 	public void run() {
-		// new MainGameLoop().setVisible(true);
 		while (!Display.isCloseRequested()) {
 			try {
 				checkKeyInput();
@@ -293,6 +295,13 @@ public class Controller extends ClientType implements KeyListener {
 	@Override
 	public void keyTyped(KeyEvent e) {
 
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		 JComboBox cb = (JComboBox)e.getSource();
+	        String petName = (String)cb.getSelectedItem();
+	        text.setText(petName);
 	}
 
 }
