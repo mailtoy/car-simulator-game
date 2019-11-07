@@ -2,8 +2,6 @@ package connection;
 
 import java.io.*;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -15,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "10.223.115.18";
+	private String serverIP = "203.246.112.148";
 	private Socket serverSocket;
 	private ClientType clientType;
 
@@ -51,12 +49,12 @@ public class Client {
 	}
 
 	public void sendConnect() throws Exception {
-		objectOutputStream.writeObject(new Packet("Connect", typeSpecify(), "has connected."));
+		objectOutputStream.writeObject(new Packet("Connect", clientType.toString(), "has connected."));
 		objectOutputStream.flush();
 	}
 
 	public void sendDisconnect() throws Exception {
-		objectOutputStream.writeObject(new Packet("Disconnect", typeSpecify(), "has disconnected."));
+		objectOutputStream.writeObject(new Packet("Disconnect", clientType.toString(), "has disconnected."));
 		objectOutputStream.flush();
 
 //		objectOutputStream.close();
@@ -65,8 +63,8 @@ public class Client {
 	}
 
 	public void sendPosition(Vector3f position) throws Exception {
-		objectOutputStream.writeObject(
-				new Packet("Position", typeSpecify(), position.getX() + ":" + position.getY() + ":" + position.getY()));
+		objectOutputStream.writeObject(new Packet("Position", clientType.toString(),
+				position.getX() + ":" + position.getY() + ":" + position.getY()));
 		objectOutputStream.flush();
 	}
 }
@@ -98,7 +96,7 @@ class IncomingInput implements Runnable {
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
 				case "Position":
-//					client.updatePosition(object);
+					client.updatePosition(object);
 					break;
 				default:
 					break;

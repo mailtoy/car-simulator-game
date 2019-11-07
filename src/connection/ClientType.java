@@ -129,7 +129,7 @@ public abstract class ClientType {
 		}
 	}
 	
-	public void updatePosition() {
+	public void updatePosition(Object object) {
 		
 	}
 

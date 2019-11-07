@@ -14,8 +14,9 @@ import java.util.*;
 public class Server implements Runnable {
 	private final int remoteServerPort = 3001;
 	private ServerSocket serverSocket;
-	private ArrayList<ObjectOutputStream> clients;
 	private boolean running;
+	
+	private ArrayList<ObjectOutputStream> clients;
 
 	public Server() {
 		clients = new ArrayList<ObjectOutputStream>();
@@ -83,10 +84,13 @@ class ClientHandler implements Runnable {
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
+	
+	private ArrayList<String> clients;
 
 	public ClientHandler(Server server, Socket clientSocket, ObjectOutputStream objectOutputStream) {
 		this.server = server;
 		this.objectOutputStream = objectOutputStream;
+		this.clients = new ArrayList<String>();
 		try {
 			this.socket = clientSocket;
 			this.objectInputStream = new ObjectInputStream(socket.getInputStream());
@@ -102,14 +106,24 @@ class ClientHandler implements Runnable {
 			while ((object = (Packet) objectInputStream.readObject()) != null) {
 				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
 						object.getMessage());
-
-				if (object.getSendType().equals("Disconnect")) {
-					server.removeClient(objectOutputStream);
+				
+				switch (object.getSendType()) {
+				case "Connect":
+					clients.add(object.getClientType());
+					break;
+				case "Disconnect":
+					clients.remove(object.getClientType());
+					break;
+				case "Position":
+					break;
+				default:
+					break;
 				}
 				broadcast(object);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			server.removeClient(objectOutputStream);
 		}
 	}
 
