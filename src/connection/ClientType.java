@@ -96,7 +96,7 @@ public abstract class ClientType {
 
 		renderer = new MasterRenderer();
 
-		bunnyModel = OBJLoader.loadObjModel("car", loader);
+		bunnyModel = OBJLoader.loadObjModel("Car", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture")));
 
 
