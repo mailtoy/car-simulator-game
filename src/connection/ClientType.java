@@ -129,8 +129,14 @@ public abstract class ClientType {
 		}
 	}
 	
-	public void updatePosition(Object object) {
+	public void updatePosition(String position) {
+		int x, y, z;
+		String[] positions = position.split(":");
+		x = Integer.parseInt(positions[0]);
+		y = Integer.parseInt(positions[1]);
+		z = Integer.parseInt(positions[2]);
 		
+		renderer.processEntity(new Player(car, new Vector3f(x, y ,z), 0, 0, 0, 0.6f));
 	}
 
 	public void printConnection(String connectionStatus) {

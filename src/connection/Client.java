@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "203.246.112.148";
+	private String serverIP = "10.223.115.18";
 	private Socket serverSocket;
 	private ClientType clientType;
 
@@ -96,7 +96,7 @@ class IncomingInput implements Runnable {
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
 				case "Position":
-					client.updatePosition(object);
+					client.updatePosition(object.getMessage());
 					break;
 				default:
 					break;
