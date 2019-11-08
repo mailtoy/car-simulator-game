@@ -101,8 +101,9 @@ public abstract class ClientType {
 		player = new Player(car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f);
 		setCamera();
 	}
-	
-	public void setCamera() {}
+
+	public void setCamera() {
+	}
 
 	public void render() {
 		renderer.processEntity(player);
@@ -128,15 +129,15 @@ public abstract class ClientType {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updatePosition(String position) {
-		int x, y, z;
+		float x, y, z;
 		String[] positions = position.split(":");
-		x = Integer.parseInt(positions[0]);
-		y = Integer.parseInt(positions[1]);
-		z = Integer.parseInt(positions[2]);
-		
-		renderer.processEntity(new Player(car, new Vector3f(x, y ,z), 0, 0, 0, 0.6f));
+		x = Float.parseFloat(positions[0]);
+		y = Float.parseFloat(positions[1]);
+		z = Float.parseFloat(positions[2]);
+
+		renderer.processEntity(new Player(car, new Vector3f(x-1, y-1, z-1), 0, 0, 0, 0.6f));
 	}
 
 	public void printConnection(String connectionStatus) {
