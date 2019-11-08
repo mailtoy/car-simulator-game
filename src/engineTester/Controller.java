@@ -1,4 +1,3 @@
-// จะทดลองไม่ใช้Grid
 package engineTester;
 
 import java.awt.event.KeyEvent;
@@ -48,27 +47,19 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	private static final float RUN_SPEED = 20;
 	private static final float TURN_SPEED = 70;
 
-
-
 	private static JFrame f = new JFrame();
 	private JTextArea text = new JTextArea();
-	
-
-	
+		
 	String[] cars = { "Car1", "Car2", "Car3", "Car4"};
 	String[] maps = { "blueMap", "reaMap", "roadMap"};
 	
 	JComboBox<String> carList = new JComboBox<>(cars);
 	JComboBox<String> mapList = new JComboBox<>(maps);
 	
+	String arrow[] = { "^", "v", "<", ">"};
+	String option[] = { "accelerate", "break", "stop" };
 
-	JPanel p;
-	// Individual keyboard rows
-	String fourthRow[] = { "^" };
-	String fifthRow[] = { "accelerate", "break", "stop", "<", "v", ">" };
-
-	// Jbuttons corresponting to each individual rows
-	JButton fourth[], fifth[];
+	JButton forward, backward, turnLeft, turnRight, accelerate, breakcar, stop;
 
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
@@ -93,23 +84,11 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		super();
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
-		f.getContentPane().setPreferredSize(new Dimension(900, 200));
+		f.getContentPane().setPreferredSize(new Dimension(600, 100));
 		f.setLocation(10, 550);
 		initWidgets();
 		f.setVisible(true);
 		run();
-	}
-
-	private void addSpace(String arr[]) {
-		p = new JPanel(new GridLayout(1, arr.length));
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
-		p.add(new JPanel());
 	}
 
 	/**
@@ -118,12 +97,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	private void initWidgets() {
 		// set the text area on top
 		text.setPreferredSize(new Dimension(600, 50));
-		// JScrollPane scrollPane = new JScrollPane(text);
-		// scrollPane.setPreferredSize(new Dimension(800, 200));
-
-		// add(typingArea, BorderLayout.PAGE_START);
-		// add(scrollPane, BorderLayout.CENTER);
-		// set the info label on top
 		JLabel info = new JLabel("<html>Note</html>");
 		// set the bold font for info
 		info.setFont(new Font("Verdana", Font.BOLD, 14));
@@ -146,73 +119,40 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		JPanel jpCenter = new JPanel();
 		JPanel jpKeyboard = new JPanel();
 		JPanel jpNote = new JPanel();
+		JPanel jpArrow = new JPanel();
 
 		f.add(jpNorth, BorderLayout.NORTH);
 		f.add(jpNote);
 		f.add(jpCenter, BorderLayout.CENTER);
 		f.add(jpKeyboard, BorderLayout.SOUTH);
 		
-
 		jpNorth.setLayout(new FlowLayout());
 		jpNorth.add(selectCar);
 		jpNorth.add(carList);
 		jpNorth.add(selectMap);
 		jpNorth.add(mapList);
-//		jpNorth.add(info, BorderLayout.SOUTH);
 
 		jpCenter.setLayout(new BorderLayout());
 		jpCenter.add(text, BorderLayout.CENTER);
 
-		// add(text,BorderLayout.WEST);
-		// add(scrollPane,BorderLayout.CENTER);
-
-		// layout for keyboard
-		jpKeyboard.setLayout(new GridLayout(3, 1));
-		// pack the components
+		jpKeyboard.setLayout(new BorderLayout());
+		jpKeyboard.add(jpArrow, BorderLayout.EAST);
+		
 		f.pack();
 
-		/* paint fourth keyboard row and add it to the keyboard */
-		fourth = new JButton[fourthRow.length];
-		// get the panel for the row
-		p = new JPanel(new GridLayout(1, fourthRow.length));
-		JPanel spacePanel = new JPanel();
-		p.add(spacePanel);
-		// add empty panels for layout
-		addSpace(fourthRow);
-
-		for (int i = 0; i < fourthRow.length; ++i) {
-			fourth[i] = new JButton(fourthRow[i]);
-			p.add(fourth[i]);
-			if (i == fourthRow.length - 2)
-				p.add(new JPanel());
-		}
-		p.add(new JPanel());
-		jpKeyboard.add(p);
-
-		// paint the fifth row
-		fifth = new JButton[fifthRow.length];
-		// get the panel for the row
-		p = new JPanel(new GridLayout(1, fifthRow.length));
-		/* draw the buttons */
-		for (int i = 0; i < fifthRow.length; ++i) {
-			if (i == 1) // space bar panel
-			{
-				JButton b = new JButton(fifthRow[i]);
-				b.setPreferredSize(new Dimension(400, 20));
-				b.setBounds(10, 10, 10, 100);
-				fifth[i] = b;
-			} else {
-				fifth[i] = new JButton(fifthRow[i]);
-			}
-
-			if (i == 0) // first black panel
-			{
-				// add empty panels for layout
-				addSpace(fifthRow);
-			}
-			p.add(fifth[i]);
-		}
-		jpKeyboard.add(p);
+		/*add button to the keyboard */
+		forward = new JButton(arrow[0]);
+		backward = new JButton(arrow[1]);
+		turnLeft = new JButton(arrow[2]);
+		turnRight = new JButton(arrow[3]);
+		accelerate = new JButton(option[0]);
+		breakcar = new JButton(option[1]);
+		stop = new JButton(option[2]);
+		
+		jpArrow.add(forward, BorderLayout.NORTH);
+		jpArrow.add(backward, BorderLayout.SOUTH);
+		jpArrow.add(turnLeft, BorderLayout.WEST);
+		jpArrow.add(turnRight, BorderLayout.EAST);
 
 		checkButtonPress();
 
@@ -249,7 +189,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	}
 
 	public void checkButtonPress() {
-		fourth[0].addActionListener(new ActionListener() {
+		forward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				text.setText("^");
 				try {
@@ -261,7 +201,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 			}
 		});
 
-		fifth[0].addActionListener(new ActionListener() {
+		turnLeft.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				text.setText("<");
 				try {
@@ -271,7 +211,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 				}
 			}
 		});
-		fifth[1].addActionListener(new ActionListener() {
+		backward.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				text.setText("v");
 				try {
@@ -281,7 +221,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 				}
 			}
 		});
-		fifth[2].addActionListener(new ActionListener() {
+		turnRight.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				text.setText(">");
 				try {
