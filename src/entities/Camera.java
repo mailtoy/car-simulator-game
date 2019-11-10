@@ -96,7 +96,7 @@ public class Camera {
 	
 	private float calculateHorizontalDistance() {
 //		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
-		return (float) -3;
+		return (float) -2;
 	}
 	
 	private float calculateVerticalDistance() {

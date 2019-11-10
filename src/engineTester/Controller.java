@@ -75,8 +75,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		f.setLocation(10, 550);
 		initWidgets();
 		f.setVisible(true);
-		setMap((String)mapList.getSelectedItem());
-		System.out.println(getMap());
 		run();
 	}
 
