@@ -11,10 +11,7 @@ import java.net.*;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-
 	private String serverIP = "192.168.0.232";
-
-
 	private Socket serverSocket;
 	private ClientType clientType;
 

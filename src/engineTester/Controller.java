@@ -4,29 +4,21 @@ package engineTester;
 import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
-
 import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.plaf.basic.BasicArrowButton;
 
 import java.awt.BorderLayout;
-import java.awt.Button;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Label;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 
 import java.awt.Font;
 import java.awt.event.KeyListener;
-import java.util.Arrays;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import javax.swing.*;
@@ -35,6 +27,7 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import connection.ClientType;
+import entities.ControllerCamera;
 
 /**
  * Controller controls the movement of the car, then sends it through Server to
@@ -48,19 +41,14 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	private static final float RUN_SPEED = 20;
 	private static final float TURN_SPEED = 70;
 
-
-
 	private static JFrame f = new JFrame();
 	private JTextArea text = new JTextArea();
-	
 
-	
-	String[] cars = { "Car1", "Car2", "Car3", "Car4"};
-	String[] maps = { "blueMap", "reaMap", "roadMap"};
-	
+	String[] cars = { "Car1", "Car2", "Car3", "Car4" };
+	String[] maps = { "blueMap", "reaMap", "roadMap" };
+
 	JComboBox<String> carList = new JComboBox<>(cars);
 	JComboBox<String> mapList = new JComboBox<>(maps);
-	
 
 	JPanel p;
 	// Individual keyboard rows
@@ -73,30 +61,18 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
 
-	/*
-	 * Invoked when a key has been pressed.
-	 * 
-	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
-	 */
-	public void keyPressed(KeyEvent evt) {
-
-	}// end of keypressed
-
-	/**
-	 * Invoked when a key has been released.
-	 */
-	public void keyReleased(KeyEvent evt) {
-
-	}
-
 	public Controller() {
 		super();
+		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setPreferredSize(new Dimension(900, 200));
 		f.setLocation(10, 550);
+		
 		initWidgets();
 		f.setVisible(true);
+		
+		camera = new ControllerCamera(player);
 		run();
 	}
 
@@ -134,7 +110,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		selectCar.setForeground(Color.red);
 		JLabel selectMap = new JLabel("select your map: ");
 		selectMap.setForeground(Color.blue);
-		
+
 		box(cars, carList);
 		box(maps, mapList);
 		/** end combobox **/
@@ -151,7 +127,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		f.add(jpNote);
 		f.add(jpCenter, BorderLayout.CENTER);
 		f.add(jpKeyboard, BorderLayout.SOUTH);
-		
 
 		jpNorth.setLayout(new FlowLayout());
 		jpNorth.add(selectCar);
@@ -298,6 +273,22 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	}
 	
+	/*
+	 * Invoked when a key has been pressed.
+	 * 
+	 * @see java.awt.event.KeyListener#keyPressed(java.awt.event.KeyEvent)
+	 */
+	public void keyPressed(KeyEvent evt) {
+
+	}// end of keypressed
+
+	/**
+	 * Invoked when a key has been released.
+	 */
+	public void keyReleased(KeyEvent evt) {
+
+	}
+
 	public void box(String name[], JComboBox<String> nameList) {
 		// Create the combo box, select item at index 0.
 		nameList = new JComboBox(name);
@@ -311,5 +302,4 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		String petName = (String) cb.getSelectedItem();
 		text.setText(petName);
 	}
-
 }
