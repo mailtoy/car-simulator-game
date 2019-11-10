@@ -46,7 +46,9 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	JButton forward, backward, turnLeft, turnRight, accelerate, breakcar, stop;
 	
-	public String map;
+	public String map = null;
+	
+	public Radial gauge;
 
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
@@ -63,7 +65,26 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	/**
 	 * Invoked when a key has been released.
 	 */
-	public void keyReleased(KeyEvent evt) {
+	public void keyReleased(KeyEvent e) {
+		int keyCode = e.getKeyCode();
+		if(keyCode == KeyEvent.VK_RIGHT){
+			
+		}
+		if(keyCode == KeyEvent.VK_LEFT){
+			
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_UP)){
+			gauge.setValueAnimated(0);
+		}
+		if(keyCode == KeyEvent.VK_DOWN){
+			
+		}
+		if(keyCode == KeyEvent.VK_SPACE){
+
+		}
+		if(keyCode == KeyEvent.VK_ESCAPE) {
+			
+		}
 
 	}
 
@@ -98,9 +119,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		box(cars, carList);
 		box(maps, mapList);
 		
-		setMap((String)mapList.getSelectedItem());
-		System.out.println(getMap());
-		
 		/** end combobox **/
 
 		/* set the layout and place compomnet in place and pack it */
@@ -113,7 +131,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		JPanel jpArrow = new JPanel();
 		
 		JPanel buttonsPanel = new JPanel();
-		final Radial gauge = new Radial();
+		gauge = new Radial();
 
 		f.add(jpNorth, BorderLayout.NORTH);
 		f.add(jpGauge, BorderLayout.WEST);
@@ -183,15 +201,14 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		/**end gauge**/
 
 		checkButtonPress();
-
-	}
-	
-	public void setMap(String map){
-		this.map = map;
 	}
 	
 	public String getMap(){
-		return map;
+		if (map == null) {
+			map = "1";
+			return "map1";
+		}
+		return (String)mapList.getSelectedItem();
 	}
 	
 
@@ -213,6 +230,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	public void checkKeyInput() throws Exception {
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+			gauge.setValueAnimated(RUN_SPEED);
 			client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
@@ -230,6 +248,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 			public void actionPerformed(ActionEvent e) {
 				text.setText("^");
 				try {
+					gauge.setValueAnimated(RUN_SPEED);
+					System.out.println(getMap());
 					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 				} catch (Exception e1) {
 					e1.printStackTrace();
