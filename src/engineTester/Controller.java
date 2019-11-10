@@ -61,8 +61,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	JButton forward, backward, turnLeft, turnRight, accelerate, breakcar, stop;
 	
-	public String map = null;
-	
 	public Radial gauge;
 
 	// default color of the button to be repainted when key released
@@ -111,10 +109,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		f.setResizable(false);
 		f.getContentPane().setPreferredSize(new Dimension(1200, 250));
 		f.setLocation(10, 550);
-		
 		initWidgets();
 		f.setVisible(true);
-		
 		camera = new ControllerCamera(player);
 		run();
 	}
@@ -222,15 +218,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 		checkButtonPress();
 	}
-	
-	public String getMap(){
-		if (map == null) {
-			map = "1";
-			return "map1";
-		}
-		return (String)mapList.getSelectedItem();
-	}
-	
 
 	public static void main(String[] args) {
 		new Controller();
@@ -268,8 +255,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 			public void actionPerformed(ActionEvent e) {
 				text.setText("^");
 				try {
+//					client.sendMapSelected((String)mapList.getSelectedItem());
 					gauge.setValueAnimated(RUN_SPEED);
-					System.out.println(getMap());
 					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -327,5 +314,6 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		JComboBox cb = (JComboBox) e.getSource();
 		String name = (String) cb.getSelectedItem();
 		text.setText(name);
+		
 	}
 }

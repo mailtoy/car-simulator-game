@@ -65,6 +65,11 @@ public class Client {
 		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
 		objectOutputStream.flush();
 	}
+	
+	public void sendMapSelected(String map) throws Exception {
+		objectOutputStream.writeObject(new ParseObject("Map", typeSpecify(), map));
+		objectOutputStream.flush();
+	}
 }
 
 /**
@@ -95,6 +100,9 @@ class IncomingInput implements Runnable {
 					break;
 				case "KeyInput":
 					client.move(object.getMessage());
+					break;
+				case "Map":
+					client.setMap(object.getMessage());
 					break;
 				default:
 					break;

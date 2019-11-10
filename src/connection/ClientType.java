@@ -39,6 +39,7 @@ public abstract class ClientType {
 	private Terrain terrain, terrain2;
 	private MasterRenderer renderer;
 	private List<Entity> entities;
+	private TerrainTexturePack texturePack;
 
 	protected Client client;
 	protected Player player; // Change to Car later
@@ -62,7 +63,7 @@ public abstract class ClientType {
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
-		TerrainTexturePack texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("map1"));
 
 		data = OBJFileLoader.loadOBJ("tree");
@@ -142,6 +143,26 @@ public abstract class ClientType {
 		}
 		camera.move();
 		player.move();
+	}
+	
+	public void setMap(String map){
+		if (map != "map1") {
+			System.out.println(map);
+			TerrainTexture newMap = new TerrainTexture(loader.loadTexture(map));
+			terrain = new Terrain(0, 0, loader, texturePack, newMap);
+			terrain2 = new Terrain(1, 0, loader, texturePack, newMap);
+			renderer.processEntity(player);
+			renderer.processTerrain(terrain);
+			renderer.processTerrain(terrain2);
+
+			for (Entity entity : entities) {
+				renderer.processEntity(entity);
+			}
+
+			renderer.render(light, camera);
+			DisplayManager.updateDisplay();
+			
+		}
 	}
 
 	public void printConnection(String connectionStatus) {
