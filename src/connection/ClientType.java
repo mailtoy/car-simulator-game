@@ -109,7 +109,7 @@ public abstract class ClientType {
 		
 		player = new Player(stanfordBunny, new Vector3f(-450, 0, -700), 0, 180, 0, 0.6f);
 		player2 = new Player(stanfordBunny, new Vector3f(-350, 0, 0), 0, 180, 0, 0.6f);
-		camera = new Camera(player);
+
 	}
 
 	public void render() {

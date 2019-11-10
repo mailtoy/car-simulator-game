@@ -13,6 +13,13 @@ import javax.swing.SwingUtilities;
 import eu.hansolo.steelseries.gauges.Radial;
 
 public class Gauge {
+	public Gauge() {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				createAndShowUI();
+			}
+		});
+	}
 	private static void createAndShowUI() {
 		final JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,7 +53,6 @@ public class Gauge {
 					double value = Double.valueOf(valueField.getText());
 					gauge.setValueAnimated(value);
 				} catch (NumberFormatException ex) {
-					// TODO - handle invalid input
 					System.err.println("invalid input");
 				}
 			}
