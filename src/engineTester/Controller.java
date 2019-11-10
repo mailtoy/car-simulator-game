@@ -36,7 +36,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	private JTextArea text = new JTextArea();
 		
 	String[] cars = { "Car1", "Car2", "Car3", "Car4"};
-	String[] maps = { "blueMap", "reaMap", "roadMap"};
+	String[] maps = { "map1", "map2",};
 	
 	JComboBox<String> carList = new JComboBox<>(cars);
 	JComboBox<String> mapList = new JComboBox<>(maps);
@@ -45,6 +45,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	String option[] = { "accelerate", "break", "stop" };
 
 	JButton forward, backward, turnLeft, turnRight, accelerate, breakcar, stop;
+	
+	public String map;
 
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
@@ -73,6 +75,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		f.setLocation(10, 550);
 		initWidgets();
 		f.setVisible(true);
+		setMap((String)mapList.getSelectedItem());
+		System.out.println(getMap());
 		run();
 	}
 
@@ -95,6 +99,10 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		
 		box(cars, carList);
 		box(maps, mapList);
+		
+		setMap((String)mapList.getSelectedItem());
+		System.out.println(getMap());
+		
 		/** end combobox **/
 
 		/* set the layout and place compomnet in place and pack it */
@@ -174,12 +182,19 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		buttonsPanel.add(valueLabel);
 		buttonsPanel.add(valueField);
 		buttonsPanel.add(button);
-		
 		/**end gauge**/
 
 		checkButtonPress();
 
-	} // end of initWidgets
+	}
+	
+	public void setMap(String map){
+		this.map = map;
+	}
+	
+	public String getMap(){
+		return map;
+	}
 	
 
 	public static void main(String[] args) {
@@ -272,8 +287,8 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		JComboBox cb = (JComboBox) e.getSource();
-		String petName = (String) cb.getSelectedItem();
-		text.setText(petName);
+		String name = (String) cb.getSelectedItem();
+		text.setText(name);
 	}
 
 }
