@@ -41,7 +41,7 @@ public abstract class ClientType {
 	private List<Entity> entities;
 
 	protected Client client;
-	protected Player player,player2; // Change to Car later
+	protected Player player; // Change to Car later
 	protected Camera camera;
 
 	public ClientType() {
@@ -79,22 +79,10 @@ public abstract class ClientType {
 		fernModel.getTexture().setHasTransparency(true);
 
 		entities = new ArrayList<Entity>();
-		Random random = new Random();
-//		for (int i = 0; i < 500; i++) {
-//			entities.add(new Entity(staticModel,
-//					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
-//			entities.add(new Entity(grassModel,
-//					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 1));
-//			entities.add(new Entity(fernModel,
-//					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 0.6f));
-//		}
 		for (int i = 0; i < 500; i++) {
-			entities.add(new Entity(staticModel,
-					new Vector3f(0, 0, 0), 0, 0, 0, 3));
-			entities.add(new Entity(grassModel,
-					new Vector3f(0, 0, 0), 0, 0, 0, 1));
-			entities.add(new Entity(fernModel,
-					new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
+			entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 3));
+			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
+			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}
 
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
@@ -106,15 +94,13 @@ public abstract class ClientType {
 
 		bunnyModel = OBJLoader.loadObjModel("car", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		
-		player = new Player(stanfordBunny, new Vector3f(-450, 0, -700), 0, 180, 0, 0.6f);
-		player2 = new Player(stanfordBunny, new Vector3f(-350, 0, 0), 0, 180, 0, 0.6f);
 
+		player = new Player(stanfordBunny, new Vector3f(450, 0, -700), 0, 180, 0, 0.6f);
+		camera = new Camera(player);
 	}
 
 	public void render() {
 		renderer.processEntity(player);
-		renderer.processEntity(player2);
 		renderer.processTerrain(terrain);
 		renderer.processTerrain(terrain2);
 
