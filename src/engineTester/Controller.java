@@ -2,15 +2,26 @@ package engineTester;
 
 import java.awt.event.KeyEvent;
 
+import javax.swing.JFrame;
+import javax.swing.JButton;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+
+import java.awt.GridLayout;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import java.awt.Font;
 import java.awt.event.KeyListener;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+
 
 import javax.swing.*;
 
@@ -18,7 +29,11 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import connection.ClientType;
+
 import eu.hansolo.steelseries.gauges.Radial;
+
+import entities.ControllerCamera;
+
 
 /**
  * Controller controls the movement of the car, then sends it through Server to
@@ -52,6 +67,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	// default color of the button to be repainted when key released
 	Color cc = new JButton().getBackground();
+
 
 	/*
 	 * Invoked when a key has been pressed.
@@ -90,12 +106,16 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 
 	public Controller() {
 		super();
+		
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		f.setResizable(false);
 		f.getContentPane().setPreferredSize(new Dimension(1200, 250));
 		f.setLocation(10, 550);
+		
 		initWidgets();
 		f.setVisible(true);
+		
+		camera = new ControllerCamera(player);
 		run();
 	}
 
@@ -115,7 +135,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		selectCar.setForeground(Color.red);
 		JLabel selectMap = new JLabel("select your map: ");
 		selectMap.setForeground(Color.blue);
-		
+
 		box(cars, carList);
 		box(maps, mapList);
 		
@@ -294,7 +314,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	public void keyTyped(KeyEvent e) {
 
 	}
-	
+
 	public void box(String name[], JComboBox<String> nameList) {
 		// Create the combo box, select item at index 0.
 		nameList = new JComboBox(name);
@@ -308,5 +328,4 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 		String name = (String) cb.getSelectedItem();
 		text.setText(name);
 	}
-
 }

@@ -2,7 +2,6 @@ package connection;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
@@ -98,7 +97,6 @@ public abstract class ClientType {
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
 
 		player = new Player(stanfordBunny, new Vector3f(450, 0, -700), 0, 180, 0, 0.6f);
-		camera = new Camera(player);
 	}
 
 	public void render() {
@@ -142,13 +140,8 @@ public abstract class ClientType {
 		} else {
 			player.setCurrentTurnSpeed(0);
 		}
-
-		try {
-			camera.move();
-			player.move();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		camera.move();
+		player.move();
 	}
 
 	public void printConnection(String connectionStatus) {
