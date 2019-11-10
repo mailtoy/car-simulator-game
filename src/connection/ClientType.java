@@ -6,8 +6,8 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
+import engineTester.Controller;
 import entities.Camera;
-import entities.ControllerCamera;
 import entities.Entity;
 import entities.Light;
 import entities.Player;
@@ -43,6 +43,7 @@ public abstract class ClientType {
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
+	protected Controller controller;
 
 	public ClientType() {
 		this.client = new Client(this);
