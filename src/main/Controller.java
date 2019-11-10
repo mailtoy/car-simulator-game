@@ -1,9 +1,10 @@
-package connection;
+package main;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -12,6 +13,8 @@ import entities.Light;
 import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
+import network.Client;
+import network.packet.ConnectPacket;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
@@ -23,13 +26,7 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
-/**
- * ClientType gathers all the functions that Client should have.
- * 
- * @author Issaree Srisomboon
- *
- */
-public abstract class ClientType {
+public class Controller {
 	private Loader loader;
 	private ModelData data;
 	private RawModel treeModel, carModel;
@@ -39,18 +36,23 @@ public abstract class ClientType {
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 
-	protected Client client;
-	protected Player player; // Change to Car later
-	protected Camera camera;
+	private Client client;
+	private Player player; // Change to Car later
+	private Camera camera;
 
-	public ClientType() {
-		this.client = new Client(this);
-		this.client.connect();
-
+	public Controller() {
+		client = new Client(this);
+		client.start();
 		initComponents();
+
+		ConnectPacket connectPacket = new ConnectPacket("Controller", player.getModel(), player.getPosition(),
+				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
+		connectPacket.writeData(client);
+
+		run();
 	}
 
-	public void initComponents() {
+	private void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
 
@@ -98,14 +100,20 @@ public abstract class ClientType {
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("color")));
 
-		player = new Player("car", car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f); // add name
-		setCamera();
+		player = new Player("Controller", car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f); // add name
+		camera = new Camera(player);
 	}
 
-	public void setCamera() {
+	private void run() {
+		while (!Display.isCloseRequested()) {
+			player.move();
+			camera.move();
+			render();
+		}
+		closeqRequest();
 	}
 
-	public void render() {
+	private void render() {
 		renderer.processEntity(player);
 		renderer.processTerrain(terrain);
 		renderer.processTerrain(terrain2);
@@ -118,29 +126,18 @@ public abstract class ClientType {
 		DisplayManager.updateDisplay();
 	}
 
-	public void closeRequest() {
+	private void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
-
-		try {
-			client.sendDisconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
-	public void updatePosition(String position) {
-		float x, y, z;
-		String[] positions = position.split(":");
-		x = Float.parseFloat(positions[0]);
-		y = Float.parseFloat(positions[1]);
-		z = Float.parseFloat(positions[2]);
-
-//		renderer.processEntity(new Player(car, new Vector3f(x-1, y-1, z-1), 0, 0, 0, 0.6f));
+	public void renderEntity(Player player) {
+//		renderer.processEntity(player);
+//		render();
 	}
 
-	public void printConnection(String connectionStatus) {
-		System.out.println(connectionStatus);
+	public static void main(String[] args) {
+		new Controller();
 	}
 }
