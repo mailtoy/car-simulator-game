@@ -3,10 +3,15 @@ package entities;
 import org.lwjgl.util.vector.Vector3f;
 
 public abstract class Camera {
-	protected Vector3f position = new Vector3f(0, 5, 0);
-	protected float pitch = 10;
+	protected Vector3f position = new Vector3f();
+	protected float pitch = 20;
 	protected float yaw;
 	protected float roll;
+	
+	public Camera() {
+		setPosition(new Vector3f(305, 6, 6));
+		setPitch(20);
+	}
 
 	public Vector3f getPosition() {
 		return position;

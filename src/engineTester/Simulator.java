@@ -16,13 +16,13 @@ public class Simulator extends ClientType {
 
 	public Simulator() {
 		super();
-		
 		camera = new SimulatorCamera();
 		run();
 	}
 
 	public void run() {
 		while (!Display.isCloseRequested()) {
+			camera.move();
 			render();
 		}
 		closeRequest();

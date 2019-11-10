@@ -5,7 +5,7 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 public class ControllerCamera extends Camera {
-	private float distanceFromPlayer = 5;
+	private float distanceFromPlayer = 20;
 	private float angleAroundPlayer = 0;
 	
 	private Player player;
@@ -44,13 +44,13 @@ public class ControllerCamera extends Camera {
 	}
 
 	private float calculateHorizontalDistance() {
-//		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
-		return (float) -2;
+		return (float) (distanceFromPlayer * Math.cos(Math.toRadians(pitch)));
+//		return (float) -2;
 	}
 
 	private float calculateVerticalDistance() {
-//		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
-		return (float) 3;
+		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
+//		return (float) 3;
 	}
 
 	private void calculateZoom() {
