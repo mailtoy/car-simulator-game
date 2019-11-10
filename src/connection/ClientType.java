@@ -140,7 +140,9 @@ public abstract class ClientType {
 		} else {
 			player.setCurrentTurnSpeed(0);
 		}
-		camera.move();
+		if (this.getClass().equals(Controller.class)) {
+			camera.move();
+		}
 		player.move();
 	}
 
