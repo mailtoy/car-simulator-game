@@ -11,7 +11,9 @@ import java.net.*;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "10.30.112.57";
+	
+	String serverIP = "10.30.117.187";
+
 
 	private Socket serverSocket;
 	private ClientType clientType;
@@ -65,6 +67,11 @@ public class Client {
 		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
 		objectOutputStream.flush();
 	}
+	
+	public void sendMapSelected(String map) throws Exception {
+		objectOutputStream.writeObject(new ParseObject("Map", typeSpecify(), map));
+		objectOutputStream.flush();
+	}
 }
 
 /**
@@ -95,6 +102,9 @@ class IncomingInput implements Runnable {
 					break;
 				case "KeyInput":
 					client.move(object.getMessage());
+					break;
+				case "Map":
+					client.setMap(object.getMessage());
 					break;
 				default:
 					break;
