@@ -4,10 +4,12 @@ import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
 import renderEngine.DisplayManager;
+import terrains.Terrain;
 
 public class Player extends Entity {
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
+	private Terrain terrain;
 
 	public Player(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
@@ -19,6 +21,7 @@ public class Player extends Entity {
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		super.increasePosition(dx, 0, dz);
+		System.out.println(terrain.getSIZE());
 	}
 
 	public void setCurrentSpeed(float currentSpeed) {

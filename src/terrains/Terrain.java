@@ -31,6 +31,10 @@ public class Terrain {
 	public float getZ() {
 		return z;
 	}
+	
+	public float getSIZE() {
+		return SIZE;
+	}
 
 	public RawModel getModel() {
 		return model;

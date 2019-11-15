@@ -37,6 +37,7 @@ public abstract class ClientType {
 	private TexturedModel staticModel, grassModel, fernModel, stanfordBunny;
 	private Light light;
 	private Terrain terrain, terrain2, terrain3, terrain4, terrain5, terrain6,terrain7,terrain8,terrain9;
+	private List<Terrain> terrainList;
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 	private TerrainTexturePack texturePack;
@@ -56,7 +57,8 @@ public abstract class ClientType {
 	public void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
-
+		terrainList = new ArrayList<Terrain>();
+		
 		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
@@ -92,12 +94,27 @@ public abstract class ClientType {
 		terrain = new Terrain(0, 0, loader, texturePack, blendMap);
 		terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
 		terrain3 = new Terrain(0, 1, loader, texturePack, blendMap);
-		terrain4 = new Terrain(0, -1, loader, texturePack, blendMap);
-		terrain5 = new Terrain(-1, 0, loader, texturePack, blendMap);
-		terrain6 = new Terrain(1, 1, loader, texturePack, blendMap);
-		terrain7 = new Terrain(-1, 1, loader, texturePack, blendMap);
-		terrain8 = new Terrain(1, -1, loader, texturePack, blendMap);
-		terrain9 = new Terrain(-1, -1, loader, texturePack, blendMap);
+		terrain4 = new Terrain(1, 1, loader, texturePack, blendMap);
+		
+		terrainList.add(new Terrain(0, 0, loader, texturePack, blendMap));
+		
+		//* for big map size logic
+//		int x = 1;
+//		int z = 1;
+//		int round = 3;
+//		for(int i = 0;i<round;i++) {
+//			terrainList.add(new Terrain(x+i, i, loader, texturePack, blendMap));
+//			terrainList.add(new Terrain(i, z+i, loader, texturePack, blendMap));
+//			terrainList.add(new Terrain(x+i, z+i, loader, texturePack, blendMap));
+//		}
+//		if(round >= 1) {
+//			for(int j =0;j<round-1;j++) {
+//				terrainList.add(new Terrain(round, j, loader, texturePack, blendMap));
+//				for(int k =0;k<round-1;k++) {
+//					terrainList.add(new Terrain(k,round, loader, texturePack, blendMap));
+//				}
+//			}
+//		}
 
 		renderer = new MasterRenderer();
 
@@ -105,6 +122,7 @@ public abstract class ClientType {
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
 
 		player = new Player(stanfordBunny, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f);
+		System.out.println(terrainList);
 	}
 
 	public void render() {
@@ -113,11 +131,6 @@ public abstract class ClientType {
 		renderer.processTerrain(terrain2);
 		renderer.processTerrain(terrain3);
 		renderer.processTerrain(terrain4);
-		renderer.processTerrain(terrain5);
-		renderer.processTerrain(terrain6);
-		renderer.processTerrain(terrain7);
-		renderer.processTerrain(terrain8);
-		renderer.processTerrain(terrain9);
 
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
@@ -168,23 +181,13 @@ public abstract class ClientType {
 			terrain = new Terrain(0, 0, loader, texturePack, newMap);
 			terrain2 = new Terrain(1, 0, loader, texturePack, newMap);
 			terrain3 = new Terrain(0, 1, loader, texturePack, newMap);
-			terrain4 = new Terrain(0, -1, loader, texturePack, newMap);
-			terrain5 = new Terrain(-1, 0, loader, texturePack, newMap);
-			terrain6 = new Terrain(1, 1, loader, texturePack, newMap);
-			terrain7 = new Terrain(-1, 1, loader, texturePack, newMap);
-			terrain8 = new Terrain(1, -1, loader, texturePack, newMap);
-			terrain9 = new Terrain(-1, -1, loader, texturePack, newMap);
+			terrain4 = new Terrain(1, 1, loader, texturePack, newMap);
 
 			renderer.processEntity(player);
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processTerrain(terrain3);
 			renderer.processTerrain(terrain4);
-			renderer.processTerrain(terrain5);
-			renderer.processTerrain(terrain6);
-			renderer.processTerrain(terrain7);
-			renderer.processTerrain(terrain8);
-			renderer.processTerrain(terrain9);
 
 			for (Entity entity : entities) {
 				renderer.processEntity(entity);

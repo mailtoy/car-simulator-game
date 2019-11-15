@@ -5,7 +5,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class SimulatorCamera extends Camera {
 
-	private Vector3f position = new Vector3f(205, 920, -270);
+	private Vector3f position = new Vector3f(0, 920, 0);
 
 	public SimulatorCamera() {
 		setPosition(position);
