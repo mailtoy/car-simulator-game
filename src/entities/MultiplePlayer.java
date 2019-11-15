@@ -17,6 +17,13 @@ public class MultiplePlayer extends Player {
 		this.port = port;
 	}
 
+	public MultiplePlayer(String name, Vector3f position, float rotX, float rotY, float rotZ, float scale,
+			InetAddress ipAddress, int port) {
+		super(name, null, position, rotX, rotY, rotZ, scale);
+		this.ipAddress = ipAddress;
+		this.port = port;
+	}
+
 	public InetAddress getIpAddress() {
 		return ipAddress;
 	}

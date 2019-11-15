@@ -13,12 +13,12 @@ public class Player extends Entity {
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
 
-	private String name;
+	private String type;
 
-	public Player(String name, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
-		this.name = name;
+		this.type = type;
 	}
 
 	public void move() {
@@ -48,7 +48,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public String getName() {
-		return this.name;
+	public String getType() {
+		return this.type;
 	}
 }

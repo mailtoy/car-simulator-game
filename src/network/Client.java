@@ -8,7 +8,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import entities.MultiplePlayer;
-import main.Controller;
+import main.WindowDisplay;
 import network.packet.ConnectPacket;
 import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
@@ -18,20 +18,20 @@ public class Client extends Thread {
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
-	private Controller controller;
+	private WindowDisplay windowDisplay;
 
-	public Client(Controller controller) {
+	public Client(WindowDisplay windowDisplay) {
+		this.windowDisplay = windowDisplay;
 		try {
 			this.socket = new DatagramSocket();
 			this.ipAddress = InetAddress.getByName(serverIP);
-			this.controller = controller;
 		} catch (SocketException e) {
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void run() {
 		while (true) {
 			byte[] data = new byte[1024];
@@ -55,14 +55,14 @@ public class Client extends Thread {
 			break;
 		case CONNECT:
 			packet = new ConnectPacket(data);
-			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getName()
+			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getType()
 					+ " has joined the server.");
 
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getName(),
-					((ConnectPacket) packet).getModel(), ((ConnectPacket) packet).getPosition(),
+			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
+					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
 					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
 					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-			controller.renderEntity(multiplePlayer);
+			this.windowDisplay.addEntity(multiplePlayer);
 			break;
 		case DISCONNECT:
 			break;

@@ -27,6 +27,7 @@ public class Server extends Thread {
 	}
 
 	public void run() {
+		System.out.println("Waiting for connection...");
 		while (true) {
 			byte[] data = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -49,13 +50,13 @@ public class Server extends Thread {
 			break;
 		case CONNECT:
 			packet = new ConnectPacket(data);
-			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getName()
+			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getType()
 					+ " has connected.");
-			
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getName(),
-					((ConnectPacket) packet).getModel(), ((ConnectPacket) packet).getPosition(),
-					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
-					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
+
+			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
+					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
+					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
+					((ConnectPacket) packet).getScale(), address, port);
 			addConnection(multiplePlayer, ((ConnectPacket) packet));
 			break;
 		case DISCONNECT:
@@ -65,22 +66,27 @@ public class Server extends Thread {
 		}
 	}
 
-	public void addConnection(MultiplePlayer players, ConnectPacket packet) {
+	public void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
 		boolean isConnected = false;
 		for (MultiplePlayer player : this.connectedPlayers) {
-			if (players.getName().equalsIgnoreCase(player.getName())) {
+			if (multiplePlayer.getPort() == player.getPort()) { // fix this later
 				if (player.getIpAddress() == null) {
-					player.setIpAddress(players.getIpAddress());
+					player.setIpAddress(multiplePlayer.getIpAddress());
 				}
 				if (player.getPort() == -1) {
-					player.setPort(players.getPort());
+					player.setPort(multiplePlayer.getPort());
 				}
+				isConnected = true;
 			} else {
 				sendData(packet.getData(), player.getIpAddress(), player.getPort());
+
+				packet = new ConnectPacket(player.getType(), player.getModel(), player.getPosition(), player.getRotX(),
+						player.getRotY(), player.getRotZ(), player.getScale());
+				sendData(packet.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}
 		}
 		if (!isConnected) {
-			connectedPlayers.add(players);
+			connectedPlayers.add(multiplePlayer);
 			packet.writeData(this);
 		}
 	}

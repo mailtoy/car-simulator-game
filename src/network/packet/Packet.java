@@ -1,5 +1,7 @@
 package network.packet;
 
+import entities.Player;
+import models.TexturedModel;
 import network.Client;
 import network.Server;
 
@@ -26,14 +28,14 @@ public abstract class Packet {
 	}
 
 	/**
-	 * Send any data to the Server from this Client.
+	 * Send a packet to the Server from this Client.
 	 * 
 	 * @param client
 	 */
 	public abstract void writeData(Client client);
 
 	/**
-	 * Send to all the clients within this Server.
+	 * Send a packet to all the clients within this Server.
 	 * 
 	 * @param server
 	 */
@@ -44,6 +46,8 @@ public abstract class Packet {
 	}
 
 	public abstract byte[] getData();
+	
+	public abstract TexturedModel getModel();
 
 	public static PacketTypes lookupPacket(int id) {
 		for (PacketTypes packetType : PacketTypes.values()) {
