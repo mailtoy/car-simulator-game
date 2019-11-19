@@ -11,6 +11,7 @@ import java.util.List;
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
+import network.packet.MovePacket;
 import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
@@ -52,18 +53,38 @@ public class Server extends Thread {
 			break;
 		case CONNECT:
 			packet = new ConnectPacket(data);
-			handdleConnection((ConnectPacket) packet, address, port);
+			handleConnect((ConnectPacket) packet, address, port);
 			break;
 		case DISCONNECT:
 			packet = new DisconnectPacket(data);
-			handdleDisconnection((DisconnectPacket) packet, address, port);
+			handleDisconnect((DisconnectPacket) packet, address, port);
+			break;
+		case MOVE:
+			packet = new MovePacket(data);
+			handleMove((MovePacket) packet);
 			break;
 		default:
 			break;
 		}
 	}
 
-	private void handdleConnection(ConnectPacket packet, InetAddress address, int port) {
+	public void sendData(byte[] data, InetAddress ipAddress, int port) {
+		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
+
+		try {
+			socket.send(packet);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void broadcast(byte[] data) {
+		for (MultiplePlayer player : connectedPlayers) {
+			sendData(data, player.getIpAddress(), player.getPort());
+		}
+	}
+
+	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has connected.");
 
@@ -74,11 +95,25 @@ public class Server extends Thread {
 		addConnection(multiplePlayer, ((ConnectPacket) packet));
 	}
 
-	private void handdleDisconnection(DisconnectPacket packet, InetAddress address, int port) {
+	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has disconnected.");
 
 		removeConnection((DisconnectPacket) packet);
+	}
+
+	private void handleMove(MovePacket packet) {
+//		System.out.println(packet.getType() + " has move to " + packet.getPosition());
+		
+		if (getMultiplePlayer(packet.getType()) != null) {
+			int index = getMultiplePlayerIndex(packet.getType());
+			connectedPlayers.get(index).setPosition(packet.getPosition());
+			connectedPlayers.get(index).setRotX(packet.getRotX());
+			connectedPlayers.get(index).setRotY(packet.getRotY());
+			connectedPlayers.get(index).setRotZ(packet.getRotX());
+
+			packet.writeData(this);
+		}
 	}
 
 	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
@@ -116,12 +151,12 @@ public class Server extends Thread {
 		packet.writeData(this);
 	}
 
-//	private MultiplePlayer getMultiplePlayer(String type) {
-//		for (MultiplePlayer player : this.connectedPlayers) {
-//			return player.getType().equals(type) ? player : null;
-//		}
-//		return null;
-//	}
+	private MultiplePlayer getMultiplePlayer(String type) {
+		for (MultiplePlayer player : this.connectedPlayers) {
+			return player.getType().equals(type) ? player : null;
+		}
+		return null;
+	}
 
 	private int getMultiplePlayerIndex(String type) {
 		int index = 0;
@@ -132,22 +167,6 @@ public class Server extends Thread {
 			index++;
 		}
 		return index;
-	}
-
-	public void sendData(byte[] data, InetAddress ipAddress, int port) {
-		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-
-		try {
-			socket.send(packet);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public void broadcast(byte[] data) {
-		for (MultiplePlayer player : connectedPlayers) {
-			sendData(data, player.getIpAddress(), player.getPort());
-		}
 	}
 
 	public static void main(String[] args) {

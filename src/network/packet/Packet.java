@@ -1,13 +1,12 @@
 package network.packet;
 
-import models.TexturedModel;
 import network.Client;
 import network.Server;
 
 public abstract class Packet {
 
 	public static enum PacketTypes {
-		INVALID(-1), CONNECT(00), DISCONNECT(01);
+		INVALID(-1), CONNECT(00), DISCONNECT(01), MOVE(02);
 
 		private int packetId;
 
@@ -45,8 +44,6 @@ public abstract class Packet {
 	}
 
 	public abstract byte[] getData();
-	
-	public abstract TexturedModel getModel();
 
 	public static PacketTypes lookupPacket(int id) {
 		for (PacketTypes packetType : PacketTypes.values()) {

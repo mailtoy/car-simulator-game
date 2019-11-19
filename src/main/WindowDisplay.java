@@ -7,6 +7,7 @@ import java.util.Random;
 import org.lwjgl.util.vector.Vector3f;
 
 import android.R.integer;
+import android.R.string;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -42,6 +43,8 @@ public abstract class WindowDisplay {
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
+	
+	protected final String TYPE = "Controller" + new Random().nextInt(100); // for now
 
 	public WindowDisplay() {
 		this.client = new Client(this);
@@ -98,11 +101,11 @@ public abstract class WindowDisplay {
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("color")));
 
-		player = new MultiplePlayer("Controller", car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f, null, -1);
+		player = new MultiplePlayer(TYPE, car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f, null, -1);
 		camera = new Camera(player);
 	}
 
-	public void render() {
+	protected void render() {
 		renderer.processEntity(player);
 		renderer.processTerrain(terrain);
 		renderer.processTerrain(terrain2);
@@ -115,7 +118,7 @@ public abstract class WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
-	public void closeqRequest(String type) {
+	protected void closeqRequest(String type) {
 		renderer.cleanUp();
 		loader.cleanUp();
 
@@ -126,22 +129,44 @@ public abstract class WindowDisplay {
 		DisplayManager.closeDisplay();
 	}
 
-	public void addEntity(Entity entity) {
-		entities.add(entity);
+	public void addMultiplePlayer(MultiplePlayer player) {
+		entities.add(player);
 	}
 
-	public void removeEntity(String type) {
+	public void removeMultiplePlayer(String type) {
 		int index = 0;
+		this.entities.remove(loopEntities(index, type));
+	}
+
+	private int getMultiplayerIndex(String type) {
+		int index = -1;
+		return loopEntities(index, type);
+	}
+
+	private int loopEntities(int index, String type) {
 		for (Entity entity : entities) {
 			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
 				break;
 			}
 			index++;
 		}
-		this.entities.remove(index);
+		return index;
+	}
+
+	public void movePlayer(String type, Vector3f position, float rotX, float rotY, float rotZ) {
+		int index = getMultiplayerIndex(type);
+		entities.get(index).setPosition(position);
+		entities.get(index).setRotX(rotX);
+		entities.get(index).setRotY(rotY);
+		entities.get(index).setRotZ(rotZ);
 	}
 
 	public Player getPlayer() {
 		return this.player;
 	}
+
+	public Client getClient() {
+		return this.client;
+	}
+
 }

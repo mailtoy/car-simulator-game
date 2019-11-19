@@ -1,13 +1,12 @@
 package main;
 
-import java.util.Random;
-
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
 import network.packet.ConnectPacket;
+import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
-	private final String TYPE = "Controller" + new Random().nextInt(1000); // for now
 
 	public Controller() {
 		super();
@@ -21,6 +20,13 @@ public class Controller extends WindowDisplay {
 
 	private void run() {
 		while (!Display.isCloseRequested()) {
+
+			if (Keyboard.next()) {
+				MovePacket packet = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
+						player.getRotY(), player.getRotZ());
+				packet.writeData(client);
+			}
+
 			player.move();
 			camera.move();
 			super.render();

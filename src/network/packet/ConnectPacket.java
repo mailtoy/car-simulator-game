@@ -54,11 +54,6 @@ public class ConnectPacket extends Packet {
 						.getBytes();
 	}
 
-	@Override
-	public TexturedModel getModel() {
-		return this.model;
-	}
-
 	public String getType() {
 		return this.type;
 	}
