@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import entities.MultiplePlayer;
 import main.WindowDisplay;
 import network.packet.ConnectPacket;
+import network.packet.DisconnectPacket;
 import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
@@ -32,6 +33,7 @@ public class Client extends Thread {
 		}
 	}
 
+	@Override
 	public void run() {
 		while (true) {
 			byte[] data = new byte[1024];
@@ -55,16 +57,11 @@ public class Client extends Thread {
 			break;
 		case CONNECT:
 			packet = new ConnectPacket(data);
-			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getType()
-					+ " has joined the server.");
-
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
-					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
-					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-			this.windowDisplay.addEntity(multiplePlayer);
+			handleConnection((ConnectPacket) packet, address, port);
 			break;
 		case DISCONNECT:
+			packet = new DisconnectPacket(data);
+			handleDisconnection((DisconnectPacket) packet, address, port);
 			break;
 		default:
 			break;
@@ -79,5 +76,23 @@ public class Client extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void handleConnection(ConnectPacket packet, InetAddress address, int port) {
+		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
+				+ " has joined the server.");
+
+		MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
+				this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
+				((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
+				((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
+		this.windowDisplay.addEntity(multiplePlayer);
+	}
+
+	private void handleDisconnection(DisconnectPacket packet, InetAddress address, int port) {
+		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
+				+ " has left from the server.");
+
+		this.windowDisplay.removeEntity(((DisconnectPacket) packet).getType());
 	}
 }

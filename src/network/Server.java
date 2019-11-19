@@ -10,6 +10,7 @@ import java.util.List;
 
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
+import network.packet.DisconnectPacket;
 import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
@@ -26,6 +27,7 @@ public class Server extends Thread {
 		}
 	}
 
+	@Override
 	public void run() {
 		System.out.println("Waiting for connection...");
 		while (true) {
@@ -50,26 +52,40 @@ public class Server extends Thread {
 			break;
 		case CONNECT:
 			packet = new ConnectPacket(data);
-			System.out.println(address.getHostAddress() + ":" + port + " " + ((ConnectPacket) packet).getType()
-					+ " has connected.");
-
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
-					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
-					((ConnectPacket) packet).getScale(), address, port);
-			addConnection(multiplePlayer, ((ConnectPacket) packet));
+			handdleConnection((ConnectPacket) packet, address, port);
 			break;
 		case DISCONNECT:
+			packet = new DisconnectPacket(data);
+			handdleDisconnection((DisconnectPacket) packet, address, port);
 			break;
 		default:
 			break;
 		}
 	}
 
-	public void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
+	private void handdleConnection(ConnectPacket packet, InetAddress address, int port) {
+		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
+				+ " has connected.");
+
+		MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
+				((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
+				((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
+				((ConnectPacket) packet).getScale(), address, port);
+		addConnection(multiplePlayer, ((ConnectPacket) packet));
+	}
+
+	private void handdleDisconnection(DisconnectPacket packet, InetAddress address, int port) {
+		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
+				+ " has disconnected.");
+
+		removeConnection((DisconnectPacket) packet);
+	}
+
+	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
 		boolean isConnected = false;
+
 		for (MultiplePlayer player : this.connectedPlayers) {
-			if (multiplePlayer.getPort() == player.getPort()) { // fix this later
+			if (multiplePlayer.getType().equals(player.getType())) { // fix this later
 				if (player.getIpAddress() == null) {
 					player.setIpAddress(multiplePlayer.getIpAddress());
 				}
@@ -78,8 +94,12 @@ public class Server extends Thread {
 				}
 				isConnected = true;
 			} else {
+				// relay to the current connected player (multiplePlayer) that there is a new
+				// player (player)
 				sendData(packet.getData(), player.getIpAddress(), player.getPort());
 
+				// relay to the new player (player) that the currently connected player
+				// (multiplePlayer) exists
 				packet = new ConnectPacket(player.getType(), player.getModel(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ(), player.getScale());
 				sendData(packet.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
@@ -89,6 +109,29 @@ public class Server extends Thread {
 			connectedPlayers.add(multiplePlayer);
 			packet.writeData(this);
 		}
+	}
+
+	private void removeConnection(DisconnectPacket packet) {
+		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
+		packet.writeData(this);
+	}
+
+//	private MultiplePlayer getMultiplePlayer(String type) {
+//		for (MultiplePlayer player : this.connectedPlayers) {
+//			return player.getType().equals(type) ? player : null;
+//		}
+//		return null;
+//	}
+
+	private int getMultiplePlayerIndex(String type) {
+		int index = 0;
+		for (MultiplePlayer player : this.connectedPlayers) {
+			if (player.getType().equals(type)) {
+				break;
+			}
+			index++;
+		}
+		return index;
 	}
 
 	public void sendData(byte[] data, InetAddress ipAddress, int port) {

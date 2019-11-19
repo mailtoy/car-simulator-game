@@ -1,6 +1,5 @@
 package network.packet;
 
-import entities.Player;
 import models.TexturedModel;
 import network.Client;
 import network.Server;

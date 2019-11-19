@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
+import android.R.integer;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -14,6 +15,7 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
+import network.packet.DisconnectPacket;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
@@ -96,7 +98,7 @@ public abstract class WindowDisplay {
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("color")));
 
-		player = new MultiplePlayer("Controller", car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f, null, -1); // add name
+		player = new MultiplePlayer("Controller", car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f, null, -1);
 		camera = new Camera(player);
 	}
 
@@ -113,16 +115,30 @@ public abstract class WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
-	public void closeqRequest() {
+	public void closeqRequest(String type) {
 		renderer.cleanUp();
 		loader.cleanUp();
+
+		DisconnectPacket packet = new DisconnectPacket(type, player.getModel(), player.getPosition(), player.getRotX(),
+				player.getRotY(), player.getRotZ(), player.getScale());
+		packet.writeData(client);
+
 		DisplayManager.closeDisplay();
 	}
-	
-	
-	public void addEntity(Player player) {
-		System.out.println("here???????");
-		entities.add(player);
+
+	public void addEntity(Entity entity) {
+		entities.add(entity);
+	}
+
+	public void removeEntity(String type) {
+		int index = 0;
+		for (Entity entity : entities) {
+			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
+				break;
+			}
+			index++;
+		}
+		this.entities.remove(index);
 	}
 
 	public Player getPlayer() {
