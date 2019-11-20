@@ -3,8 +3,6 @@ package connection;
 import java.io.*;
 import java.net.*;
 
-import org.lwjgl.util.vector.Vector3f;
-
 /**
  * Client creates a TCP socket to Server.
  * 
@@ -13,7 +11,10 @@ import org.lwjgl.util.vector.Vector3f;
  */
 public class Client {
 	private final int remoteServerPort = 3001;
-	private String serverIP = "10.223.115.18";
+	
+	String serverIP = "10.30.115.212";
+
+
 	private Socket serverSocket;
 	private ClientType clientType;
 
@@ -49,12 +50,12 @@ public class Client {
 	}
 
 	public void sendConnect() throws Exception {
-		objectOutputStream.writeObject(new Packet("Connect", clientType.toString(), "has connected."));
+		objectOutputStream.writeObject(new ParseObject("Connect", typeSpecify(), "has connected."));
 		objectOutputStream.flush();
 	}
 
 	public void sendDisconnect() throws Exception {
-		objectOutputStream.writeObject(new Packet("Disconnect", clientType.toString(), "has disconnected."));
+		objectOutputStream.writeObject(new ParseObject("Disconnect", typeSpecify(), "has disconnected."));
 		objectOutputStream.flush();
 
 //		objectOutputStream.close();
@@ -62,9 +63,13 @@ public class Client {
 //		serverSocket.close();
 	}
 
-	public void sendPosition(Vector3f position) throws Exception {
-		objectOutputStream.writeObject(new Packet("Position", clientType.toString(),
-				position.getX() + ":" + position.getY() + ":" + position.getY()));
+	public void sendKeyInput(int keyInput, float speed) throws Exception {
+		objectOutputStream.writeObject(new ParseObject("KeyInput", typeSpecify(), keyInput + ":" + speed));
+		objectOutputStream.flush();
+	}
+	
+	public void sendMapSelected(String map) throws Exception {
+		objectOutputStream.writeObject(new ParseObject("Map", typeSpecify(), map));
 		objectOutputStream.flush();
 	}
 }
@@ -86,21 +91,25 @@ class IncomingInput implements Runnable {
 
 	@Override
 	public void run() {
-		Packet object;
+		ParseObject object;
 		try {
-			while ((object = (Packet) objectInputStream.readObject()) != null) {
+			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
 
 				switch (object.getSendType()) {
 				case "Connect":
 				case "Disconnect":
 					client.printConnection(object.getClientType() + " " + object.getMessage());
 					break;
-				case "Position":
-					client.updatePosition(object.getMessage());
+				case "KeyInput":
+					client.move(object.getMessage());
+					break;
+				case "Map":
+					client.setMap(object.getMessage());
 					break;
 				default:
 					break;
 				}
+
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -4,8 +4,8 @@ import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
 import toolbox.Maths;
-
 import entities.Camera;
+import entities.ControllerCamera;
 import entities.Light;
 
 public class StaticShader extends ShaderProgram {

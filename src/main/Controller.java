@@ -3,6 +3,7 @@ package main;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 
+import entities.ControllerCamera;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 
@@ -10,6 +11,7 @@ public class Controller extends WindowDisplay {
 
 	public Controller() {
 		super();
+		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(TYPE, player.getModel(), player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());

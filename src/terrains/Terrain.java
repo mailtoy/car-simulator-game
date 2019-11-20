@@ -1,8 +1,9 @@
 package terrains;
 
+import java.util.List;
+
 import models.RawModel;
 import renderEngine.Loader;
-import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
@@ -16,6 +17,7 @@ public class Terrain {
 	private RawModel model;
 	private TerrainTexturePack texturePack;
 	private TerrainTexture blendMap;
+	private List<Terrain> terrainList;
 
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap) {
 		this.texturePack = texturePack;
@@ -32,6 +34,10 @@ public class Terrain {
 	public float getZ() {
 		return z;
 	}
+	
+	public float getSIZE() {
+		return SIZE;
+	}
 
 	public RawModel getModel() {
 		return model;
@@ -44,6 +50,8 @@ public class Terrain {
 	public TerrainTexture getBlendMap() {
 		return blendMap;
 	}
+	
+	
 
 	private RawModel generateTerrain(Loader loader) {
 		int count = VERTEX_COUNT * VERTEX_COUNT;

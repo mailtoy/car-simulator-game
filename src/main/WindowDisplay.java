@@ -15,8 +15,6 @@ import models.RawModel;
 import models.TexturedModel;
 import network.Client;
 import network.packet.DisconnectPacket;
-import objConverter.ModelData;
-import objConverter.OBJFileLoader;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -28,13 +26,11 @@ import textures.TerrainTexturePack;
 
 public abstract class WindowDisplay {
 	private Loader loader;
-	private ModelData data;
-	private RawModel treeModel, carModel;
-	private TerrainTexture backgroundTexture, rTexture, gTexture, bTexture, blendMap;
+	private RawModel carModel;
 	private TexturedModel staticModel, grassModel, fernModel, car;
 	private TerrainTexturePack texturePack;
 	private Light light;
-	private Terrain terrain, terrain2;
+	private List<Terrain> terrains;
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 
@@ -53,17 +49,17 @@ public abstract class WindowDisplay {
 	private void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
+		terrains = new ArrayList<Terrain>();
 
 		// Terrain TextureStaff
-		backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
-		rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
-		gTexture = new TerrainTexture(loader.loadTexture("road"));
-		bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("map1"));
 
-		data = OBJFileLoader.loadOBJ("tree");
-		treeModel = loader.loadToVAO(data.getVertices(), data.getTextureCoords(), data.getNormals(), data.getIndices());
 		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
 
@@ -77,34 +73,51 @@ public abstract class WindowDisplay {
 		fernModel.getTexture().setHasTransparency(true);
 
 		entities = new ArrayList<Entity>();
-		Random random = new Random();
 		for (int i = 0; i < 500; i++) {
-			entities.add(new Entity(staticModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 3));
-			entities.add(new Entity(grassModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 1));
-			entities.add(new Entity(fernModel,
-					new Vector3f(random.nextFloat() * 800 - 400, 0, random.nextFloat() * -600), 0, 0, 0, 0.6f));
+			entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 3));
+			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
+			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}
 
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
-		blendMap = new TerrainTexture(loader.loadTexture("blendMap"));
-		terrain = new Terrain(0, 0, loader, texturePack, blendMap);
-		terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
+//		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
+//		Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
+//		Terrain terrain3 = new Terrain(0, 1, loader, texturePack, blendMap);
+//		Terrain terrain4 = new Terrain(1, 1, loader, texturePack, blendMap);
+
+		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
+
+		// * for big map size logic
+		int count = 0, x = 1, z = 1, round = 4;
+		for (int i = 0; i < round; i++) {
+			terrains.add(new Terrain(x + i, i, loader, texturePack, blendMap));
+			terrains.add(new Terrain(i, z + i, loader, texturePack, blendMap));
+			terrains.add(new Terrain(x + i, z + i, loader, texturePack, blendMap));
+		}
+		if (round > 1) {
+			for (int i = round; i > 1; i--) {
+				for (int j = i - 2; j >= 0; j--) {
+					terrains.add(new Terrain(i, j, loader, texturePack, blendMap));
+					count++;
+				}
+				for (int k = i - 2; k >= 0; k--) {
+					terrains.add(new Terrain(k, i, loader, texturePack, blendMap));
+				}
+			}
+		}
 
 		renderer = new MasterRenderer();
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
-		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("color")));
-
-		player = new MultiplePlayer(TYPE, car, new Vector3f(110, 0, -750), 0, 0, 0, 0.6f, null, -1);
-		camera = new Camera(player);
+		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
+		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 	}
 
 	protected void render() {
-		renderer.processTerrain(terrain);
-		renderer.processTerrain(terrain2);
+		for (Terrain terrain : terrains) {
+			renderer.processTerrain(terrain);
+		}
 
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);

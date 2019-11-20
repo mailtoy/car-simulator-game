@@ -1,10 +1,9 @@
 package engineTester;
 
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
 
 import connection.ClientType;
-import entities.Camera;
+import entities.SimulatorCamera;
 
 /**
  * Simulator receives the movement commands from Controller. Showing from the
@@ -17,19 +16,13 @@ public class Simulator extends ClientType {
 
 	public Simulator() {
 		super();
-		setCamera();
+		camera = new SimulatorCamera();
 		run();
-	}
-	
-	@Override
-	public void setCamera() {
-		camera = new Camera();
-		camera.setPosition(new Vector3f(100, 100, -100));
-		camera.setPitch(90);
 	}
 
 	public void run() {
 		while (!Display.isCloseRequested()) {
+			camera.move();
 			render();
 		}
 		closeRequest();
