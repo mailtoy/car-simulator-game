@@ -103,8 +103,8 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-//		System.out.println(packet.getType() + " has move to " + packet.getPosition());
-		
+		System.out.println(packet.getType() + " has move to " + packet.getPosition());
+
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
 			connectedPlayers.get(index).setPosition(packet.getPosition());
@@ -120,11 +120,11 @@ public class Server extends Thread {
 		boolean isConnected = false;
 
 		for (MultiplePlayer player : this.connectedPlayers) {
-			if (multiplePlayer.getType().equals(player.getType())) { // fix this later
-				if (player.getIpAddress() == null) {
+			if (multiplePlayer.getType().equals(player.getType())) { 
+				if (player.getIpAddress() == null) { // fix this later
 					player.setIpAddress(multiplePlayer.getIpAddress());
 				}
-				if (player.getPort() == -1) {
+				if (player.getPort() == -1) { // fix this later
 					player.setPort(multiplePlayer.getPort());
 				}
 				isConnected = true;
@@ -170,7 +170,6 @@ public class Server extends Thread {
 	}
 
 	public static void main(String[] args) {
-		Server server = new Server();
-		server.start();
+		new Server().start();
 	}
 }

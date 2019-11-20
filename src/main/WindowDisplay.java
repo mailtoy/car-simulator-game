@@ -6,8 +6,6 @@ import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import android.R.integer;
-import android.R.string;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -43,7 +41,6 @@ public abstract class WindowDisplay {
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
-	
 	protected final String TYPE = "Controller" + new Random().nextInt(100); // for now
 
 	public WindowDisplay() {
@@ -106,7 +103,6 @@ public abstract class WindowDisplay {
 	}
 
 	protected void render() {
-		renderer.processEntity(player);
 		renderer.processTerrain(terrain);
 		renderer.processTerrain(terrain2);
 
@@ -134,13 +130,11 @@ public abstract class WindowDisplay {
 	}
 
 	public void removeMultiplePlayer(String type) {
-		int index = 0;
-		this.entities.remove(loopEntities(index, type));
+		entities.remove(loopEntities(0, type));
 	}
 
 	private int getMultiplayerIndex(String type) {
-		int index = -1;
-		return loopEntities(index, type);
+		return loopEntities(0, type);
 	}
 
 	private int loopEntities(int index, String type) {

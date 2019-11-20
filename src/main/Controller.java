@@ -20,16 +20,16 @@ public class Controller extends WindowDisplay {
 
 	private void run() {
 		while (!Display.isCloseRequested()) {
+			camera.move();
+			player.move();
+			super.render();
 
-			if (Keyboard.next()) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_DOWN)
+					|| Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 				MovePacket packet = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ());
 				packet.writeData(client);
 			}
-
-			player.move();
-			camera.move();
-			super.render();
 		}
 		super.closeqRequest(TYPE);
 	}
