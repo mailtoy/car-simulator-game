@@ -27,10 +27,10 @@ public class SimulatorCamera extends Camera {
 			position.x -= 1f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			position.y += 1f;
+			position.y += 10f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			position.y -= 1f;
+			position.y -= 10f;
 		}
 	}
 
