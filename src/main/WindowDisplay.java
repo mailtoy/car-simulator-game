@@ -2,7 +2,6 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -27,7 +26,7 @@ import textures.TerrainTexturePack;
 public abstract class WindowDisplay {
 	private Loader loader;
 	private RawModel carModel;
-	private TexturedModel staticModel, grassModel, fernModel, car;
+	protected TexturedModel staticModel, grassModel, fernModel, car;
 	private TerrainTexturePack texturePack;
 	private Light light;
 	private List<Terrain> terrains;
@@ -37,7 +36,6 @@ public abstract class WindowDisplay {
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
-	protected final String TYPE = "Controller" + new Random().nextInt(100); // for now
 
 	public WindowDisplay() {
 		this.client = new Client(this);
@@ -106,12 +104,10 @@ public abstract class WindowDisplay {
 				}
 			}
 		}
-
 		renderer = new MasterRenderer();
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 	}
 
 	protected void render() {
@@ -131,9 +127,9 @@ public abstract class WindowDisplay {
 		renderer.cleanUp();
 		loader.cleanUp();
 
-		DisconnectPacket packet = new DisconnectPacket(type, player.getModel(), player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
-		packet.writeData(client);
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getModel(), player.getPosition(),
+				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
+		disconnectPacket.writeData(client);
 
 		DisplayManager.closeDisplay();
 	}
@@ -143,14 +139,19 @@ public abstract class WindowDisplay {
 	}
 
 	public void removeMultiplePlayer(String type) {
-		entities.remove(loopEntities(0, type));
+		entities.remove(loopEntities(type));
+	}
+
+	public boolean isAdded(String type) {
+		return (loopEntities(type) == entities.size()) ? false : true;
 	}
 
 	private int getMultiplayerIndex(String type) {
-		return loopEntities(0, type);
+		return loopEntities(type);
 	}
 
-	private int loopEntities(int index, String type) {
+	private int loopEntities(String type) {
+		int index = 0;
 		for (Entity entity : entities) {
 			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
 				break;
@@ -162,10 +163,11 @@ public abstract class WindowDisplay {
 
 	public void movePlayer(String type, Vector3f position, float rotX, float rotY, float rotZ) {
 		int index = getMultiplayerIndex(type);
-		entities.get(index).setPosition(position);
-		entities.get(index).setRotX(rotX);
-		entities.get(index).setRotY(rotY);
-		entities.get(index).setRotZ(rotZ);
+		MultiplePlayer player = (MultiplePlayer) entities.get(index);
+		player.setPosition(position);
+		player.setRotX(rotX);
+		player.setRotY(rotY);
+		player.setRotZ(rotZ);
 	}
 
 	public Player getPlayer() {

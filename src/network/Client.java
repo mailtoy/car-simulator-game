@@ -16,7 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	private final String serverIP = "203.246.112.148";
+	private final String serverIP = "10.223.113.247";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
@@ -75,7 +75,6 @@ public class Client extends Thread {
 
 	public void sendData(byte[] data) {
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 3001);
-
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
@@ -87,11 +86,13 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
 
-		MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-				this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
-				((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
-				((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-		this.windowDisplay.addMultiplePlayer(multiplePlayer);
+		if (!this.windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
+			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
+					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
+					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
+					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
+			this.windowDisplay.addMultiplePlayer(multiplePlayer);
+		}
 	}
 
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {

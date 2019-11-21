@@ -1,16 +1,22 @@
 package main;
 
+import java.util.Random;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector3f;
 
 import entities.ControllerCamera;
+import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
+	protected final String TYPE = "Controller" + new Random().nextInt(100); // for now
 
 	public Controller() {
 		super();
+		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(TYPE, player.getModel(), player.getPosition(), player.getRotX(),
@@ -28,9 +34,9 @@ public class Controller extends WindowDisplay {
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_DOWN)
 					|| Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
-				MovePacket packet = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
+				MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ());
-				packet.writeData(client);
+				movePacket.writeData(client);
 			}
 		}
 		super.closeqRequest(TYPE);

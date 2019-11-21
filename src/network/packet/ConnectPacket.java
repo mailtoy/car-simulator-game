@@ -55,7 +55,7 @@ public class ConnectPacket extends Packet {
 	}
 
 	public String getType() {
-		return this.type;
+		return type;
 	}
 
 	public Vector3f getPosition() {

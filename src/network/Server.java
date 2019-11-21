@@ -70,7 +70,6 @@ public class Server extends Thread {
 
 	public void sendData(byte[] data, InetAddress ipAddress, int port) {
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-
 		try {
 			socket.send(packet);
 		} catch (IOException e) {
@@ -92,14 +91,14 @@ public class Server extends Thread {
 				((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
 				((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
 				((ConnectPacket) packet).getScale(), address, port);
-		addConnection(multiplePlayer, ((ConnectPacket) packet));
+		addConnection(multiplePlayer, packet);
 	}
 
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has disconnected.");
 
-		removeConnection((DisconnectPacket) packet);
+		removeConnection(packet);
 	}
 
 	private void handleMove(MovePacket packet) {
@@ -107,10 +106,11 @@ public class Server extends Thread {
 
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
-			connectedPlayers.get(index).setPosition(packet.getPosition());
-			connectedPlayers.get(index).setRotX(packet.getRotX());
-			connectedPlayers.get(index).setRotY(packet.getRotY());
-			connectedPlayers.get(index).setRotZ(packet.getRotX());
+			MultiplePlayer player = connectedPlayers.get(index);
+			player.setPosition(packet.getPosition());
+			player.setRotX(packet.getRotX());
+			player.setRotY(packet.getRotY());
+			player.setRotZ(packet.getRotX());
 
 			packet.writeData(this);
 		}
@@ -119,14 +119,10 @@ public class Server extends Thread {
 	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
 		boolean isConnected = false;
 
-		for (MultiplePlayer player : this.connectedPlayers) {
-			if (multiplePlayer.getType().equals(player.getType())) { 
-				if (player.getIpAddress() == null) { // fix this later
-					player.setIpAddress(multiplePlayer.getIpAddress());
-				}
-				if (player.getPort() == -1) { // fix this later
-					player.setPort(multiplePlayer.getPort());
-				}
+		for (MultiplePlayer player : connectedPlayers) {
+			if (multiplePlayer.getType().equals(player.getType())) {
+				player.setIpAddress(multiplePlayer.getIpAddress());
+				player.setPort(multiplePlayer.getPort());
 				isConnected = true;
 			} else {
 				// relay to the current connected player (multiplePlayer) that there is a new
@@ -135,9 +131,9 @@ public class Server extends Thread {
 
 				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
-				packet = new ConnectPacket(player.getType(), player.getModel(), player.getPosition(), player.getRotX(),
+				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getModel(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ(), player.getScale());
-				sendData(packet.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
+				sendData(updatePacket.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}
 		}
 		if (!isConnected) {
@@ -152,15 +148,17 @@ public class Server extends Thread {
 	}
 
 	private MultiplePlayer getMultiplePlayer(String type) {
-		for (MultiplePlayer player : this.connectedPlayers) {
-			return player.getType().equals(type) ? player : null;
+		for (MultiplePlayer player : connectedPlayers) {
+			if (player.getType().equals(type)) {
+				return player;
+			}
 		}
 		return null;
 	}
 
 	private int getMultiplePlayerIndex(String type) {
 		int index = 0;
-		for (MultiplePlayer player : this.connectedPlayers) {
+		for (MultiplePlayer player : connectedPlayers) {
 			if (player.getType().equals(type)) {
 				break;
 			}
