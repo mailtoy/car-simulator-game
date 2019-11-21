@@ -36,10 +36,12 @@ public abstract class ClientType {
 	private RawModel treeModel, bunnyModel;
 	private TexturedModel staticModel, grassModel, fernModel, stanfordBunny;
 	private Light light;
-	private Terrain terrain, terrain2;
+	private Terrain terrain, terrain2, terrain3, terrain4, terrain5, terrain6, terrain7, terrain8, terrain9;
+	private List<Terrain> terrainList, terrainList2;
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 	private TerrainTexturePack texturePack;
+	private int round = 4;
 
 	protected Client client;
 	protected Player player; // Change to Car later
@@ -56,11 +58,12 @@ public abstract class ClientType {
 	public void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
+		terrainList = new ArrayList<Terrain>();
 
 		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
-		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
-		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
+		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
+		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
@@ -91,6 +94,31 @@ public abstract class ClientType {
 
 		terrain = new Terrain(0, 0, loader, texturePack, blendMap);
 		terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
+		terrain3 = new Terrain(0, 1, loader, texturePack, blendMap);
+		terrain4 = new Terrain(1, 1, loader, texturePack, blendMap);
+
+		terrainList.add(new Terrain(0, 0, loader, texturePack, blendMap));
+
+		// * for big map size logic
+		int count = 0;
+		int x = 1;
+		int z = 1;
+		for (int i = 0; i < round; i++) {
+			terrainList.add(new Terrain(x + i, i, loader, texturePack, blendMap));
+			terrainList.add(new Terrain(i, z + i, loader, texturePack, blendMap));
+			terrainList.add(new Terrain(x + i, z + i, loader, texturePack, blendMap));
+		}
+		if (round > 1) {
+			for (int i = round; i > 1; i--) {
+				for (int j = i - 2; j >= 0; j--) {
+					terrainList.add(new Terrain(i, j, loader, texturePack, blendMap));
+					count++;
+				}
+				for (int k = i - 2; k >= 0; k--) {
+					terrainList.add(new Terrain(k, i, loader, texturePack, blendMap));
+				}
+			}
+		}
 
 		renderer = new MasterRenderer();
 
@@ -98,12 +126,19 @@ public abstract class ClientType {
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
 
 		player = new Player(stanfordBunny, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f);
+		System.out.println(terrainList.size());
+		System.out.println(count);
 	}
 
 	public void render() {
 		renderer.processEntity(player);
-		renderer.processTerrain(terrain);
-		renderer.processTerrain(terrain2);
+		for (int i = 0; i < terrainList.size(); i++) {
+			renderer.processTerrain(terrainList.get(i));
+		}
+//		renderer.processTerrain(terrain);
+//		renderer.processTerrain(terrain2);
+//		renderer.processTerrain(terrain3);
+//		renderer.processTerrain(terrain4);
 
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
@@ -146,24 +181,51 @@ public abstract class ClientType {
 		}
 		player.move();
 	}
-	
-	public void setMap(String map){
+
+	public void setMap(String map) {
 		if (map != "map1") {
 			System.out.println(map);
 			TerrainTexture newMap = new TerrainTexture(loader.loadTexture(map));
 			terrain = new Terrain(0, 0, loader, texturePack, newMap);
 			terrain2 = new Terrain(1, 0, loader, texturePack, newMap);
-			renderer.processEntity(player);
-			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
+			terrain3 = new Terrain(0, 1, loader, texturePack, newMap);
+			terrain4 = new Terrain(1, 1, loader, texturePack, newMap);
 
-			for (Entity entity : entities) {
-				renderer.processEntity(entity);
+			int x = 1;
+			int z = 1;
+			terrainList2.add(new Terrain(0, 0, loader, texturePack, newMap));
+			for (int i = 0; i < round; i++) {
+				terrainList2.add(new Terrain(x + i, i, loader, texturePack, newMap));
+				terrainList2.add(new Terrain(i, z + i, loader, texturePack, newMap));
+				terrainList2.add(new Terrain(x + i, z + i, loader, texturePack, newMap));
 			}
+			if (round > 1) {
+				for (int i = round; i > 1; i--) {
+					for (int j = i - 2; j >= 0; j--) {
+						terrainList2.add(new Terrain(i, j, loader, texturePack, newMap));
+					}
+					for (int k = i - 2; k >= 0; k--) {
+						terrainList2.add(new Terrain(k, i, loader, texturePack, newMap));
+					}
+				}
 
-			renderer.render(light, camera);
-			DisplayManager.updateDisplay();
-			
+				renderer.processEntity(player);
+				for (int i = 0; i < terrainList.size(); i++) {
+					renderer.processTerrain(terrainList2.get(i));
+				}
+//			renderer.processTerrain(terrain);
+//			renderer.processTerrain(terrain2);
+//			renderer.processTerrain(terrain3);
+//			renderer.processTerrain(terrain4);
+
+				for (Entity entity : entities) {
+					renderer.processEntity(entity);
+				}
+
+				renderer.render(light, camera);
+				DisplayManager.updateDisplay();
+
+			}
 		}
 	}
 
