@@ -17,7 +17,6 @@ public class Terrain {
 	private RawModel model;
 	private TerrainTexturePack texturePack;
 	private TerrainTexture blendMap;
-	private List<Terrain> terrainList;
 
 	public Terrain(int gridX, int gridZ, Loader loader, TerrainTexturePack texturePack, TerrainTexture blendMap) {
 		this.texturePack = texturePack;
