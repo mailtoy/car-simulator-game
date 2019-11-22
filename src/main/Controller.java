@@ -19,8 +19,8 @@ public class Controller extends WindowDisplay {
 		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(TYPE, player.getModel(), player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
+		ConnectPacket connectPacket = new ConnectPacket(TYPE, player.getPosition(), player.getRotX(), player.getRotY(),
+				player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
 
 		run();

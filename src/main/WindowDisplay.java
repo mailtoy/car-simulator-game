@@ -127,8 +127,8 @@ public abstract class WindowDisplay {
 		renderer.cleanUp();
 		loader.cleanUp();
 
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getModel(), player.getPosition(),
-				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
+				player.getRotY(), player.getRotZ(), player.getScale());
 		disconnectPacket.writeData(client);
 
 		DisplayManager.closeDisplay();

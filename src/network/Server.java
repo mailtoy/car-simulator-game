@@ -131,7 +131,7 @@ public class Server extends Thread {
 
 				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
-				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getModel(), player.getPosition(), player.getRotX(),
+				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ(), player.getScale());
 				sendData(updatePacket.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}

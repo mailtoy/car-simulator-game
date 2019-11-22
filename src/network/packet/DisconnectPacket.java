@@ -2,13 +2,11 @@ package network.packet;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import models.TexturedModel;
 import network.Client;
 import network.Server;
 
 public class DisconnectPacket extends Packet {
 	private String type;
-	private TexturedModel model;
 	private Vector3f position;
 	private float rotX, rotY, rotZ, scale;
 
@@ -17,19 +15,17 @@ public class DisconnectPacket extends Packet {
 
 		String[] dataArray = readData(data).split(":");
 		this.type = dataArray[0];
-		this.position = new Vector3f(Float.parseFloat(dataArray[2]), Float.parseFloat(dataArray[3]),
-				Float.parseFloat(dataArray[4]));
-		this.rotX = Float.parseFloat(dataArray[5]);
-		this.rotY = Float.parseFloat(dataArray[6]);
-		this.rotZ = Float.parseFloat(dataArray[7]);
-		this.scale = Float.parseFloat(dataArray[8]);
+		this.position = new Vector3f(Float.parseFloat(dataArray[1]), Float.parseFloat(dataArray[2]),
+				Float.parseFloat(dataArray[3]));
+		this.rotX = Float.parseFloat(dataArray[4]);
+		this.rotY = Float.parseFloat(dataArray[5]);
+		this.rotZ = Float.parseFloat(dataArray[6]);
+		this.scale = Float.parseFloat(dataArray[7]);
 	}
 
-	public DisconnectPacket(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
-			float scale) {
+	public DisconnectPacket(String type, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(01);
 		this.type = type;
-		this.model = model;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
@@ -49,9 +45,8 @@ public class DisconnectPacket extends Packet {
 
 	@Override
 	public byte[] getData() {
-		return ("01" + this.type + ":" + this.model + ":" + this.position.getX() + ":" + this.position.getY() + ":"
-				+ this.position.getZ() + ":" + this.rotX + ":" + this.rotY + ":" + this.rotZ + ":" + this.scale)
-						.getBytes();
+		return ("01" + this.type + ":" + this.position.getX() + ":" + this.position.getY() + ":" + this.position.getZ()
+				+ ":" + this.rotX + ":" + this.rotY + ":" + this.rotZ + ":" + this.scale).getBytes();
 	}
 
 	public String getType() {
