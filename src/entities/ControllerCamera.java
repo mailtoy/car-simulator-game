@@ -5,9 +5,9 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 public class ControllerCamera extends Camera {
-	private float distanceFromPlayer = 20;
+	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
-	
+
 	private Player player;
 
 	public ControllerCamera(Player player) {

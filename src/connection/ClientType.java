@@ -3,7 +3,6 @@ package connection;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.util.vector.Vector3f;
 
 import engineTester.Controller;
@@ -125,7 +124,7 @@ public abstract class ClientType {
 		bunnyModel = OBJLoader.loadObjModel("car", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
 
-		player = new Player(stanfordBunny, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f);
+//		player = new Player(stanfordBunny, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f);
 		System.out.println(terrainList.size());
 		System.out.println(count);
 	}
@@ -161,25 +160,25 @@ public abstract class ClientType {
 	}
 
 	public void move(String message) {
-		String[] messageArr = message.split(":");
-		int keyInput = Integer.parseInt(messageArr[0]);
-		float speed = Float.parseFloat(messageArr[1]);
+//		String[] messageArr = message.split(":");
+//		int keyInput = Integer.parseInt(messageArr[0]);
+//		float speed = Float.parseFloat(messageArr[1]);
 
-		if (keyInput == Keyboard.KEY_UP || keyInput == Keyboard.KEY_DOWN) {
-			player.setCurrentSpeed(speed);
-		} else {
-			player.setCurrentSpeed(0);
-		}
-
-		if (keyInput == Keyboard.KEY_RIGHT || keyInput == Keyboard.KEY_LEFT) {
-			player.setCurrentTurnSpeed(speed);
-		} else {
-			player.setCurrentTurnSpeed(0);
-		}
-		if (this.getClass().equals(Controller.class)) {
-			camera.move();
-		}
-		player.move();
+//		if (keyInput == Keyboard.KEY_UP || keyInput == Keyboard.KEY_DOWN) {
+//			player.setCurrentSpeed(speed);
+//		} else {
+//			player.setCurrentSpeed(0);
+//		}
+//
+//		if (keyInput == Keyboard.KEY_RIGHT || keyInput == Keyboard.KEY_LEFT) {
+//			player.setCurrentTurnSpeed(speed);
+//		} else {
+//			player.setCurrentTurnSpeed(0);
+//		}
+//		if (this.getClass().equals(Controller.class)) {
+//			camera.move();
+//		}
+//		player.move();
 	}
 
 	public void setMap(String map) {

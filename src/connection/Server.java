@@ -14,29 +14,38 @@ import java.util.*;
 public class Server implements Runnable {
 	private final int remoteServerPort = 3001;
 	private ServerSocket serverSocket;
+	private boolean running;
+	
 	private ArrayList<ObjectOutputStream> clients;
 
 	public Server() {
 		clients = new ArrayList<ObjectOutputStream>();
+		System.out.println("Waiting for connections...");
+
+		try {
+			serverSocket = new ServerSocket(remoteServerPort);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public void run() {
-		try {
-			serverSocket = new ServerSocket(remoteServerPort);
-			System.out.println("Waiting for connections...");
+		running = true;
 
-			while (true) {
+		while (running) {
+			try {
 				Socket clientSocket = serverSocket.accept();
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(clientSocket.getOutputStream());
 				clients.add(objectOutputStream);
 
 				Thread listener = new Thread(new ClientHandler(this, clientSocket, objectOutputStream));
 				listener.start();
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
+		shutdown();
 	}
 
 	public synchronized ArrayList<ObjectOutputStream> getClients() {
@@ -45,6 +54,16 @@ public class Server implements Runnable {
 
 	public synchronized void removeClient(ObjectOutputStream ObjectOutputStream) {
 		this.clients.remove(ObjectOutputStream);
+	}
+
+	public void shutdown() {
+		running = false;
+
+		try {
+			serverSocket.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
@@ -65,14 +84,16 @@ class ClientHandler implements Runnable {
 	private Socket socket;
 	private ObjectInputStream objectInputStream;
 	private ObjectOutputStream objectOutputStream;
+	
+	private ArrayList<String> clients;
 
 	public ClientHandler(Server server, Socket clientSocket, ObjectOutputStream objectOutputStream) {
 		this.server = server;
 		this.objectOutputStream = objectOutputStream;
+		this.clients = new ArrayList<String>();
 		try {
 			this.socket = clientSocket;
-			InputStream inputStream = this.socket.getInputStream();
-			this.objectInputStream = new ObjectInputStream(inputStream);
+			this.objectInputStream = new ObjectInputStream(socket.getInputStream());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,14 +106,24 @@ class ClientHandler implements Runnable {
 			while ((object = (ParseObject) objectInputStream.readObject()) != null) {
 				System.out.printf("Received: [%s] %s %s\n", object.getSendType(), object.getClientType(),
 						object.getMessage());
-
-				if (object.getSendType().equals("Disconnect")) {
-					server.removeClient(objectOutputStream);
+				
+				switch (object.getSendType()) {
+				case "Connect":
+					clients.add(object.getClientType());
+					break;
+				case "Disconnect":
+					clients.remove(object.getClientType());
+					break;
+				case "Position":
+					break;
+				default:
+					break;
 				}
 				broadcast(object);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			server.removeClient(objectOutputStream);
 		}
 	}
 
