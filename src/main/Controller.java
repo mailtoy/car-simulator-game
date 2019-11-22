@@ -9,6 +9,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
+import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
@@ -39,7 +40,10 @@ public class Controller extends WindowDisplay {
 				movePacket.writeData(client);
 			}
 		}
-		super.closeqRequest(TYPE);
+		DisconnectPacket disconnectPacket = new DisconnectPacket(TYPE, player.getPosition(), player.getRotX(),
+				player.getRotY(), player.getRotZ(), player.getScale());
+		disconnectPacket.writeData(client);
+		super.closeqRequest();
 	}
 
 	public static void main(String[] args) {

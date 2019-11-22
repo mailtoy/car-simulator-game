@@ -85,8 +85,8 @@ public class Client extends Thread {
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
-
-		if (!this.windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
+		if (((ConnectPacket) packet).getType().contains("Controller")
+				&& !this.windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
 			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
 					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
 					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),

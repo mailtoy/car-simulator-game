@@ -13,7 +13,6 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
-import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -123,13 +122,9 @@ public abstract class WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
-	protected void closeqRequest(String type) {
+	protected void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
-
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
-		disconnectPacket.writeData(client);
 
 		DisplayManager.closeDisplay();
 	}
