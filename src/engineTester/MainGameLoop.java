@@ -205,7 +205,7 @@ public class MainGameLoop extends JFrame implements KeyListener {
 			public void actionPerformed(ActionEvent e) {
 				text.setText("^");
 				try {
-					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
+//					client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -221,7 +221,7 @@ public class MainGameLoop extends JFrame implements KeyListener {
 			public void actionPerformed(ActionEvent e) {
 				text.setText("v");
 				try {
-					client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
+//					client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
 				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
