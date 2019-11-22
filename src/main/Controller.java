@@ -13,10 +13,13 @@ import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
+	protected ControllerHandler controllerHandler;
 	protected final String TYPE = "Controller" + new Random().nextInt(100); // for now
 
 	public Controller() {
 		super();
+		controllerHandler = new ControllerHandler(this);
+		
 		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		camera = new ControllerCamera(player);
 
