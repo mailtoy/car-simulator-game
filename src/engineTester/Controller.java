@@ -82,26 +82,7 @@ public class Controller extends ClientType implements KeyListener, ActionListene
 	 * Invoked when a key has been released.
 	 */
 	public void keyReleased(KeyEvent e) {
-		int keyCode = e.getKeyCode();
-		if (keyCode == KeyEvent.VK_RIGHT) {
-
-		}
-		if (keyCode == KeyEvent.VK_LEFT) {
-
-		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			gauge.setValueAnimated(0);
-		}
-		if (keyCode == KeyEvent.VK_DOWN) {
-
-		}
-		if (keyCode == KeyEvent.VK_SPACE) {
-
-		}
-		if (keyCode == KeyEvent.VK_ESCAPE) {
-
-		}
-
+		
 	}
 
 	public Controller() {
