@@ -126,7 +126,15 @@ public class ControllerHandler implements KeyListener, ActionListener {
 		jpNorth.add(stop);
 		jpNorth.add(breakcar);
 		jpNorth.add(accelerate);
-		//
+
+		forward.addActionListener(this);
+		backward.addActionListener(this);
+		turnLeft.addActionListener(this);
+		turnRight.addActionListener(this);
+
+		accelerate.addActionListener(this);
+		breakcar.addActionListener(this);
+		stop.addActionListener(this);
 		// jpCenter.setLayout(new BorderLayout());
 		// jpCenter.add(stop, BorderLayout.CENTER);
 
@@ -161,8 +169,7 @@ public class ControllerHandler implements KeyListener, ActionListener {
 		buttonsPanel.add(valueField);
 		buttonsPanel.add(button);
 		/** end gauge **/
-
-		checkButtonPress();
+		
 		f.pack();
 	}
 
@@ -175,110 +182,6 @@ public class ControllerHandler implements KeyListener, ActionListener {
 		f.setVisible(true);
 	}
 
-	public void checkButtonPress() {
-
-		forward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				text.setText("^");
-				try {
-					gauge.setValueAnimated(RUN_SPEED);
-					running = true;
-					moveThread = new Thread(new Runnable() {
-						@Override
-						public void run() {
-							while (running) {
-								try {
-									forward.setEnabled(false);
-									stop.setEnabled(true);
-									// client.sendKeyInput(Keyboard.KEY_UP,
-									// RUN_SPEED);
-									Thread.sleep((long) 25);
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
-								// if (Thread.interrupted()) {
-								// return;
-								// }
-							}
-						}
-					});
-					moveThread.start();
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-			}
-		});
-
-		turnLeft.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// client.sendKeyInput(Keyboard.KEY_LEFT, TURN_SPEED);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		backward.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-		turnRight.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					// client.sendKeyInput(Keyboard.KEY_RIGHT, -TURN_SPEED);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		stop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					forward.setEnabled(true);
-					stop.setEnabled(false);
-					running = false;
-					// moveThread.interrupted();
-					// client.sendKeyInput(Keyboard.KEY_0, 0);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-			}
-		});
-
-		breakcar.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					RUN_SPEED = RUN_SPEED + RUN_BREAK;
-					// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-					gauge.setValueAnimated(RUN_SPEED);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-			}
-		});
-
-		accelerate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					RUN_SPEED = RUN_SPEED + RUN_ACC;
-					// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-					gauge.setValueAnimated(RUN_SPEED);
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
-
-			}
-		});
-	}
-
 	public void box(String name[], JComboBox<String> nameList) {
 		// Create the combo box, select item at index 0.
 		nameList = new JComboBox(name);
@@ -288,10 +191,58 @@ public class ControllerHandler implements KeyListener, ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		JComboBox cb = (JComboBox) e.getSource();
-		String name = (String) cb.getSelectedItem();
-		text.setText(name);
+		// JComboBox cb = (JComboBox) e.getSource();
+		// String name = (String) cb.getSelectedItem();
+		// text.setText(name);
 
+		String action = e.getActionCommand();
+		if (action.equals("^")) {
+			try {
+				gauge.setValueAnimated(RUN_SPEED);
+				running = true;
+				moveThread = new Thread(new Runnable() {
+					@Override
+					public void run() {
+						while (running) {
+							try {
+								forward.setEnabled(false);
+								stop.setEnabled(true);
+								// client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
+								Thread.sleep((long) 25);
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+				moveThread.start();
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		} else if (action.equals("v")) {
+			// client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
+		} else if (action.equals("<")) {
+			// client.sendKeyInput(Keyboard.KEY_LEFT, TURN_SPEED);
+		} else if (action.equals(">")) {
+			// client.sendKeyInput(Keyboard.KEY_RIGHT, -TURN_SPEED);
+		} else if (action.equals("accelerate")) {
+			RUN_SPEED = RUN_SPEED + RUN_ACC;
+			// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
+			gauge.setValueAnimated(RUN_SPEED);
+		} else if (action.equals("break")) {
+			RUN_SPEED = RUN_SPEED + RUN_BREAK;
+			// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
+			gauge.setValueAnimated(RUN_SPEED);
+		} else if (action.equals("stop")) {
+			try {
+				forward.setEnabled(true);
+				stop.setEnabled(false);
+				running = false;
+				// client.sendKeyInput(Keyboard.KEY_0, 0);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		}
 	}
 
 	@Override
