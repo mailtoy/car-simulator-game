@@ -150,24 +150,24 @@ public class ControllerHandler implements KeyListener, ActionListener {
 
 		JLabel valueLabel = new JLabel("Value:");
 
-		final JTextField valueField = new JTextField(7);
-		valueField.setText("30");
-		JButton button = new JButton("Set");
-		button.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					double value = Double.valueOf(valueField.getText());
-					gauge.setValueAnimated(value);
-				} catch (NumberFormatException ex) {
-					System.err.println("invalid input");
-				}
-			}
-		});
+//		final JTextField valueField = new JTextField(7);
+//		valueField.setText("30");
+//		JButton button = new JButton("Set");
+//		button.addActionListener(new ActionListener() {
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				try {
+//					double value = Double.valueOf(valueField.getText());
+//					gauge.setValueAnimated(value);
+//				} catch (NumberFormatException ex) {
+//					System.err.println("invalid input");
+//				}
+//			}
+//		});
 
 		buttonsPanel.add(valueLabel);
-		buttonsPanel.add(valueField);
-		buttonsPanel.add(button);
+//		buttonsPanel.add(valueField);
+//		buttonsPanel.add(button);
 		/** end gauge **/
 		
 		f.pack();
