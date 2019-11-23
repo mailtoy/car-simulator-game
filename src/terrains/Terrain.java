@@ -66,9 +66,9 @@ public class Terrain {
 //				vertices[vertexPointer*3+1] = 0;
 //				vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
 				/* fix grass */
-				vertices[vertexPointer * 3] = -SIZE + (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
+				vertices[vertexPointer * 3] = 0 + (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
 				vertices[vertexPointer * 3 + 1] = 0;
-				vertices[vertexPointer * 3 + 2] = -SIZE + (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
+				vertices[vertexPointer * 3 + 2] = 0 + (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
 
 				normals[vertexPointer * 3] = 0;
 				normals[vertexPointer * 3 + 1] = 1;

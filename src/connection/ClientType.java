@@ -41,7 +41,7 @@ public abstract class ClientType {
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 	private TerrainTexturePack texturePack;
-	private int round = 5;
+	protected int round = 1;
 
 	protected Client client;
 	protected Player player; // Change to Car later
@@ -104,7 +104,7 @@ public abstract class ClientType {
 		bunnyModel = OBJLoader.loadObjModel("car", loader);
 		stanfordBunny = new TexturedModel(bunnyModel, new ModelTexture(loader.loadTexture("carTexture2")));
 
-		player = new Player(stanfordBunny, new Vector3f(305, 0, -10), 0, 180,0, 0.6f);
+		player = new Player(stanfordBunny, new Vector3f(0, 0, 0), 0, 180,0, 0.6f);
 	}
 
 	public void render() {
