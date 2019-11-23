@@ -38,7 +38,8 @@ public class Controller extends WindowDisplay {
 			super.render();
 
 			if (Keyboard.isKeyDown(Keyboard.KEY_UP) || Keyboard.isKeyDown(Keyboard.KEY_DOWN)
-					|| Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || isPressed) {
+					|| Keyboard.isKeyDown(Keyboard.KEY_LEFT) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)
+					|| player.getCurrentSpeed() > 0 || isPressed) {
 				MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ());
 				movePacket.writeData(client);
