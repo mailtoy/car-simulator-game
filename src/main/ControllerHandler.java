@@ -20,11 +20,8 @@ import eu.hansolo.steelseries.gauges.Radial;
 public class ControllerHandler extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Controller controller;
+	private Radial gauge = new Radial();
 
-//	private static float RUN_SPEED = 20;
-//	private static final float RUN_BREAK = -5;
-//	private static final float RUN_ACC = 5;
-//	private static final float TURN_SPEED = 30;
 //	private static boolean running = false;
 //	private Thread moveThread;
 
@@ -61,11 +58,10 @@ public class ControllerHandler extends JFrame {
 		mapList.setSelectedIndex(0);
 //		mapList.addActionListener(this); // fix this later
 
-		Radial gauge = new Radial();
+		gauge = new Radial();
 		gauge.setTitle("Controller");
 		gauge.setUnitString("Km / Hr");
 		gauge.setPreferredSize(new Dimension(200, 200));
-//		gauge.setValueAnimated(value);
 
 		forwardBtn = new JButton("^");
 		backwardBtn = new JButton("v");
@@ -155,6 +151,10 @@ public class ControllerHandler extends JFrame {
 
 			}
 		});
+	}
+
+	public void updateSpeed(Float currentSpeed) {
+		gauge.setValueAnimated(currentSpeed);
 	}
 
 //	@Override
