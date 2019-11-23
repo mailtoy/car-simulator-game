@@ -21,8 +21,7 @@ public class Player extends Entity {
 		this.type = type;
 	}
 
-	public void move() {
-		checkInputs();
+	private void move() {
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -30,7 +29,7 @@ public class Player extends Entity {
 		super.increasePosition(dx, 0, dz);
 	}
 
-	private void checkInputs() {
+	public void checkInputs() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			this.currentSpeed = RUN_SPEED;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
@@ -46,6 +45,26 @@ public class Player extends Entity {
 		} else {
 			this.currentTurnSpeed = 0;
 		}
+		move();
+	}
+
+	public void checkInputs(String button) {
+		if (button.equals("^")) {
+			this.currentSpeed = RUN_SPEED;
+		} else if (button.equals("v")) {
+			this.currentSpeed = -RUN_SPEED;
+		} else {
+			this.currentSpeed = 0;
+		}
+
+		if (button.equals(">")) {
+			this.currentTurnSpeed = -TURN_SPEED;
+		} else if (button.equals("<")) {
+			this.currentTurnSpeed = TURN_SPEED;
+		} else {
+			this.currentTurnSpeed = 0;
+		}
+		move();
 	}
 
 	public String getType() {
