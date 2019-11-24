@@ -22,8 +22,8 @@ public class ControllerHandler extends JFrame {
 	private Controller controller;
 	private Radial gauge = new Radial();
 
-//	private static boolean running = false;
-//	private Thread moveThread;
+	// private static boolean running = false;
+	// private Thread moveThread;
 
 	private JButton forwardBtn, backwardBtn, leftBtn, rightBtn, accelerateBtn, breakBtn, stopBtn;
 	private ArrayList<JButton> directionButtons;
@@ -56,7 +56,7 @@ public class ControllerHandler extends JFrame {
 		String[] maps = { "map1", "map2" };
 		JComboBox<String> mapList = new JComboBox<String>(maps);
 		mapList.setSelectedIndex(0);
-//		mapList.addActionListener(this); // fix this later
+		// mapList.addActionListener(this); // fix this later
 
 		gauge = new Radial();
 		gauge.setTitle("Controller");
@@ -154,58 +154,59 @@ public class ControllerHandler extends JFrame {
 	}
 
 	public void updateSpeed(Float currentSpeed) {
-		gauge.setValueAnimated(currentSpeed);
+		System.out.println("cur:"+ currentSpeed);
+		gauge.setValue(currentSpeed);
 	}
 
-//	@Override
-//	public void actionPerformed(ActionEvent e) {
-//		String action = e.getActionCommand();
-//		if (action.equals("^")) {
-//			try {
-////				gauge.setValueAnimated(RUN_SPEED);
-//				running = true;
-//				moveThread = new Thread(new Runnable() {
-//					@Override
-//					public void run() {
-//						while (running) {
-//							try {
-////								forward.setEnabled(false);
-////								stop.setEnabled(true);
-//								// client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
-//								Thread.sleep((long) 25);
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}
-//						}
-//					}
-//				});
-//				moveThread.start();
-//			} catch (Exception e1) {
-//				e1.printStackTrace();
-//			}
-//		} else if (action.equals("v")) {
-//			// client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
-//		} else if (action.equals("<")) {
-//			// client.sendKeyInput(Keyboard.KEY_LEFT, TURN_SPEED);
-//		} else if (action.equals(">")) {
-//			// client.sendKeyInput(Keyboard.KEY_RIGHT, -TURN_SPEED);
-//		} else if (action.equals("accelerate")) {
-//			RUN_SPEED = RUN_SPEED + RUN_ACC;
-//			// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-////			gauge.setValueAnimated(RUN_SPEED);
-//		} else if (action.equals("break")) {
-//			RUN_SPEED = RUN_SPEED + RUN_BREAK;
-//			// client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-////			gauge.setValueAnimated(RUN_SPEED);
-//		} else if (action.equals("stop")) {
-//			try {
-////				forward.setEnabled(true);
-////				stop.setEnabled(false);
-//				running = false;
-//				// client.sendKeyInput(Keyboard.KEY_0, 0);
-//			} catch (Exception e1) {
-//				e1.printStackTrace();
-//			}
-//		}
-//	}
+	// @Override
+	// public void actionPerformed(ActionEvent e) {
+	// String action = e.getActionCommand();
+	// if (action.equals("^")) {
+	// try {
+	//// gauge.setValueAnimated(RUN_SPEED);
+	// running = true;
+	// moveThread = new Thread(new Runnable() {
+	// @Override
+	// public void run() {
+	// while (running) {
+	// try {
+	//// forward.setEnabled(false);
+	//// stop.setEnabled(true);
+	// // client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
+	// Thread.sleep((long) 25);
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// });
+	// moveThread.start();
+	// } catch (Exception e1) {
+	// e1.printStackTrace();
+	// }
+	// } else if (action.equals("v")) {
+	// // client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
+	// } else if (action.equals("<")) {
+	// // client.sendKeyInput(Keyboard.KEY_LEFT, TURN_SPEED);
+	// } else if (action.equals(">")) {
+	// // client.sendKeyInput(Keyboard.KEY_RIGHT, -TURN_SPEED);
+	// } else if (action.equals("accelerate")) {
+	// RUN_SPEED = RUN_SPEED + RUN_ACC;
+	// // client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
+	//// gauge.setValueAnimated(RUN_SPEED);
+	// } else if (action.equals("break")) {
+	// RUN_SPEED = RUN_SPEED + RUN_BREAK;
+	// // client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
+	//// gauge.setValueAnimated(RUN_SPEED);
+	// } else if (action.equals("stop")) {
+	// try {
+	//// forward.setEnabled(true);
+	//// stop.setEnabled(false);
+	// running = false;
+	// // client.sendKeyInput(Keyboard.KEY_0, 0);
+	// } catch (Exception e1) {
+	// e1.printStackTrace();
+	// }
+	// }
+	// }
 }
