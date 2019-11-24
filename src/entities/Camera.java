@@ -42,3 +42,4 @@ public abstract class Camera {
 	public abstract void move();
 	public abstract void setRound(int round);
 }
+

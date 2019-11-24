@@ -1,8 +1,6 @@
-  package renderEngine;
+package renderEngine;
 
 import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;

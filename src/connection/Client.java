@@ -14,7 +14,6 @@ public class Client {
 	
 	String serverIP = "10.30.113.169";
 
-
 	private Socket serverSocket;
 	private ClientType clientType;
 

@@ -7,7 +7,7 @@ import terrains.Terrain;
 
 public class SimulatorCamera extends Camera {
 
-	private Vector3f position = new Vector3f(0, 500, 0);
+	private Vector3f position = new Vector3f(765, 500, 800);
 	private int round;
 
 	public SimulatorCamera() {
@@ -19,27 +19,27 @@ public class SimulatorCamera extends Camera {
 	public void move() {
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
-			if (position.z < 200) {
-				position.z = 200;
-			}
+//			if (position.z < 400) {
+//				position.z = 400;
+//			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			position.z += 5f;
-			if (position.z >= (round * 800) ) {
-				position.z = round * 800;
-			}
+//			if (position.z >= ((round+1) * 800) ) {
+//				position.z = (round+1) * 800;
+//			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 			position.x += 5f;
-			if (position.x >= (round * 800) ) {
-				position.x = round * 800;
-			}
+//			if (position.x >= ((round+1) * 800) ) {
+//				position.x = (round+1) * 800;
+//			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			position.x -= 5f;
-			if (position.x < 300) {
-				position.x = 300;
-			}
+//			if (position.x < 0) {
+//				position.x = 0;
+//			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			position.y += 5f;
