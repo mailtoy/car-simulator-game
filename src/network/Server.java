@@ -10,6 +10,7 @@ import java.util.List;
 
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
+import network.packet.CrashPacket;
 import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import network.packet.Packet;
@@ -113,6 +114,26 @@ public class Server extends Thread {
 			player.setRotZ(packet.getRotX());
 
 			packet.writeData(this);
+			checkCrash();
+		}
+	}
+
+	private void checkCrash() {
+		// width 6 height 14
+		for (int i = 0; i < connectedPlayers.size() - 1; i++) {
+			for (int j = i + 1; j < connectedPlayers.size(); j++) {
+				float playerPosX = connectedPlayers.get(i).getPosition().getX();
+				float playerPosZ = connectedPlayers.get(i).getPosition().getZ();
+				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
+				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
+				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
+					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes() );
+				}
+			}
+
+		}
+		for (MultiplePlayer player : connectedPlayers) {
+			System.out.println(player.getType() + ": " + player.getPosition());
 		}
 	}
 

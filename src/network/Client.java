@@ -16,7 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	private final String serverIP = "192.168.0.35";
+	private final String serverIP = "192.168.0.45";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 

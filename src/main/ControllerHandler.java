@@ -58,7 +58,6 @@ public class ControllerHandler extends JFrame {
 		mapList.setSelectedIndex(0);
 		// mapList.addActionListener(this); // fix this later
 
-		gauge = new Radial();
 		gauge.setTitle("Controller");
 		gauge.setUnitString("Km / Hr");
 		gauge.setPreferredSize(new Dimension(200, 200));
@@ -154,7 +153,6 @@ public class ControllerHandler extends JFrame {
 	}
 
 	public void updateSpeed(Float currentSpeed) {
-		System.out.println("cur:"+ currentSpeed);
 		gauge.setValue(currentSpeed);
 	}
 
