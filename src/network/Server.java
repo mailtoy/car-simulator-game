@@ -19,8 +19,10 @@ import network.packet.Packet.PacketTypes;
 public class Server extends Thread {
 	private DatagramSocket socket;
 	private List<MultiplePlayer> connectedPlayers;
+	private ServerGUI serverGUI;
 
 	public Server() {
+		this.serverGUI = new ServerGUI(this);
 		try {
 			this.socket = new DatagramSocket(3001);
 			this.connectedPlayers = new ArrayList<MultiplePlayer>();
@@ -31,7 +33,7 @@ public class Server extends Thread {
 
 	@Override
 	public void run() {
-		System.out.println("Waiting for connection...");
+		serverGUI.appendResponse("Waiting for connection...");
 		while (true) {
 			byte[] data = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
@@ -85,7 +87,7 @@ public class Server extends Thread {
 	}
 
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
-		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
+		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has connected.");
 
 		MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
@@ -96,8 +98,8 @@ public class Server extends Thread {
 	}
 
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
-		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
-				+ " has disconnected.");
+		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] "
+				+ ((DisconnectPacket) packet).getType() + " has disconnected.");
 
 		removeConnection(packet);
 	}
@@ -127,14 +129,14 @@ public class Server extends Thread {
 				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
 				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
 				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
-					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes() );
+					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes());
 				}
 			}
 
 		}
-		for (MultiplePlayer player : connectedPlayers) {
-			System.out.println(player.getType() + ": " + player.getPosition());
-		}
+//		for (MultiplePlayer player : connectedPlayers) {
+//			System.out.println(player.getType() + ": " + player.getPosition());
+//		}
 	}
 
 	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
@@ -187,7 +189,7 @@ public class Server extends Thread {
 		}
 		return index;
 	}
-
+	
 	public static void main(String[] args) {
 		new Server().start();
 	}

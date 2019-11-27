@@ -39,11 +39,11 @@ public abstract class WindowDisplay {
 	public WindowDisplay() {
 		this.client = new Client(this);
 		this.client.start();
-
+		
 		initComponents();
 	}
 
-	private void initComponents() {
+	protected void initComponents() {
 		DisplayManager.createDisplay();
 		loader = new Loader();
 		terrains = new ArrayList<Terrain>();
@@ -141,21 +141,6 @@ public abstract class WindowDisplay {
 		return (loopEntities(type) == entities.size()) ? false : true;
 	}
 
-	private int getMultiplayerIndex(String type) {
-		return loopEntities(type);
-	}
-
-	private int loopEntities(String type) {
-		int index = 0;
-		for (Entity entity : entities) {
-			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
-				break;
-			}
-			index++;
-		}
-		return index;
-	}
-
 	public void movePlayer(String type, Vector3f position, float rotX, float rotY, float rotZ) {
 		int index = getMultiplayerIndex(type);
 		MultiplePlayer player = (MultiplePlayer) entities.get(index);
@@ -171,6 +156,21 @@ public abstract class WindowDisplay {
 
 	public Client getClient() {
 		return this.client;
+	}
+
+	private int getMultiplayerIndex(String type) {
+		return loopEntities(type);
+	}
+
+	private int loopEntities(String type) {
+		int index = 0;
+		for (Entity entity : entities) {
+			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
+				break;
+			}
+			index++;
+		}
+		return index;
 	}
 
 }
