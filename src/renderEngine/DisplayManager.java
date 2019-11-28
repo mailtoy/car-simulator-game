@@ -17,13 +17,13 @@ public class DisplayManager {
 	private static long lastFramTime;
 	private static float delta;
 
-	public static void createDisplay() {
+	public static void createDisplay(String title) {
 		ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
 
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Our First Display!");
+			Display.setTitle(title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
@@ -35,19 +35,19 @@ public class DisplayManager {
 		Display.sync(FPS_CAP);
 		Display.update();
 		long currentFrameTime = getCurrentTime();
-		delta = (currentFrameTime - lastFramTime)/1000f;
+		delta = (currentFrameTime - lastFramTime) / 1000f;
 		lastFramTime = currentFrameTime;
 	}
-	
-	public static float getFrameTimeSeconds(){
+
+	public static float getFrameTimeSeconds() {
 		return delta;
 	}
 
 	public static void closeDisplay() {
 		Display.destroy();
 	}
-	
-	private static long getCurrentTime(){
-		return Sys.getTime()*1000/Sys.getTimerResolution();
+
+	private static long getCurrentTime() {
+		return Sys.getTime() * 1000 / Sys.getTimerResolution();
 	}
 }

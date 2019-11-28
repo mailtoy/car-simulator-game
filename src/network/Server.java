@@ -105,7 +105,7 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-//		System.out.println(packet.getType() + " has move to " + packet.getPosition());
+		System.out.println(packet.getType() + " has move to " + packet.getPosition());
 
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
@@ -129,18 +129,16 @@ public class Server extends Thread {
 				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
 				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
 				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
-					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes());
+//					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes());
 				}
 			}
 
 		}
-//		for (MultiplePlayer player : connectedPlayers) {
-//			System.out.println(player.getType() + ": " + player.getPosition());
-//		}
 	}
 
 	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
 		boolean isConnected = false;
+		packet.setMap(serverGUI.getSelectedMap());
 
 		for (MultiplePlayer player : connectedPlayers) {
 			if (multiplePlayer.getType().equals(player.getType())) {
@@ -154,8 +152,8 @@ public class Server extends Thread {
 
 				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
-				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getPosition(), player.getRotX(),
-						player.getRotY(), player.getRotZ(), player.getScale());
+				ConnectPacket updatePacket = new ConnectPacket(player.getType(), serverGUI.getSelectedMap(),
+						player.getPosition(), player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
 				sendData(updatePacket.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}
 		}
@@ -189,7 +187,7 @@ public class Server extends Thread {
 		}
 		return index;
 	}
-	
+
 	public static void main(String[] args) {
 		new Server().start();
 	}

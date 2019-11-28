@@ -14,11 +14,10 @@ import javax.swing.JTextArea;
 public class ServerGUI extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private Server server;
-	
+
 	private JTextArea responsesArea;
 	private String[] mapNames = new String[] { "map1", "map2" };
 	private JComboBox<String> mapList;
-	
 
 	public ServerGUI(Server server) {
 		this.server = server;
@@ -27,6 +26,7 @@ public class ServerGUI extends JFrame {
 	}
 
 	private void setFrame() {
+		setTitle("Server");
 		setSize(new Dimension(500, 300));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
@@ -45,22 +45,18 @@ public class ServerGUI extends JFrame {
 
 		responsesArea = new JTextArea(50, 100);
 		responsesArea.setEditable(false);
-		
+
 		add(mapSelectPanel, BorderLayout.NORTH);
 		add(responsesArea, BorderLayout.CENTER);
-		
-		mapList.addItemListener(new ItemListener() {
-			
-			@Override
-			public void itemStateChanged(ItemEvent arg0) {
-				
-			}
-		});
 
 		pack();
 	}
 
 	public void appendResponse(String response) {
 		responsesArea.append(response + "\n");
+	}
+
+	public String getSelectedMap() {
+		return mapList.getSelectedItem().toString();
 	}
 }

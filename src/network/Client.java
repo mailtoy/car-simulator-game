@@ -16,7 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	private final String serverIP = "192.168.0.45";
+	private final String serverIP = "10.223.119.90";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
@@ -85,25 +85,30 @@ public class Client extends Thread {
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
+
+		if (!windowDisplay.isInited()) {
+			windowDisplay.initComponents(packet.getMap());
+		}
 		if (((ConnectPacket) packet).getType().contains("Controller")
-				&& !this.windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
+				&& !windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
 			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
+					windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
 					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
 					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-			this.windowDisplay.addMultiplePlayer(multiplePlayer);
+			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
+		windowDisplay.run();
 	}
 
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has left from the server.");
 
-		this.windowDisplay.removeMultiplePlayer(((DisconnectPacket) packet).getType());
+		windowDisplay.removeMultiplePlayer(((DisconnectPacket) packet).getType());
 	}
 
 	private void handleMove(MovePacket packet) {
-		this.windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
+		windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
 				packet.getRotZ());
 	}
 }

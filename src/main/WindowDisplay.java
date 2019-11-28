@@ -2,6 +2,7 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -13,6 +14,7 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
+import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -33,20 +35,25 @@ public abstract class WindowDisplay {
 	private List<Entity> entities;
 
 	protected Client client;
-	protected Player player; // Change to Car later
+	protected Player player; // Change to Car later and random initial position
 	protected Camera camera;
+	protected String type;
+
+	private boolean isInited = false;
 
 	public WindowDisplay() {
 		this.client = new Client(this);
 		this.client.start();
-		
-		initComponents();
+		this.type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	}
 
-	protected void initComponents() {
-		DisplayManager.createDisplay();
+	public abstract void run();
+
+	public void initComponents(String mapName) {
+		DisplayManager.createDisplay("Car" + type);
 		loader = new Loader();
 		terrains = new ArrayList<Terrain>();
+		isInited = true;
 
 		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -55,7 +62,7 @@ public abstract class WindowDisplay {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture("map1"));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture(mapName));
 
 		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
@@ -77,12 +84,6 @@ public abstract class WindowDisplay {
 		}
 
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-
-//		Terrain terrain = new Terrain(0, 0, loader, texturePack, blendMap);
-//		Terrain terrain2 = new Terrain(1, 0, loader, texturePack, blendMap);
-//		Terrain terrain3 = new Terrain(0, 1, loader, texturePack, blendMap);
-//		Terrain terrain4 = new Terrain(1, 1, loader, texturePack, blendMap);
-
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
 
 		// * for big map size logic
@@ -107,6 +108,7 @@ public abstract class WindowDisplay {
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
+		player.setModel(car);
 	}
 
 	protected void render() {
@@ -123,8 +125,18 @@ public abstract class WindowDisplay {
 	}
 
 	protected void closeqRequest() {
+		isInited = false;
 		renderer.cleanUp();
 		loader.cleanUp();
+
+		DisconnectPacket disconnectPacket;
+		if (this.getClass().equals(Controller.class)) {
+			disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(), player.getRotY(),
+					player.getRotZ(), player.getScale());
+		} else {
+			disconnectPacket = new DisconnectPacket(type);
+		}
+		disconnectPacket.writeData(client);
 
 		DisplayManager.closeDisplay();
 	}
@@ -156,6 +168,10 @@ public abstract class WindowDisplay {
 
 	public Client getClient() {
 		return this.client;
+	}
+
+	public boolean isInited() {
+		return isInited;
 	}
 
 	private int getMultiplayerIndex(String type) {
