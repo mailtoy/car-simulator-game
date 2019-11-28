@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
+import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
@@ -15,13 +16,15 @@ public class Controller extends WindowDisplay {
 
 	public Controller() {
 		super();
-		player = new MultiplePlayer(type, null, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
+		player = new MultiplePlayer(type, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		controllerHandler = new ControllerHandler(this);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, "map1", player.getPosition(), player.getRotX(),
+		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
+
+		run();
 	}
 
 	@Override
@@ -46,6 +49,9 @@ public class Controller extends WindowDisplay {
 			}
 		}
 		super.closeqRequest();
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
+				player.getRotY(), player.getRotZ(), player.getScale());
+		disconnectPacket.writeData(client);
 	}
 
 	public void setPressed(String pressedButton) {

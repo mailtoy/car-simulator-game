@@ -86,9 +86,10 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
 
-		if (!windowDisplay.isInited()) {
-			windowDisplay.initComponents(packet.getMap());
+		if (!((ConnectPacket) packet).getMap().equals("map1")) {
+			windowDisplay.reloadMap(packet.getMap());
 		}
+
 		if (((ConnectPacket) packet).getType().contains("Controller")
 				&& !windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
 			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),

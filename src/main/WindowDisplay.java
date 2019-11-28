@@ -14,7 +14,6 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
-import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -34,26 +33,26 @@ public abstract class WindowDisplay {
 	private MasterRenderer renderer;
 	private List<Entity> entities;
 
+	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
+	protected String map = "map1";
 	protected Client client;
 	protected Player player; // Change to Car later and random initial position
 	protected Camera camera;
-	protected String type;
-
-	private boolean isInited = false;
 
 	public WindowDisplay() {
 		this.client = new Client(this);
 		this.client.start();
-		this.type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
+
+		initComponents(map);
 	}
 
 	public abstract void run();
 
-	public void initComponents(String mapName) {
+	private void initComponents(String mapName) {
 		DisplayManager.createDisplay("Car" + type);
 		loader = new Loader();
 		terrains = new ArrayList<Terrain>();
-		isInited = true;
+		map = mapName;
 
 		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -62,7 +61,7 @@ public abstract class WindowDisplay {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture(mapName));
+		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture(map));
 
 		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
@@ -108,7 +107,6 @@ public abstract class WindowDisplay {
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		player.setModel(car);
 	}
 
 	protected void render() {
@@ -125,18 +123,8 @@ public abstract class WindowDisplay {
 	}
 
 	protected void closeqRequest() {
-		isInited = false;
 		renderer.cleanUp();
 		loader.cleanUp();
-
-		DisconnectPacket disconnectPacket;
-		if (this.getClass().equals(Controller.class)) {
-			disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(), player.getRotY(),
-					player.getRotZ(), player.getScale());
-		} else {
-			disconnectPacket = new DisconnectPacket(type);
-		}
-		disconnectPacket.writeData(client);
 
 		DisplayManager.closeDisplay();
 	}
@@ -146,11 +134,11 @@ public abstract class WindowDisplay {
 	}
 
 	public void removeMultiplePlayer(String type) {
-		entities.remove(loopEntities(type));
+		entities.remove(getMultiplayerIndex(type));
 	}
 
 	public boolean isAdded(String type) {
-		return (loopEntities(type) == entities.size()) ? false : true;
+		return (getMultiplayerIndex(type) == entities.size()) ? false : true;
 	}
 
 	public void movePlayer(String type, Vector3f position, float rotX, float rotY, float rotZ) {
@@ -162,6 +150,22 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
+	public void reloadMap(String mapName) {
+		ArrayList<MultiplePlayer> multiplePlayers = new ArrayList<MultiplePlayer>();
+		for (Entity entity : entities) {
+			if (entity instanceof MultiplePlayer) {
+				multiplePlayers.add((MultiplePlayer) entity);
+			}
+		}
+
+		closeqRequest();
+		initComponents(mapName);
+
+		for (MultiplePlayer player : multiplePlayers) {
+			addMultiplePlayer(player);
+		}
+	}
+
 	public Player getPlayer() {
 		return this.player;
 	}
@@ -170,15 +174,7 @@ public abstract class WindowDisplay {
 		return this.client;
 	}
 
-	public boolean isInited() {
-		return isInited;
-	}
-
 	private int getMultiplayerIndex(String type) {
-		return loopEntities(type);
-	}
-
-	private int loopEntities(String type) {
 		int index = 0;
 		for (Entity entity : entities) {
 			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
