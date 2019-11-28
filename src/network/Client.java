@@ -97,7 +97,6 @@ public class Client extends Thread {
 					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
 			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
-		windowDisplay.run();
 	}
 
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
