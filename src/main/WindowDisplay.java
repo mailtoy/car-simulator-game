@@ -24,9 +24,10 @@ import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
 public abstract class WindowDisplay {
-	private Loader loader;
+	private Loader loader = new Loader();
 	private RawModel carModel;
 	protected TexturedModel staticModel, grassModel, fernModel, car;
+	protected TerrainTexture blendMap;
 	private TerrainTexturePack texturePack;
 	private Light light;
 	private List<Terrain> terrains;
@@ -50,7 +51,7 @@ public abstract class WindowDisplay {
 
 	private void initComponents(String mapName) {
 		DisplayManager.createDisplay("Car" + type);
-		loader = new Loader();
+		renderer = new MasterRenderer();
 		terrains = new ArrayList<Terrain>();
 		map = mapName;
 
@@ -61,7 +62,7 @@ public abstract class WindowDisplay {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		TerrainTexture blendMap = new TerrainTexture(loader.loadTexture(map));
+		blendMap = new TerrainTexture(loader.loadTexture(map));
 
 		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
@@ -103,7 +104,6 @@ public abstract class WindowDisplay {
 				}
 			}
 		}
-		renderer = new MasterRenderer();
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));

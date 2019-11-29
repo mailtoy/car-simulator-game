@@ -16,7 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	private final String serverIP = "10.223.119.90";
+	private final String serverIP = "203.246.112.148";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
@@ -86,16 +86,17 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
 
-		if (!((ConnectPacket) packet).getMap().equals("map1")) {
-			windowDisplay.reloadMap(packet.getMap());
+		String packetMap = ((ConnectPacket) packet).getMap();
+		if (!packetMap.equals("map1")) {
+			windowDisplay.reloadMap(packetMap);
 		}
 
-		if (((ConnectPacket) packet).getType().contains("Controller")
-				&& !windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-					windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
-					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
-					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
+		String packetType = ((ConnectPacket) packet).getType();
+		if (packetType.contains("Controller") && !windowDisplay.isAdded(packetType)) {
+			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, windowDisplay.getPlayer().getModel(),
+					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
+					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
+					((ConnectPacket) packet).getScale(), address, port);
 			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
 	}

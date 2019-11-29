@@ -1,9 +1,7 @@
 package textures;
 
 public class TerrainTexture {
-	
 	private int textureID;
-
 
 	public TerrainTexture(int textureID) {
 		this.textureID = textureID;
@@ -12,4 +10,5 @@ public class TerrainTexture {
 	public int getTextureID() {
 		return textureID;
 	}
+
 }
