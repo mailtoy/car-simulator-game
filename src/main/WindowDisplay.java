@@ -40,7 +40,7 @@ public abstract class WindowDisplay {
 	public WindowDisplay() {
 		this.client = new Client(this);
 		this.client.start();
-
+		
 		initComponents();
 	}
 
@@ -72,7 +72,7 @@ public abstract class WindowDisplay {
 
 		entities = new ArrayList<Entity>();
 		for (int i = 0; i < 500; i++) {
-			entities.add(new Entity(staticModel, new Vector3f(0, 0, 0), 0, 0, 0, 3));
+			entities.add(new Entity(staticModel, new Vector3f(800, 0, 800), 0, 0, 0, 3));
 			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
 			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}

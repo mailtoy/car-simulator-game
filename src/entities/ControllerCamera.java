@@ -2,6 +2,8 @@ package entities;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 import terrains.Terrain;
 
@@ -10,6 +12,11 @@ public class ControllerCamera extends Camera {
 	private float angleAroundPlayer = 0;
 	private int round;
 	private Player player;
+	private Vector3f upLeft;
+
+	public Vector3f getUpLeft() {
+		return upLeft;
+	}
 
 	public ControllerCamera(Player player) {
 		this.player = player;
@@ -17,6 +24,8 @@ public class ControllerCamera extends Camera {
 
 	@Override
 	public void move() {
+		setFrame();
+		checkCrash();
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundPlayer();
@@ -24,6 +33,7 @@ public class ControllerCamera extends Camera {
 		float verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
 		this.yaw = 180 - (player.getRotY() + angleAroundPlayer);
+
 	}
 
 	public void zoom(String zoom) {
@@ -71,6 +81,48 @@ public class ControllerCamera extends Camera {
 			float angleChange = Mouse.getDX() * 0.3f;
 			angleAroundPlayer -= angleChange;
 		}
+	}
+
+	public void checkCrash() {
+//		if (750 >= upLeft.getX() && 750 <= upRight.getX()) {
+////			player.setPosition(new Vector3f(upLeft.getX() + 6, 0, upLeft.getZ() + 6));
+////			player.setCurrentSpeed(0);
+////			System.out.println("เร่งสิเหยดแม่ม!!!");
+//		}
+//		if (750 >= upLeft.getZ() && 750 <= downLeft.getZ()) {
+//			player.setPosition(new Vector3f(upLeft.getX() + 6, 0, upLeft.getZ() + 6));
+//			player.setCurrentSpeed(0);
+//		}
+//		if (750 >= downLeft.getX() && 750 <= downRight.getX()) {
+//			player.setPosition(player.getPosition());
+//		}
+//		if (750 >= downRight.getZ() && 750 <= upRight.getZ()) {
+//			player.setPosition(player.getPosition());
+//		}
+
+		int carW = 8;
+		int carH = 16;
+		if ((upLeft.getX() >= 799 && upLeft.getX() <= 701)
+				|| (upLeft.getX() + carW >= 799 && upLeft.getX() + carW <= 801)
+				|| (upLeft.getX() <= 799 && upLeft.getX() + carW >= 801)) {
+			System.out.println("เข้าไม่สุดจ้าาาา");
+			if (upLeft.getZ() >= 799 && upLeft.getZ() <= 801) {
+				System.out.println("เข้าสุดละจ้าาาา");
+				player.setPosition(new Vector3f(850, 0, 850));
+			} else if (upLeft.getZ() + carH >= 799 && upLeft.getZ() + carH <= 801) {
+				System.out.println("เข้าสุดละจ้าาาา");
+				player.setPosition(new Vector3f(850, 0, 850));
+			}
+			else if (upLeft.getZ() <= 799 && upLeft.getZ() + carH >= 801) {
+				System.out.println("เข้าสุดละจ้าาาา");
+				player.setPosition(new Vector3f(850, 0, 850));
+			}
+
+		}
+	}
+
+	public void setFrame() {
+		upLeft = new Vector3f(player.getPosition().getX() - 4, 0, player.getPosition().getZ() - 8);
 	}
 
 	@Override

@@ -49,6 +49,8 @@ public class Player extends Entity {
 		} else {
 			if (this.currentSpeed > 0) {
 				this.currentSpeed -= 0.5;
+			} else {
+				this.currentSpeed = 0;
 			}
 		}
 
@@ -87,5 +89,9 @@ public class Player extends Entity {
 
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
+	}
+	
+	public void setCurrentSpeed(int currentSpeed) {
+		 this.currentSpeed = currentTurnSpeed;
 	}
 }
