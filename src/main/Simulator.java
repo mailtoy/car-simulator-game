@@ -17,6 +17,7 @@ public class Simulator extends WindowDisplay {
 		super();
 		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1); // get model only
 		camera = new SimulatorCamera();
+		camera.setRound(round);
 
 		ConnectPacket connectPacket = new ConnectPacket(TYPE);
 		connectPacket.writeData(client);

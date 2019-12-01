@@ -19,9 +19,9 @@ public class Controller extends WindowDisplay {
 
 	public Controller() {
 		super();
-		controllerHandler = new ControllerHandler(this);
+//		controllerHandler = new ControllerHandler(this);
 
-		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
+		player = new MultiplePlayer(TYPE, car, new Vector3f(765, 0, 800), 0, 180, 0, 0.6f, null, -1);
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(TYPE, player.getPosition(), player.getRotX(), player.getRotY(),
@@ -43,7 +43,7 @@ public class Controller extends WindowDisplay {
 			boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 
 			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() > 0 || isPressed) {
-				controllerHandler.updateSpeed(player.getCurrentSpeed());
+//				controllerHandler.updateSpeed(player.getCurrentSpeed());
 				isPressed = false;
 
 				MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),

@@ -17,6 +17,7 @@ public class Simulator extends ClientType {
 	public Simulator() {
 		super();
 		camera = new SimulatorCamera();
+		camera.setRound(round);
 		run();
 	}
 

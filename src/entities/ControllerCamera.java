@@ -3,10 +3,12 @@ package entities;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import terrains.Terrain;
+
 public class ControllerCamera extends Camera {
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
-
+	private int round;
 	private Player player;
 
 	public ControllerCamera(Player player) {
@@ -69,6 +71,11 @@ public class ControllerCamera extends Camera {
 			float angleChange = Mouse.getDX() * 0.3f;
 			angleAroundPlayer -= angleChange;
 		}
+	}
+
+	@Override
+	public void setRound(int round) {
+		this.round = round;
 	}
 
 }

@@ -10,6 +10,7 @@ import models.RawModel;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
@@ -31,11 +32,21 @@ public class Loader {
 		unbindVAO();
 		return new RawModel(vaoID, indices.length);
 	}
+	
+	public RawModel loadToVAO(float[] positions) {
+		int vaoID = createVAO();
+		this.storeDataInAttributeList(0, 2, positions);
+		unbindVAO();
+		return new RawModel(vaoID, positions.length/2);
+	}
 
 	public int loadTexture(String fileName) {
 		Texture texture = null;
 		try {
 			texture = TextureLoader.getTexture("PNG", new FileInputStream("res/" + fileName + ".png"));
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR_MIPMAP_LINEAR);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL14.GL_TEXTURE_LOD_BIAS, -0.4f);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.err.println("Tried to load texture " + fileName + ".png , didn't work");
