@@ -28,8 +28,12 @@ public class Controller extends WindowDisplay {
 	}
 
 	@Override
-	public void run() {
+	public void run() {		
 		while (!Display.isCloseRequested()) {
+			if (!map.equals("map1") && !isMapChanged()) {
+				reloadMap();
+			}
+			
 			camera.move();
 			player.checkInputs();
 			super.render();

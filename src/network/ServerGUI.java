@@ -55,6 +55,10 @@ public class ServerGUI extends JFrame {
 	public void appendResponse(String response) {
 		responsesArea.append(response + "\n");
 	}
+	
+	public void setMapEnabled(boolean enable) {
+		mapList.setEnabled(enable);
+	}
 
 	public String getSelectedMap() {
 		return mapList.getSelectedItem().toString();

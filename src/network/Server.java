@@ -10,7 +10,6 @@ import java.util.List;
 
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
-import network.packet.CrashPacket;
 import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import network.packet.Packet;
@@ -121,17 +120,17 @@ public class Server extends Thread {
 	}
 
 	private void checkCrash() {
-		// width 6 height 14
+		// handle simulator later
 		for (int i = 0; i < connectedPlayers.size() - 1; i++) {
-			for (int j = i + 1; j < connectedPlayers.size(); j++) {
-				float playerPosX = connectedPlayers.get(i).getPosition().getX();
-				float playerPosZ = connectedPlayers.get(i).getPosition().getZ();
-				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
-				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
-				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
+//			for (int j = i + 1; j < connectedPlayers.size(); j++) {
+//				float playerPosX = connectedPlayers.get(i).getPosition().getX();
+//				float playerPosZ = connectedPlayers.get(i).getPosition().getZ();
+//				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
+//				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
+//				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
 //					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes());
-				}
-			}
+//				}
+//			}
 
 		}
 	}
@@ -161,11 +160,18 @@ public class Server extends Thread {
 			connectedPlayers.add(multiplePlayer);
 			packet.writeData(this);
 		}
+		if (connectedPlayers.size() != 0) {
+			serverGUI.setMapEnabled(false);
+		}
 	}
 
 	private void removeConnection(DisconnectPacket packet) {
 		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
 		packet.writeData(this);
+		
+		if (connectedPlayers.size() == 0) {
+			serverGUI.setMapEnabled(true);
+		}
 	}
 
 	private MultiplePlayer getMultiplePlayer(String type) {

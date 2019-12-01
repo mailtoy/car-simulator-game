@@ -24,15 +24,16 @@ import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
 public abstract class WindowDisplay {
-	private Loader loader = new Loader();
+	private Loader loader;
+	private MasterRenderer renderer;
 	private RawModel carModel;
 	protected TexturedModel staticModel, grassModel, fernModel, car;
 	protected TerrainTexture blendMap;
 	private TerrainTexturePack texturePack;
 	private Light light;
 	private List<Terrain> terrains;
-	private MasterRenderer renderer;
 	private List<Entity> entities;
+	private boolean isMapChanged = false;
 
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected String map = "map1";
@@ -44,16 +45,16 @@ public abstract class WindowDisplay {
 		this.client = new Client(this);
 		this.client.start();
 
-		initComponents(map);
+		initComponents();
 	}
 
 	public abstract void run();
 
-	private void initComponents(String mapName) {
+	private void initComponents() {
 		DisplayManager.createDisplay("Car" + type);
+		loader = new Loader();
 		renderer = new MasterRenderer();
 		terrains = new ArrayList<Terrain>();
-		map = mapName;
 
 		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
@@ -62,7 +63,7 @@ public abstract class WindowDisplay {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
-		blendMap = new TerrainTexture(loader.loadTexture(map));
+		loadMap();
 
 		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
@@ -82,8 +83,13 @@ public abstract class WindowDisplay {
 			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
 			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}
-
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
+		carModel = OBJLoader.loadObjModel("Car", loader);
+		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
+	}
+
+	private void loadMap() {
+		blendMap = new TerrainTexture(loader.loadTexture(map));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
 
 		// * for big map size logic
@@ -104,20 +110,15 @@ public abstract class WindowDisplay {
 				}
 			}
 		}
-
-		carModel = OBJLoader.loadObjModel("Car", loader);
-		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
 	}
 
 	protected void render() {
 		for (Terrain terrain : terrains) {
 			renderer.processTerrain(terrain);
 		}
-
 		for (Entity entity : entities) {
 			renderer.processEntity(entity);
 		}
-
 		renderer.render(light, camera);
 		DisplayManager.updateDisplay();
 	}
@@ -150,20 +151,11 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
-	public void reloadMap(String mapName) {
-		ArrayList<MultiplePlayer> multiplePlayers = new ArrayList<MultiplePlayer>();
-		for (Entity entity : entities) {
-			if (entity instanceof MultiplePlayer) {
-				multiplePlayers.add((MultiplePlayer) entity);
-			}
-		}
+	public void reloadMap() {
+		terrains.clear();
+		loadMap();
 
-		closeqRequest();
-		initComponents(mapName);
-
-		for (MultiplePlayer player : multiplePlayers) {
-			addMultiplePlayer(player);
-		}
+		isMapChanged = true;
 	}
 
 	public Player getPlayer() {
@@ -172,6 +164,14 @@ public abstract class WindowDisplay {
 
 	public Client getClient() {
 		return this.client;
+	}
+
+	public boolean isMapChanged() {
+		return isMapChanged;
+	}
+
+	public void setMap(String map) {
+		this.map = map;
 	}
 
 	private int getMultiplayerIndex(String type) {
@@ -184,5 +184,4 @@ public abstract class WindowDisplay {
 		}
 		return index;
 	}
-
 }

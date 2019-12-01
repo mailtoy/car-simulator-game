@@ -24,6 +24,10 @@ public class Simulator extends WindowDisplay {
 	@Override
 	public void run() {
 		while (!Display.isCloseRequested()) {
+			if (!map.equals("map1") && !isMapChanged()) {
+				reloadMap();
+			}
+			
 			camera.move();
 			super.render();
 		}

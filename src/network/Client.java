@@ -16,7 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	private final String serverIP = "203.246.112.148";
+	private final String serverIP = "192.168.0.45";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
@@ -88,7 +88,7 @@ public class Client extends Thread {
 
 		String packetMap = ((ConnectPacket) packet).getMap();
 		if (!packetMap.equals("map1")) {
-			windowDisplay.reloadMap(packetMap);
+			windowDisplay.setMap(packetMap);
 		}
 
 		String packetType = ((ConnectPacket) packet).getType();
