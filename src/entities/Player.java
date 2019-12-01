@@ -1,6 +1,7 @@
 package entities;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
@@ -34,6 +35,8 @@ public class Player extends Entity {
 	}
 
 	public void checkInputs() {
+		System.out.println("xxxx:" + Mouse.getX());
+		System.out.println("yyyy:" + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
@@ -44,9 +47,11 @@ public class Player extends Entity {
 			}
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (Mouse.getX() <= 1110 && Mouse.getX() >= 1055 && Mouse.getY() <= 285
+				&& Mouse.getY() >= 245 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = RUN_SPEED + this.speedIncrease;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (Mouse.getX() <= 1107 && Mouse.getX() >= 1060
+				&& Mouse.getY() <= 165 && Mouse.getY() >= 125 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = -RUN_SPEED;
 		} else {
 			if (this.currentSpeed > 0) {
@@ -56,9 +61,11 @@ public class Player extends Entity {
 			}
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (Mouse.getX() <= 1170 && Mouse.getX() >= 1120
+				&& Mouse.getY() <= 230 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
 			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) || (Mouse.getX() <= 1037 && Mouse.getX() >= 992
+				&& Mouse.getY() <= 228 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
 			this.currentTurnSpeed = TURN_SPEED;
 		} else {
 			this.currentTurnSpeed = 0;
