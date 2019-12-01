@@ -1,5 +1,8 @@
 package renderEngine;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Mouse;
@@ -12,6 +15,7 @@ import org.lwjgl.util.vector.Vector2f;
 
 public class DisplayManager {
 
+	private static Dimension screenSize;
 	private static final int WIDTH = 1280;
 	private static final int HEIGHT = 720;
 	private static final int FPS_CAP = 30;
@@ -19,17 +23,20 @@ public class DisplayManager {
 	private static long lastFramTime;
 	private static float delta;
 
-	public static void createDisplay() {
+	public static void createDisplay(String title) {
 		ContextAttribs attribs = new ContextAttribs(3, 2).withForwardCompatible(true).withProfileCore(true);
+		screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		int height = screenSize.height;
+		int width = screenSize.width;
 
 		try {
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
+			Display.setDisplayMode(new DisplayMode(width, height));
 			Display.create(new PixelFormat(), attribs);
-			Display.setTitle("Our First Display!");
+			Display.setTitle(title);
 		} catch (LWJGLException e) {
 			e.printStackTrace();
 		}
-		GL11.glViewport(0, 0, WIDTH, HEIGHT);
+		GL11.glViewport(0, 0, screenSize.width, screenSize.height);
 		lastFramTime = getCurrentTime();
 	}
 
@@ -57,5 +64,6 @@ public class DisplayManager {
 		float normalizedx = -1.0f + 0.2f * (float) Mouse.getX() / (float) Display.getWidth();
 		float normalizedy = 1.0f - 0.2f * (float) Mouse.getY() / (float) Display.getHeight();
 		return  new Vector2f(normalizedx, normalizedy);
+
 	}
 }
