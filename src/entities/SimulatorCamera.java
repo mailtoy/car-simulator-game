@@ -1,6 +1,9 @@
 package entities;
 
+import java.awt.event.MouseEvent;
+
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import terrains.Terrain;
@@ -17,6 +20,7 @@ public class SimulatorCamera extends Camera {
 
 	@Override
 	public void move() {
+		calculateMouseZoom();
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
 			if (position.z < 15) {
@@ -46,15 +50,24 @@ public class SimulatorCamera extends Camera {
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
 			position.y += 5f;
-			if (position.y >= 920) {
-				position.y = 928;
-			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			position.y -= 5f;
-			if (position.y <= 30) {
-				position.y = 30;
-			}
+		}
+		 if (Mouse.isButtonDown(0)) {
+			 position.x -= Mouse.getDX();
+			 position.z += Mouse.getDY();
+		 }
+	}
+	
+	public void calculateMouseZoom() {
+		float zoomLevel = Mouse.getDWheel() * 0.1f;
+		position.y += zoomLevel;
+		if (position.y >= 920) {
+			position.y = 928;
+		}
+		if (position.y <= 30) {
+			position.y = 30;
 		}
 	}
 

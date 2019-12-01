@@ -84,22 +84,6 @@ public class ControllerCamera extends Camera {
 	}
 
 	public void checkCrash() {
-//		if (750 >= upLeft.getX() && 750 <= upRight.getX()) {
-////			player.setPosition(new Vector3f(upLeft.getX() + 6, 0, upLeft.getZ() + 6));
-////			player.setCurrentSpeed(0);
-////			System.out.println("เร่งสิเหยดแม่ม!!!");
-//		}
-//		if (750 >= upLeft.getZ() && 750 <= downLeft.getZ()) {
-//			player.setPosition(new Vector3f(upLeft.getX() + 6, 0, upLeft.getZ() + 6));
-//			player.setCurrentSpeed(0);
-//		}
-//		if (750 >= downLeft.getX() && 750 <= downRight.getX()) {
-//			player.setPosition(player.getPosition());
-//		}
-//		if (750 >= downRight.getZ() && 750 <= upRight.getZ()) {
-//			player.setPosition(player.getPosition());
-//		}
-
 		int carW = 8;
 		int carH = 16;
 		if ((upLeft.getX() >= 799 && upLeft.getX() <= 701)
