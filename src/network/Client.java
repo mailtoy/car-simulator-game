@@ -16,9 +16,7 @@ import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
-	
-	private final String serverIP = "192.168.0.8";
-
+	private final String serverIP = "192.168.0.45";
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 
@@ -87,13 +85,19 @@ public class Client extends Thread {
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
-		if (((ConnectPacket) packet).getType().contains("Controller")
-				&& !this.windowDisplay.isAdded(((ConnectPacket) packet).getType())) {
-			MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-					this.windowDisplay.getPlayer().getModel(), ((ConnectPacket) packet).getPosition(),
-					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
-					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-			this.windowDisplay.addMultiplePlayer(multiplePlayer);
+
+		String packetMap = ((ConnectPacket) packet).getMap();
+		if (!packetMap.equals("map1")) {
+			windowDisplay.setMap(packetMap);
+		}
+
+		String packetType = ((ConnectPacket) packet).getType();
+		if (packetType.contains("Controller") && !windowDisplay.isAdded(packetType)) {
+			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, windowDisplay.getPlayer().getModel(),
+					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
+					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
+					((ConnectPacket) packet).getScale(), address, port);
+			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
 	}
 
@@ -101,11 +105,11 @@ public class Client extends Thread {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has left from the server.");
 
-		this.windowDisplay.removeMultiplePlayer(((DisconnectPacket) packet).getType());
+		windowDisplay.removeMultiplePlayer(((DisconnectPacket) packet).getType());
 	}
 
 	private void handleMove(MovePacket packet) {
-		this.windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
+		windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
 				packet.getRotZ());
 	}
 }

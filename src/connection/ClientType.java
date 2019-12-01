@@ -55,7 +55,7 @@ public abstract class ClientType {
 	}
 
 	public void initComponents() {
-		DisplayManager.createDisplay();
+//		DisplayManager.createDisplay();
 		loader = new Loader();
 		terrainList = new ArrayList<Terrain>();
 

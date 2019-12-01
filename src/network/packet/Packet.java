@@ -6,7 +6,7 @@ import network.Server;
 public abstract class Packet {
 
 	public static enum PacketTypes {
-		INVALID(-1), CONNECT(00), DISCONNECT(01), MOVE(02);
+		INVALID(-1), CONNECT(00), DISCONNECT(01), MOVE(02), CRASH(03);
 
 		private int packetId;
 
