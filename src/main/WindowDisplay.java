@@ -35,12 +35,16 @@ public abstract class WindowDisplay {
 
 	protected TexturedModel staticModel, grassModel, fernModel, car;
 	protected TerrainTexture blendMap;
-	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected String map = "map1";
-	protected int round = 3;
+	protected final String defaultMap = "map1";
 	protected Client client;
-	protected Player player; // Change to Car later and random initial position
+	protected Player player; // Change to Car later
 	protected Camera camera;
+	protected int round = 3;
+
+	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
+	protected final float randPosX = new Random().nextInt(800); // for now
+	protected final float randPosZ = new Random().nextInt(800); // for now
 
 	public WindowDisplay() {
 		this.client = new Client(this);
@@ -183,5 +187,9 @@ public abstract class WindowDisplay {
 
 	public void setMap(String map) {
 		this.map = map;
+	}
+
+	public String getDefaultMap() {
+		return this.defaultMap;
 	}
 }

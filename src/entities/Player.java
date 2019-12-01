@@ -15,6 +15,7 @@ public class Player extends Entity {
 	private float currentTurnSpeed = 0;
 	private float speedIncrease = 0;
 
+	private Vector3f frame;
 	private String type;
 
 	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
@@ -24,6 +25,7 @@ public class Player extends Entity {
 	}
 
 	private void move() {
+		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -83,6 +85,14 @@ public class Player extends Entity {
 		move();
 	}
 
+	private void setFrame() {
+		frame = new Vector3f(getPosition().getX() - 4, 0, getPosition().getZ() - 8);
+	}
+
+	public Vector3f getFrame() {
+		return this.frame;
+	}
+
 	public String getType() {
 		return this.type;
 	}
@@ -90,8 +100,8 @@ public class Player extends Entity {
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
 	}
-	
+
 	public void setCurrentSpeed(int currentSpeed) {
-		 this.currentSpeed = currentTurnSpeed;
+		this.currentSpeed = currentTurnSpeed;
 	}
 }

@@ -10,6 +10,7 @@ import java.util.List;
 
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
+import network.packet.CrashPacket;
 import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import network.packet.Packet;
@@ -18,6 +19,7 @@ import network.packet.Packet.PacketTypes;
 public class Server extends Thread {
 	private DatagramSocket socket;
 	private List<MultiplePlayer> connectedPlayers;
+	private List<MultiplePlayer> connectedControllers;
 	private ServerGUI serverGUI;
 
 	public Server() {
@@ -25,6 +27,7 @@ public class Server extends Thread {
 		try {
 			this.socket = new DatagramSocket(3001);
 			this.connectedPlayers = new ArrayList<MultiplePlayer>();
+			this.connectedControllers = new ArrayList<MultiplePlayer>();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -104,7 +107,7 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-		System.out.println(packet.getType() + " has move to " + packet.getPosition());
+		serverGUI.appendResponse(packet.getType() + " has move to " + packet.getPosition());
 
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
@@ -115,23 +118,32 @@ public class Server extends Thread {
 			player.setRotZ(packet.getRotX());
 
 			packet.writeData(this);
-			checkCrash();
+//			if (connectedControllers.size() != 1) {
+//				checkCrash();
+//			}
 		}
 	}
 
 	private void checkCrash() {
-		// handle simulator later
-		for (int i = 0; i < connectedPlayers.size() - 1; i++) {
-//			for (int j = i + 1; j < connectedPlayers.size(); j++) {
-//				float playerPosX = connectedPlayers.get(i).getPosition().getX();
-//				float playerPosZ = connectedPlayers.get(i).getPosition().getZ();
-//				float nextPlayerPosX = connectedPlayers.get(j).getPosition().getX();
-//				float nextPlayerPosZ = connectedPlayers.get(j).getPosition().getZ();
-//				if (playerPosX - nextPlayerPosX <= 6 || playerPosZ - nextPlayerPosZ == 0) {
-//					CrashPacket crashPacket = new CrashPacket(connectedPlayers.get(i).getType().getBytes());
-//				}
-//			}
-
+		final int carWidth = 8;
+		final int carHeight = 16;
+		for (int i = 0; i < connectedControllers.size() - 1; i++) {
+			for (int j = i + 1; j < connectedControllers.size(); j++) {
+				float playerFrameX = connectedControllers.get(i).getFrame().getX();
+				float playerFrameZ = connectedControllers.get(i).getFrame().getZ();
+				float nextPlayerPosX = connectedControllers.get(j).getPosition().getX();
+				float nextPlayerPosZ = connectedControllers.get(i).getPosition().getZ();
+				if (playerFrameX >= nextPlayerPosX && playerFrameX <= nextPlayerPosZ
+						|| playerFrameX + carWidth >= nextPlayerPosX && playerFrameX + carWidth <= nextPlayerPosZ
+						|| playerFrameX <= nextPlayerPosX && playerFrameX + carWidth >= nextPlayerPosZ) {
+					System.out.println("crash?");
+					if (playerFrameZ >= nextPlayerPosX && playerFrameZ <= nextPlayerPosZ
+							|| playerFrameZ + carHeight >= nextPlayerPosX && playerFrameZ + carHeight <= nextPlayerPosZ
+							|| playerFrameZ <= nextPlayerPosX && playerFrameZ + carHeight >= nextPlayerPosZ) {
+						System.out.println("crash!");
+					}
+				}
+			}
 		}
 	}
 
@@ -158,6 +170,9 @@ public class Server extends Thread {
 		}
 		if (!isConnected) {
 			connectedPlayers.add(multiplePlayer);
+			if (packet.getType().contains("Controller")) {
+				connectedControllers.add(multiplePlayer);
+			}
 			packet.writeData(this);
 		}
 		if (connectedPlayers.size() != 0) {
@@ -168,7 +183,7 @@ public class Server extends Thread {
 	private void removeConnection(DisconnectPacket packet) {
 		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
 		packet.writeData(this);
-		
+
 		if (connectedPlayers.size() == 0) {
 			serverGUI.setMapEnabled(true);
 		}

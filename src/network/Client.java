@@ -87,7 +87,7 @@ public class Client extends Thread {
 				+ " has joined the server.");
 
 		String packetMap = ((ConnectPacket) packet).getMap();
-		if (!packetMap.equals("map1")) {
+		if (!packetMap.equals(windowDisplay.getDefaultMap())) {
 			windowDisplay.setMap(packetMap);
 		}
 

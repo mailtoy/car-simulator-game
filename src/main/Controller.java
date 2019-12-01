@@ -16,7 +16,7 @@ public class Controller extends WindowDisplay {
 
 	public Controller() {
 		super();
-		player = new MultiplePlayer(type, car, new Vector3f(765, 0, 800), 0, 180, 0, 0.6f, null, -1);
+		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
 		controllerHandler = new ControllerHandler(this);
 		camera = new ControllerCamera(player);
 
