@@ -43,7 +43,7 @@ public class Controller extends WindowDisplay {
 			boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 
-			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() > 0 || isPressed) {
+			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0 || isPressed) {
 				controllerHandler.updateSpeed(player.getCurrentSpeed());
 				isPressed = false;
 

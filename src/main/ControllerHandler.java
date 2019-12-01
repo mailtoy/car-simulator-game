@@ -53,11 +53,6 @@ public class ControllerHandler extends JFrame {
 		JLabel selectMap = new JLabel("select your map: ");
 		selectMap.setForeground(Color.blue);
 
-		String[] maps = { "map1", "map2" };
-		JComboBox<String> mapList = new JComboBox<String>(maps);
-		mapList.setSelectedIndex(0);
-		// mapList.addActionListener(this); // fix this later
-
 		gauge.setTitle("Controller");
 		gauge.setUnitString("Km / Hr");
 		gauge.setPreferredSize(new Dimension(200, 200));
@@ -78,19 +73,13 @@ public class ControllerHandler extends JFrame {
 		addActionListener();
 
 		setLayout(new BorderLayout());
-		JPanel mapPanel = new JPanel();
 		JPanel gaugePanel = new JPanel();
 		JPanel keyboardPanel = new JPanel();
 		JPanel directionPanel = new JPanel();
 		JPanel operationPanel = new JPanel();
 
-		add(mapPanel, BorderLayout.NORTH);
 		add(gaugePanel, BorderLayout.WEST);
 		add(keyboardPanel, BorderLayout.EAST);
-
-		mapPanel.setLayout(new FlowLayout());
-		mapPanel.add(selectMap);
-		mapPanel.add(mapList);
 
 		gaugePanel.setLayout(new FlowLayout());
 		gaugePanel.add(gauge);
@@ -153,58 +142,7 @@ public class ControllerHandler extends JFrame {
 	}
 
 	public void updateSpeed(Float currentSpeed) {
-		gauge.setValue(currentSpeed);
+		gauge.setValue(Math.abs(currentSpeed));
 	}
 
-	// @Override
-	// public void actionPerformed(ActionEvent e) {
-	// String action = e.getActionCommand();
-	// if (action.equals("^")) {
-	// try {
-	//// gauge.setValueAnimated(RUN_SPEED);
-	// running = true;
-	// moveThread = new Thread(new Runnable() {
-	// @Override
-	// public void run() {
-	// while (running) {
-	// try {
-	//// forward.setEnabled(false);
-	//// stop.setEnabled(true);
-	// // client.sendKeyInput(Keyboard.KEY_UP, RUN_SPEED);
-	// Thread.sleep((long) 25);
-	// } catch (Exception e) {
-	// e.printStackTrace();
-	// }
-	// }
-	// }
-	// });
-	// moveThread.start();
-	// } catch (Exception e1) {
-	// e1.printStackTrace();
-	// }
-	// } else if (action.equals("v")) {
-	// // client.sendKeyInput(Keyboard.KEY_DOWN, -RUN_SPEED);
-	// } else if (action.equals("<")) {
-	// // client.sendKeyInput(Keyboard.KEY_LEFT, TURN_SPEED);
-	// } else if (action.equals(">")) {
-	// // client.sendKeyInput(Keyboard.KEY_RIGHT, -TURN_SPEED);
-	// } else if (action.equals("accelerate")) {
-	// RUN_SPEED = RUN_SPEED + RUN_ACC;
-	// // client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-	//// gauge.setValueAnimated(RUN_SPEED);
-	// } else if (action.equals("break")) {
-	// RUN_SPEED = RUN_SPEED + RUN_BREAK;
-	// // client.sendKeyInput(Keyboard.KEY_DOWN, RUN_SPEED);
-	//// gauge.setValueAnimated(RUN_SPEED);
-	// } else if (action.equals("stop")) {
-	// try {
-	//// forward.setEnabled(true);
-	//// stop.setEnabled(false);
-	// running = false;
-	// // client.sendKeyInput(Keyboard.KEY_0, 0);
-	// } catch (Exception e1) {
-	// e1.printStackTrace();
-	// }
-	// }
-	// }
 }
