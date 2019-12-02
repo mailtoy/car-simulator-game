@@ -145,7 +145,10 @@ public class Server extends Thread {
 							|| playerFrameZ <= zInFrame && playerFrameZ + carHeight >= zOutFrame) {
 						serverGUI.appendResponse(
 								controllers.get(i).getType() + "and" + controllers.get(j).getType() + " are crashing!");
-						// create crash packet here
+
+//						CrashPacket crashPacket = new CrashPacket(controllers.get(i).getType(),
+//								controllers.get(j).getType());
+//						crashPacket.writeData(this);
 					}
 				}
 			}

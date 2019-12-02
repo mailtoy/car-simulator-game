@@ -61,7 +61,7 @@ public abstract class WindowDisplay {
 	private void initComponents() {
 		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
-		renderer = new MasterRenderer();
+		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
 
 		// Terrain TextureStaff
@@ -169,7 +169,7 @@ public abstract class WindowDisplay {
 	public Loader geLoader() {
 		return this.loader;
 	}
-	
+
 	public TexturedModel getCarModel() {
 		return this.car;
 	}
@@ -184,5 +184,9 @@ public abstract class WindowDisplay {
 
 	public String getDefaultMap() {
 		return this.defaultMap;
+	}
+
+	public String getType() {
+		return this.type;
 	}
 }
