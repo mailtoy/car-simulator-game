@@ -169,13 +169,9 @@ public abstract class WindowDisplay {
 	public Loader geLoader() {
 		return this.loader;
 	}
-
-	public Player getPlayer() {
-		return this.player;
-	}
-
-	public Client getClient() {
-		return this.client;
+	
+	public TexturedModel getCarModel() {
+		return this.car;
 	}
 
 	public boolean isMapChanged() {

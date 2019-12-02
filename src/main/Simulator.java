@@ -15,7 +15,6 @@ public class Simulator extends WindowDisplay {
 
 	public Simulator() {
 		super();
-		player = new MultiplePlayer(type, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
 
@@ -38,7 +37,7 @@ public class Simulator extends WindowDisplay {
 		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
 		disconnectPacket.writeData(client);
 	}
-	
+
 	@Override
 	protected void render() {
 		for (Terrain terrain : terrains) {

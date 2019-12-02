@@ -142,12 +142,11 @@ public class Server extends Thread {
 				if (playerFrameX >= xInFrame && playerFrameX <= xOutFrame
 						|| playerFrameX + carWidth >= xInFrame && playerFrameX + carWidth <= xOutFrame
 						|| playerFrameX <= xInFrame && playerFrameX + carWidth >= xOutFrame) {
-//					System.out.println("crash?");
 					if (playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame
 							|| playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame
 							|| playerFrameZ <= zInFrame && playerFrameZ + carHeight >= zOutFrame) {
 						serverGUI.appendResponse(
-								connectedControllers.get(i) + "and" + connectedControllers.get(j) + " are crashing! ");
+								connectedControllers.get(i) + "and" + connectedControllers.get(j) + " are crashing!");
 					}
 				}
 			}
