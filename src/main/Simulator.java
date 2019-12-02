@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Random;
-
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -11,28 +9,32 @@ import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
 
 public class Simulator extends WindowDisplay {
-	protected final String TYPE = "Simulator" + new Random().nextInt(100); // for now
 
 	public Simulator() {
 		super();
-		player = new MultiplePlayer(TYPE, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1); // get model only
+		player = new MultiplePlayer(type, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
 
-		ConnectPacket connectPacket = new ConnectPacket(TYPE);
+		ConnectPacket connectPacket = new ConnectPacket(type, map);
 		connectPacket.writeData(client);
 
 		run();
 	}
 
-	private void run() {
+	@Override
+	public void run() {
 		while (!Display.isCloseRequested()) {
+			if (!map.equals(defaultMap) && !isMapChanged()) {
+				reloadMap();
+			}
+
 			camera.move();
 			super.render();
 		}
-		DisconnectPacket disconnectPacket = new DisconnectPacket(TYPE);
-		disconnectPacket.writeData(client);
 		super.closeqRequest();
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
+		disconnectPacket.writeData(client);
 	}
 
 	public static void main(String[] args) {

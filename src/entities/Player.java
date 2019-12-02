@@ -1,6 +1,7 @@
 package entities;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
 import models.TexturedModel;
@@ -15,6 +16,7 @@ public class Player extends Entity {
 	private float currentTurnSpeed = 0;
 	private float speedIncrease = 0;
 
+	private Vector3f frame;
 	private String type;
 
 	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
@@ -24,6 +26,7 @@ public class Player extends Entity {
 	}
 
 	private void move() {
+		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -32,6 +35,8 @@ public class Player extends Entity {
 	}
 
 	public void checkInputs() {
+		System.out.println("xxxx:" + Mouse.getX());
+		System.out.println("yyyy:" + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
@@ -42,21 +47,25 @@ public class Player extends Entity {
 			}
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (Mouse.getX() <= 1110 && Mouse.getX() >= 1055 && Mouse.getY() <= 285
+				&& Mouse.getY() >= 245 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = RUN_SPEED + this.speedIncrease;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (Mouse.getX() <= 1107 && Mouse.getX() >= 1060
+				&& Mouse.getY() <= 165 && Mouse.getY() >= 125 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = -RUN_SPEED;
 		} else {
 			if (this.currentSpeed > 0) {
 				this.currentSpeed -= 0.5;
-			} else {
-				this.currentSpeed = 0;
+			} else if (this.currentSpeed < 0) {
+				this.currentSpeed += 0.5;
 			}
 		}
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (Mouse.getX() <= 1170 && Mouse.getX() >= 1120
+				&& Mouse.getY() <= 230 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
 			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) || (Mouse.getX() <= 1037 && Mouse.getX() >= 992
+				&& Mouse.getY() <= 228 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
 			this.currentTurnSpeed = TURN_SPEED;
 		} else {
 			this.currentTurnSpeed = 0;
@@ -83,6 +92,14 @@ public class Player extends Entity {
 		move();
 	}
 
+	private void setFrame() {
+		frame = new Vector3f(getPosition().getX() - 4, 0, getPosition().getZ() - 8);
+	}
+
+	public Vector3f getFrame() {
+		return this.frame;
+	}
+
 	public String getType() {
 		return this.type;
 	}
@@ -90,8 +107,8 @@ public class Player extends Entity {
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
 	}
-	
+
 	public void setCurrentSpeed(int currentSpeed) {
-		 this.currentSpeed = currentTurnSpeed;
+		this.currentSpeed = currentTurnSpeed;
 	}
 }

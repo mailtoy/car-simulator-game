@@ -6,7 +6,7 @@ import network.Client;
 import network.Server;
 
 public class ConnectPacket extends Packet {
-	private String type;
+	private String type, map;
 	private Vector3f position;
 	private float rotX, rotY, rotZ, scale;
 
@@ -14,27 +14,31 @@ public class ConnectPacket extends Packet {
 		super(00);
 
 		String[] dataArray = readData(data).split(":");
-		if (dataArray.length != 1) {
+		if (dataArray.length > 2) {
 			this.type = dataArray[0];
-			this.position = new Vector3f(Float.parseFloat(dataArray[1]), Float.parseFloat(dataArray[2]),
-					Float.parseFloat(dataArray[3]));
-			this.rotX = Float.parseFloat(dataArray[4]);
-			this.rotY = Float.parseFloat(dataArray[5]);
-			this.rotZ = Float.parseFloat(dataArray[6]);
-			this.scale = Float.parseFloat(dataArray[7]);
+			this.map = dataArray[1];
+			this.position = new Vector3f(Float.parseFloat(dataArray[2]), Float.parseFloat(dataArray[3]),
+					Float.parseFloat(dataArray[4]));
+			this.rotX = Float.parseFloat(dataArray[5]);
+			this.rotY = Float.parseFloat(dataArray[6]);
+			this.rotZ = Float.parseFloat(dataArray[7]);
+			this.scale = Float.parseFloat(dataArray[8]);
 		} else {
-			this.type = readData(data);
+			this.type = dataArray[0];
+			this.map = dataArray[1];
 		}
 	}
 
-	public ConnectPacket(String type) {
+	public ConnectPacket(String type, String map) {
 		super(00);
 		this.type = type;
+		this.map = map;
 	}
 
-	public ConnectPacket(String type, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
+	public ConnectPacket(String type, String map, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		super(00);
 		this.type = type;
+		this.map = map;
 		this.position = position;
 		this.rotX = rotX;
 		this.rotY = rotY;
@@ -55,14 +59,22 @@ public class ConnectPacket extends Packet {
 	@Override
 	public byte[] getData() {
 		return this.type.contains("Controller")
-				? ("00" + this.type + ":" + this.position.getX() + ":" + this.position.getY() + ":"
+				? ("00" + this.type + ":" + this.map + ":" + this.position.getX() + ":" + this.position.getY() + ":"
 						+ this.position.getZ() + ":" + this.rotX + ":" + this.rotY + ":" + this.rotZ + ":" + this.scale)
 								.getBytes()
-				: ("00" + this.type).getBytes();
+				: ("00" + this.type + ":" + this.map).getBytes();
 	}
 
 	public String getType() {
 		return type;
+	}
+
+	public String getMap() {
+		return map;
+	}
+
+	public void setMap(String map) {
+		this.map = map;
 	}
 
 	public Vector3f getPosition() {
