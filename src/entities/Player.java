@@ -35,8 +35,6 @@ public class Player extends Entity {
 	}
 
 	public void checkInputs() {
-		System.out.println("xxxx:" + Mouse.getX());
-		System.out.println("yyyy:" + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;

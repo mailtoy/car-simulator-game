@@ -100,16 +100,41 @@ public abstract class WindowDisplay {
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		
+
+		controll();
 		// controll
+		// guis = new ArrayList<GuiTexture>();
+		//
+		// forward = new GuiTexture(loader.loadTexture("FBTN"), new
+		// Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
+		// backward = new GuiTexture(loader.loadTexture("BBTN"), new
+		// Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
+		// left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f,
+		// -0.5f), new Vector2f(0.06f, 0.08f));
+		// right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f,
+		// -0.5f), new Vector2f(0.06f, 0.08f));
+		// bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f,
+		// -0.6f), new Vector2f(0.8f, 0.4f));
+		//
+		// guis.add(bg);
+		// guis.add(forward);
+		// guis.add(backward);
+		// guis.add(right);
+		// guis.add(left);
+		//
+		// guiRenderer = new GuiRenderer(loader);
+
+	}
+
+	protected void controll() {
 		guis = new ArrayList<GuiTexture>();
-		
+
 		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
 		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
 		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f), new Vector2f(0.06f, 0.08f));
 		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
 		bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f, -0.6f), new Vector2f(0.8f, 0.4f));
-		
+
 		guis.add(bg);
 		guis.add(forward);
 		guis.add(backward);
@@ -117,7 +142,6 @@ public abstract class WindowDisplay {
 		guis.add(left);
 
 		guiRenderer = new GuiRenderer(loader);
-
 	}
 
 	private void loadMap() {
@@ -152,8 +176,17 @@ public abstract class WindowDisplay {
 		}
 		renderer.render(light, camera);
 		guiRenderer.render(guis);
+
 		DisplayManager.updateDisplay();
 	}
+	
+//	protected void controller(){
+//		guiRenderer.render(guis);
+//	}
+//	
+//	protected void update(){
+//		DisplayManager.updateDisplay();
+//	}
 
 	protected void closeqRequest() {
 		renderer.cleanUp();
