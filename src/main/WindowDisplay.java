@@ -61,7 +61,7 @@ public abstract class WindowDisplay {
 	private void initComponents() {
 		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
-		renderer = new MasterRenderer();
+		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
 
 		// Terrain TextureStaff
