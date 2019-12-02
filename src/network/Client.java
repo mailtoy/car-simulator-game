@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 import entities.MultiplePlayer;
 import main.WindowDisplay;
 import network.packet.ConnectPacket;
+import network.packet.CrashPacket;
 import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import network.packet.Packet;
@@ -67,6 +68,10 @@ public class Client extends Thread {
 			packet = new MovePacket(data);
 			handleMove((MovePacket) packet);
 			break;
+		case CRASH:
+			packet = new CrashPacket(data);
+			handleCrash((CrashPacket) packet);
+			break;
 		default:
 			break;
 		}
@@ -103,7 +108,7 @@ public class Client extends Thread {
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has left from the server.");
-		
+
 		String packetType = ((DisconnectPacket) packet).getType();
 		if (packetType.contains("Controller")) {
 			windowDisplay.removeMultiplePlayer(packetType);
@@ -113,5 +118,12 @@ public class Client extends Thread {
 	private void handleMove(MovePacket packet) {
 		windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
 				packet.getRotZ());
+	}
+
+	private void handleCrash(CrashPacket packet) {
+		String type = windowDisplay.getType();
+		if (type.equals(packet.getPlayer1()) || type.equals(packet.getPlayer2())) {
+
+		}
 	}
 }

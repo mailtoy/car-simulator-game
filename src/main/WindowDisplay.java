@@ -169,7 +169,7 @@ public abstract class WindowDisplay {
 	public Loader geLoader() {
 		return this.loader;
 	}
-	
+
 	public TexturedModel getCarModel() {
 		return this.car;
 	}
@@ -184,5 +184,9 @@ public abstract class WindowDisplay {
 
 	public String getDefaultMap() {
 		return this.defaultMap;
+	}
+
+	public String getType() {
+		return this.type;
 	}
 }
