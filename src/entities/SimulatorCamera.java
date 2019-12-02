@@ -1,17 +1,11 @@
 package entities;
 
-import java.awt.event.MouseEvent;
-
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
-import terrains.Terrain;
-
 public class SimulatorCamera extends Camera {
-
 	private Vector3f position = new Vector3f(765, 500, 800);
-	private int round;
 
 	public SimulatorCamera() {
 		setPosition(position);
@@ -25,15 +19,15 @@ public class SimulatorCamera extends Camera {
 			position.z -= 5f;
 			if (position.z < 15) {
 				position.z = 15;
-				 if(Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-						position.z -= 5f;
-					}
+				if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+					position.z -= 5f;
+				}
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			position.z += 5f;
-			if (position.z >= (Math.pow(2, round+1)*100) ) {
-				position.z = (float) (Math.pow(2, round+1)*100);
+			if (position.z >= (Math.pow(2, round + 1) * 100)) {
+				position.z = (float) (Math.pow(2, round + 1) * 100);
 			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
@@ -54,12 +48,12 @@ public class SimulatorCamera extends Camera {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			position.y -= 5f;
 		}
-		 if (Mouse.isButtonDown(0)) {
-			 position.x -= Mouse.getDX();
-			 position.z += Mouse.getDY();
-		 }
+		if (Mouse.isButtonDown(0)) {
+			position.x -= Mouse.getDX();
+			position.z += Mouse.getDY();
+		}
 	}
-	
+
 	public void calculateMouseZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		position.y += zoomLevel;
@@ -69,12 +63,6 @@ public class SimulatorCamera extends Camera {
 		if (position.y <= 30) {
 			position.y = 30;
 		}
-	}
-
-	@Override
-	public void setRound(int round) {
-		this.round = round;
-
 	}
 
 }

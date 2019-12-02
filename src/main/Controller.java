@@ -1,7 +1,6 @@
 package main;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -12,14 +11,14 @@ import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 
 public class Controller extends WindowDisplay {
-	protected ControllerHandler controllerHandler;
+//	protected ControllerHandler controllerHandler;
 	private boolean isPressed = false;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
-		controllerHandler = new ControllerHandler(this);
+//		controllerHandler = new ControllerHandler(this);
 
 		camera = new ControllerCamera(player);
 
@@ -33,7 +32,7 @@ public class Controller extends WindowDisplay {
 	@Override
 	public void run() {
 		while (!Display.isCloseRequested()) {
-			if (!map.equals("map1") && !isMapChanged()) {
+			if (!map.equals(defaultMap) && !isMapChanged()) {
 				reloadMap();
 			}
 
@@ -46,8 +45,8 @@ public class Controller extends WindowDisplay {
 			boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
 
-			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() > 0 || isPressed) {
-				controllerHandler.updateSpeed(player.getCurrentSpeed());
+			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0 || isPressed) {
+//				controllerHandler.updateSpeed(player.getCurrentSpeed());
 
 				isPressed = false;
 

@@ -16,13 +16,14 @@ public class Player extends Entity {
 	private float currentTurnSpeed = 0;
 	private float speedIncrease = 0;
 
-	private Vector3f frame;
 	private String type;
+	protected Vector3f frame;
 
 	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
+		setFrame();
 	}
 
 	private void move() {
@@ -35,8 +36,8 @@ public class Player extends Entity {
 	}
 
 	public void checkInputs() {
-		System.out.println("xxxx:" + Mouse.getX());
-		System.out.println("yyyy:" + Mouse.getY());
+//		System.out.println("xxxx:" + Mouse.getX());
+//		System.out.println("yyyy:" + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
