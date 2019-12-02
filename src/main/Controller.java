@@ -39,7 +39,7 @@ public class Controller extends WindowDisplay {
 			}
 
 			camera.move();
-			player.checkInputs();
+			player.move();
 			render();
 
 			boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);

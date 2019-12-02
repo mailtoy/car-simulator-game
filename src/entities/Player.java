@@ -23,10 +23,13 @@ public class Player extends Entity {
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
-		setFrame();
+		if (model != null || scale != 0.0) {
+			setFrame();
+		}
 	}
 
-	private void move() {
+	public void move() {
+		checkInputs();
 		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
@@ -35,9 +38,9 @@ public class Player extends Entity {
 		super.increasePosition(dx, 0, dz);
 	}
 
-	public void checkInputs() {
-		System.out.println("x: " + Mouse.getX());
-		System.out.println("y: " + Mouse.getY());
+	protected void checkInputs() {
+//		System.out.println("x: " + Mouse.getX());
+//		System.out.println("y: " + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
@@ -73,26 +76,6 @@ public class Player extends Entity {
 		} else {
 			this.currentTurnSpeed = 0;
 		}
-		move();
-	}
-
-	public void checkInputs(String button) {
-		if (button.equals("^")) {
-			this.currentSpeed = RUN_SPEED;
-		} else if (button.equals("v")) {
-			this.currentSpeed = -RUN_SPEED;
-		} else {
-			this.currentSpeed = 0;
-		}
-
-		if (button.equals(">")) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (button.equals("<")) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
-		}
-		move();
 	}
 
 	private void setFrame() {

@@ -16,7 +16,7 @@ public class Simulator extends WindowDisplay {
 
 	public Simulator() {
 		super();
-		player = new MultiplePlayer(type, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
+//		player = new MultiplePlayer(type, car, new Vector3f(305, 0, -10), 0, 180, 0, 0.6f, null, -1);
 		simulatorHandler = new SimulatorHandler(this);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
