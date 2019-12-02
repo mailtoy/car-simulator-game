@@ -17,10 +17,10 @@ import network.packet.Packet.PacketTypes;
 
 public class Client extends Thread {
 	
-	private final String serverIP = "10.223.117.119";
+	private final String serverIP = "10.223.119.241";
+
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
-
 	private WindowDisplay windowDisplay;
 
 	public Client(WindowDisplay windowDisplay) {

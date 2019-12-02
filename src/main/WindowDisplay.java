@@ -7,7 +7,6 @@ import java.util.Random;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import buttons.AbstractButton;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -50,8 +49,7 @@ public abstract class WindowDisplay {
 	protected Camera camera;
 	protected int round = 3;
 
-	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for
-																										// now
+	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected final float randPosX = new Random().nextInt(800); // for now
 	protected final float randPosZ = new Random().nextInt(800); // for now
 
@@ -100,16 +98,16 @@ public abstract class WindowDisplay {
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		
+
 		// controll
 		guis = new ArrayList<GuiTexture>();
-		
+
 		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
 		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
 		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f), new Vector2f(0.06f, 0.08f));
 		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
 		bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f, -0.6f), new Vector2f(0.8f, 0.4f));
-		
+
 		guis.add(bg);
 		guis.add(forward);
 		guis.add(backward);

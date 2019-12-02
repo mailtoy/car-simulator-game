@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,14 +21,11 @@ public class ControllerHandler extends JFrame {
 	private Controller controller;
 	private Radial gauge = new Radial();
 
-	// private static boolean running = false;
-	// private Thread moveThread;
-
 	private JButton forwardBtn, backwardBtn, leftBtn, rightBtn, accelerateBtn, breakBtn, stopBtn;
 	private ArrayList<JButton> directionButtons;
 
 	// default color of the button to be repainted when key released
-	private Color cc = new JButton().getBackground();
+//	private Color cc = new JButton().getBackground();
 
 	public ControllerHandler(Controller controller) {
 		this.controller = controller;

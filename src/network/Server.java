@@ -24,10 +24,10 @@ public class Server extends Thread {
 
 	public Server() {
 		this.serverGUI = new ServerGUI(this);
+		this.connectedPlayers = new ArrayList<MultiplePlayer>();
+		this.connectedControllers = new ArrayList<MultiplePlayer>();
 		try {
 			this.socket = new DatagramSocket(3001);
-			this.connectedPlayers = new ArrayList<MultiplePlayer>();
-			this.connectedControllers = new ArrayList<MultiplePlayer>();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -107,7 +107,7 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-		serverGUI.appendResponse(packet.getType() + " has move to " + packet.getPosition());
+//		serverGUI.appendResponse(packet.getType() + " has move to " + packet.getPosition());
 
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
@@ -118,13 +118,13 @@ public class Server extends Thread {
 			player.setRotZ(packet.getRotX());
 
 			packet.writeData(this);
-//			if (connectedControllers.size() != 1) {
-//				checkCrash();
-//			}
+			if (connectedControllers.size() >= 2) {
+				handleCrash();
+			}
 		}
 	}
 
-	private void checkCrash() {
+	private void handleCrash() {
 		final int carWidth = 8;
 		final int carHeight = 16;
 		for (int i = 0; i < connectedControllers.size() - 1; i++) {
@@ -133,14 +133,21 @@ public class Server extends Thread {
 				float playerFrameZ = connectedControllers.get(i).getFrame().getZ();
 				float nextPlayerPosX = connectedControllers.get(j).getPosition().getX();
 				float nextPlayerPosZ = connectedControllers.get(i).getPosition().getZ();
-				if (playerFrameX >= nextPlayerPosX && playerFrameX <= nextPlayerPosZ
-						|| playerFrameX + carWidth >= nextPlayerPosX && playerFrameX + carWidth <= nextPlayerPosZ
-						|| playerFrameX <= nextPlayerPosX && playerFrameX + carWidth >= nextPlayerPosZ) {
-					System.out.println("crash?");
-					if (playerFrameZ >= nextPlayerPosX && playerFrameZ <= nextPlayerPosZ
-							|| playerFrameZ + carHeight >= nextPlayerPosX && playerFrameZ + carHeight <= nextPlayerPosZ
-							|| playerFrameZ <= nextPlayerPosX && playerFrameZ + carHeight >= nextPlayerPosZ) {
-						System.out.println("crash!");
+
+				float xInFrame = nextPlayerPosX - 4;
+				float xOutFrame = nextPlayerPosX + 4;
+				float zInFrame = nextPlayerPosZ - 8;
+				float zOutFrame = nextPlayerPosZ + 8;
+
+				if (playerFrameX >= xInFrame && playerFrameX <= xOutFrame
+						|| playerFrameX + carWidth >= xInFrame && playerFrameX + carWidth <= xOutFrame
+						|| playerFrameX <= xInFrame && playerFrameX + carWidth >= xOutFrame) {
+//					System.out.println("crash?");
+					if (playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame
+							|| playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame
+							|| playerFrameZ <= zInFrame && playerFrameZ + carHeight >= zOutFrame) {
+						serverGUI.appendResponse(
+								connectedControllers.get(i) + "and" + connectedControllers.get(j) + " are crashing! ");
 					}
 				}
 			}
