@@ -1,10 +1,8 @@
 package main;
 
 import org.lwjgl.opengl.Display;
-import org.lwjgl.util.vector.Vector3f;
 
 import entities.Entity;
-import entities.MultiplePlayer;
 import entities.SimulatorCamera;
 import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
