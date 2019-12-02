@@ -2,14 +2,11 @@ package entities;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
-import org.lwjgl.util.vector.Vector3f;
 
 public class ControllerCamera extends Camera {
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
-	private int round;
 	private Player player;
-	private Vector3f upLeft;
 
 	public ControllerCamera(Player player) {
 		this.player = player;
@@ -17,8 +14,6 @@ public class ControllerCamera extends Camera {
 
 	@Override
 	public void move() {
-		setUpLeft();
-		checkCrash();
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundPlayer();
@@ -72,35 +67,6 @@ public class ControllerCamera extends Camera {
 			float angleChange = Mouse.getDX() * 0.3f;
 			angleAroundPlayer -= angleChange;
 		}
-	}
-
-	private void setUpLeft() {
-		upLeft = new Vector3f(player.getPosition().getX() - 4, 0, player.getPosition().getZ() - 8);
-	}
-
-	private void checkCrash() {
-		int carW = 8;
-		int carH = 16;
-		if ((upLeft.getX() >= 799 && upLeft.getX() <= 701)
-				|| (upLeft.getX() + carW >= 799 && upLeft.getX() + carW <= 801)
-				|| (upLeft.getX() <= 799 && upLeft.getX() + carW >= 801)) {
-			System.out.println("เข้าไม่สุดจ้าาาา");
-			if (upLeft.getZ() >= 799 && upLeft.getZ() <= 801) {
-				System.out.println("เข้าสุดละจ้าาาา");
-				player.setPosition(new Vector3f(850, 0, 850));
-			} else if (upLeft.getZ() + carH >= 799 && upLeft.getZ() + carH <= 801) {
-				System.out.println("เข้าสุดละจ้าาาา");
-				player.setPosition(new Vector3f(850, 0, 850));
-			} else if (upLeft.getZ() <= 799 && upLeft.getZ() + carH >= 801) {
-				System.out.println("เข้าสุดละจ้าาาา");
-				player.setPosition(new Vector3f(850, 0, 850));
-			}
-		}
-	}
-
-	@Override
-	public void setRound(int round) {
-		this.round = round;
 	}
 
 }

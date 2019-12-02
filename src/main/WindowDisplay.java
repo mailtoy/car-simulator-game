@@ -7,7 +7,6 @@ import java.util.Random;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import buttons.AbstractButton;
 import entities.Camera;
 import entities.Entity;
 import entities.Light;
@@ -29,16 +28,16 @@ import textures.TerrainTexturePack;
 
 public abstract class WindowDisplay {
 	private Loader loader;
-	private MasterRenderer renderer;
+	protected MasterRenderer renderer;
 	private RawModel carModel;
 	private TerrainTexturePack texturePack;
-	private Light light;
-	private List<Terrain> terrains;
-	private List<Entity> entities;
+	protected Light light;
+	protected List<Terrain> terrains;
+	protected List<Entity> entities;
 	private boolean isMapChanged = false;
 
-	private GuiRenderer guiRenderer;
-	private List<GuiTexture> guis;
+	protected GuiRenderer guiRenderer;
+	protected List<GuiTexture> guis;
 	private GuiTexture forward, backward, right, left, bg;
 
 	protected TexturedModel staticModel, grassModel, fernModel, car;
@@ -50,8 +49,7 @@ public abstract class WindowDisplay {
 	protected Camera camera;
 	protected int round = 3;
 
-	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for
-																										// now
+	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected final float randPosX = new Random().nextInt(800); // for now
 	protected final float randPosZ = new Random().nextInt(800); // for now
 
@@ -100,8 +98,6 @@ public abstract class WindowDisplay {
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 		carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-
-		controll();
 		// controll
 		// guis = new ArrayList<GuiTexture>();
 		//
@@ -126,7 +122,7 @@ public abstract class WindowDisplay {
 
 	}
 
-	protected void controll() {
+	protected void control() {
 		guis = new ArrayList<GuiTexture>();
 
 		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
@@ -167,18 +163,20 @@ public abstract class WindowDisplay {
 		}
 	}
 
-	protected void render() {
-		for (Terrain terrain : terrains) {
-			renderer.processTerrain(terrain);
-		}
-		for (Entity entity : entities) {
-			renderer.processEntity(entity);
-		}
-		renderer.render(light, camera);
-		guiRenderer.render(guis);
-
-		DisplayManager.updateDisplay();
-	}
+	public abstract void render();
+	
+//	protected void render() {
+//		for (Terrain terrain : terrains) {
+//			renderer.processTerrain(terrain);
+//		}
+//		for (Entity entity : entities) {
+//			renderer.processEntity(entity);
+//		}
+//		renderer.render(light, camera);
+//		guiRenderer.render(guis);
+//
+//		DisplayManager.updateDisplay();
+//	}
 	
 //	protected void controller(){
 //		guiRenderer.render(guis);

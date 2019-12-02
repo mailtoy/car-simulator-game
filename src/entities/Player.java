@@ -16,13 +16,14 @@ public class Player extends Entity {
 	private float currentTurnSpeed = 0;
 	private float speedIncrease = 0;
 
-	private Vector3f frame;
 	private String type;
+	protected Vector3f frame;
 
 	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
+		setFrame();
 	}
 
 	private void move() {

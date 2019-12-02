@@ -3,10 +3,13 @@ package main;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import entities.Entity;
 import entities.MultiplePlayer;
 import entities.SimulatorCamera;
 import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
+import renderEngine.DisplayManager;
+import terrains.Terrain;
 
 public class Simulator extends WindowDisplay {
 
@@ -30,7 +33,7 @@ public class Simulator extends WindowDisplay {
 			}
 
 			camera.move();
-			super.render();
+			render();
 		}
 		super.closeqRequest();
 		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
@@ -39,6 +42,20 @@ public class Simulator extends WindowDisplay {
 
 	public static void main(String[] args) {
 		new Simulator();
+	}
+
+	@Override
+	public void render() {
+		for (Terrain terrain : terrains) {
+			renderer.processTerrain(terrain);
+		}
+		for (Entity entity : entities) {
+			renderer.processEntity(entity);
+		}
+		renderer.render(light, camera);
+//		guiRenderer.render(guis);
+
+		DisplayManager.updateDisplay();
 	}
 
 }

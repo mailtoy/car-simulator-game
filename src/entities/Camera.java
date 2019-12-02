@@ -2,14 +2,13 @@ package entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import terrains.Terrain;
-
 public abstract class Camera {
 	protected Vector3f position = new Vector3f();
 	protected float pitch = 20;
 	protected float yaw;
 	protected float roll;
-	
+	protected int round;
+
 	public Camera() {
 		setPosition(new Vector3f(-650, 6, 6));
 		setPitch(20);
@@ -38,8 +37,10 @@ public abstract class Camera {
 	public void setPitch(float pitch) {
 		this.pitch = pitch;
 	}
-	
-	public abstract void move();
-	public abstract void setRound(int round);
-}
 
+	public void setRound(int round) {
+		this.round = round;
+	}
+
+	public abstract void move();
+}
