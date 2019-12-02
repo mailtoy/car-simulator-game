@@ -3,8 +3,6 @@ package network;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
@@ -45,6 +43,7 @@ public class ServerGUI extends JFrame {
 
 		responsesArea = new JTextArea(50, 100);
 		responsesArea.setEditable(false);
+		responsesArea.setAutoscrolls(true);
 
 		add(mapSelectPanel, BorderLayout.NORTH);
 		add(responsesArea, BorderLayout.CENTER);
