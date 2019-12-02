@@ -23,10 +23,13 @@ public class Player extends Entity {
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
-		setFrame();
+		if (model != null || scale != 0.0) {
+			setFrame();
+		}
 	}
 
-	private void move() {
+	public void move() {
+		checkInputs();
 		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
@@ -35,7 +38,9 @@ public class Player extends Entity {
 		super.increasePosition(dx, 0, dz);
 	}
 
-	public void checkInputs() {
+	protected void checkInputs() {
+//		System.out.println("x: " + Mouse.getX());
+//		System.out.println("y: " + Mouse.getY());
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
@@ -46,12 +51,14 @@ public class Player extends Entity {
 			}
 		}
 
+		// fixed mouse detection here
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (Mouse.getX() <= 1110 && Mouse.getX() >= 1055 && Mouse.getY() <= 285
 				&& Mouse.getY() >= 245 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = RUN_SPEED + this.speedIncrease;
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (Mouse.getX() <= 1107 && Mouse.getX() >= 1060
 				&& Mouse.getY() <= 165 && Mouse.getY() >= 125 && Mouse.isButtonDown(0))) {
 			this.currentSpeed = -RUN_SPEED;
+			this.speedIncrease = 0;
 		} else {
 			if (this.currentSpeed > 0) {
 				this.currentSpeed -= 0.5;
@@ -69,26 +76,6 @@ public class Player extends Entity {
 		} else {
 			this.currentTurnSpeed = 0;
 		}
-		move();
-	}
-
-	public void checkInputs(String button) {
-		if (button.equals("^")) {
-			this.currentSpeed = RUN_SPEED;
-		} else if (button.equals("v")) {
-			this.currentSpeed = -RUN_SPEED;
-		} else {
-			this.currentSpeed = 0;
-		}
-
-		if (button.equals(">")) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else if (button.equals("<")) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
-		}
-		move();
 	}
 
 	private void setFrame() {

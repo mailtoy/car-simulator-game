@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -12,8 +11,6 @@ import entities.Entity;
 import entities.Light;
 import entities.MultiplePlayer;
 import entities.Player;
-import guis.GuiRenderer;
-import guis.GuiTexture;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
@@ -28,22 +25,19 @@ import textures.TerrainTexturePack;
 
 public abstract class WindowDisplay {
 	private Loader loader;
-	protected MasterRenderer renderer;
-	private RawModel carModel;
 	private TerrainTexturePack texturePack;
+	private boolean isMapChanged = false;
+
+	protected MasterRenderer renderer;
 	protected Light light;
 	protected List<Terrain> terrains;
 	protected List<Entity> entities;
-	private boolean isMapChanged = false;
-
-	protected GuiRenderer guiRenderer;
-	protected List<GuiTexture> guis;
-	private GuiTexture forward, backward, right, left, bg;
-
-	protected TexturedModel staticModel, grassModel, fernModel, car;
+	protected TexturedModel car;
 	protected TerrainTexture blendMap;
-	protected String map = "map1";
+
 	protected final String defaultMap = "map1";
+	protected String map = defaultMap;
+
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
@@ -60,10 +54,12 @@ public abstract class WindowDisplay {
 		initComponents();
 	}
 
-	public abstract void run();
+	protected abstract void run();
+
+	protected abstract void render();
 
 	private void initComponents() {
-		DisplayManager.createDisplay("Car" + type);
+		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
 		renderer = new MasterRenderer();
 		terrains = new ArrayList<Terrain>();
@@ -77,12 +73,12 @@ public abstract class WindowDisplay {
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
 		loadMap();
 
-		staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
+		TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
 
-		grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
+		TexturedModel grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
 				new ModelTexture(loader.loadTexture("grassTexture")));
-		fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
+		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
 				new ModelTexture(loader.loadTexture("fern")));
 
 		grassModel.getTexture().setHasTransparency(true);
@@ -95,49 +91,10 @@ public abstract class WindowDisplay {
 			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
 			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}
+
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-		carModel = OBJLoader.loadObjModel("Car", loader);
+		RawModel carModel = OBJLoader.loadObjModel("Car", loader);
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
-		// controll
-		// guis = new ArrayList<GuiTexture>();
-		//
-		// forward = new GuiTexture(loader.loadTexture("FBTN"), new
-		// Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
-		// backward = new GuiTexture(loader.loadTexture("BBTN"), new
-		// Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
-		// left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f,
-		// -0.5f), new Vector2f(0.06f, 0.08f));
-		// right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f,
-		// -0.5f), new Vector2f(0.06f, 0.08f));
-		// bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f,
-		// -0.6f), new Vector2f(0.8f, 0.4f));
-		//
-		// guis.add(bg);
-		// guis.add(forward);
-		// guis.add(backward);
-		// guis.add(right);
-		// guis.add(left);
-		//
-		// guiRenderer = new GuiRenderer(loader);
-
-	}
-
-	protected void control() {
-		guis = new ArrayList<GuiTexture>();
-
-		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
-		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
-		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f), new Vector2f(0.06f, 0.08f));
-		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
-		bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f, -0.6f), new Vector2f(0.8f, 0.4f));
-
-		guis.add(bg);
-		guis.add(forward);
-		guis.add(backward);
-		guis.add(right);
-		guis.add(left);
-
-		guiRenderer = new GuiRenderer(loader);
 	}
 
 	private void loadMap() {
@@ -162,29 +119,6 @@ public abstract class WindowDisplay {
 			}
 		}
 	}
-
-	public abstract void render();
-	
-//	protected void render() {
-//		for (Terrain terrain : terrains) {
-//			renderer.processTerrain(terrain);
-//		}
-//		for (Entity entity : entities) {
-//			renderer.processEntity(entity);
-//		}
-//		renderer.render(light, camera);
-//		guiRenderer.render(guis);
-//
-//		DisplayManager.updateDisplay();
-//	}
-	
-//	protected void controller(){
-//		guiRenderer.render(guis);
-//	}
-//	
-//	protected void update(){
-//		DisplayManager.updateDisplay();
-//	}
 
 	protected void closeqRequest() {
 		renderer.cleanUp();
@@ -232,12 +166,12 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
-	public Player getPlayer() {
-		return this.player;
+	public Loader geLoader() {
+		return this.loader;
 	}
-
-	public Client getClient() {
-		return this.client;
+	
+	public TexturedModel getCarModel() {
+		return this.car;
 	}
 
 	public boolean isMapChanged() {

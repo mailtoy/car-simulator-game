@@ -93,7 +93,7 @@ public class Client extends Thread {
 
 		String packetType = ((ConnectPacket) packet).getType();
 		if (packetType.contains("Controller") && !windowDisplay.isAdded(packetType)) {
-			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, windowDisplay.getPlayer().getModel(),
+			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, windowDisplay.getCarModel(),
 					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
 					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
 					((ConnectPacket) packet).getScale(), address, port);
@@ -104,8 +104,11 @@ public class Client extends Thread {
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has left from the server.");
-
-		windowDisplay.removeMultiplePlayer(((DisconnectPacket) packet).getType());
+		
+		String packetType = ((DisconnectPacket) packet).getType();
+		if (packetType.contains("Controller")) {
+			windowDisplay.removeMultiplePlayer(packetType);
+		}
 	}
 
 	private void handleMove(MovePacket packet) {

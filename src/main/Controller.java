@@ -14,15 +14,13 @@ import renderEngine.DisplayManager;
 import terrains.Terrain;
 
 public class Controller extends WindowDisplay {
-//	protected ControllerHandler controllerHandler;
-	private boolean isPressed = false;
+	protected ControllerHandler controllerHandler;
 
 	public Controller() {
 		super();
-		super.control();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
-//		controllerHandler = new ControllerHandler(this);
+		controllerHandler = new ControllerHandler(this);
 
 		camera = new ControllerCamera(player);
 
@@ -34,26 +32,23 @@ public class Controller extends WindowDisplay {
 	}
 
 	@Override
-	public void run() {
+	protected void run() {
 		while (!Display.isCloseRequested()) {
 			if (!map.equals(defaultMap) && !isMapChanged()) {
 				reloadMap();
 			}
 
 			camera.move();
-			player.checkInputs();
+			player.move();
 			render();
 
 			boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
 			boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 			boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
 			boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+			// boolean for mouse detect here
 
-			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0 || isPressed) {
-//				controllerHandler.updateSpeed(player.getCurrentSpeed());
-
-				isPressed = false;
-
+			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0) {
 				MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 						player.getRotY(), player.getRotZ());
 				movePacket.writeData(client);
@@ -65,17 +60,8 @@ public class Controller extends WindowDisplay {
 		disconnectPacket.writeData(client);
 	}
 
-	public void setPressed(String pressedButton) {
-		player.checkInputs(pressedButton);
-		isPressed = true;
-	}
-
-	public static void main(String[] args) {
-		new Controller();
-	}
-
 	@Override
-	public void render() {
+	protected void render() {
 		for (Terrain terrain : terrains) {
 			renderer.processTerrain(terrain);
 		}
@@ -83,8 +69,11 @@ public class Controller extends WindowDisplay {
 			renderer.processEntity(entity);
 		}
 		renderer.render(light, camera);
-		guiRenderer.render(guis);
-
+		controllerHandler.render();
 		DisplayManager.updateDisplay();
+	}
+
+	public static void main(String[] args) {
+		new Controller();
 	}
 }
