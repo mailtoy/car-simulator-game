@@ -123,7 +123,7 @@ public class Client extends Thread {
 	private void handleCrash(CrashPacket packet) {
 		String type = windowDisplay.getType();
 		if (type.equals(packet.getPlayer1()) || type.equals(packet.getPlayer2())) {
-
+			windowDisplay.setCrash(true);
 		}
 	}
 }

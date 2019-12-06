@@ -42,6 +42,7 @@ public abstract class WindowDisplay {
 	protected Player player; // Change to Car later
 	protected Camera camera;
 	protected int round = 3;
+	protected boolean isCrashed = false;
 
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected final float randPosX = new Random().nextInt(800); // for now
@@ -188,5 +189,9 @@ public abstract class WindowDisplay {
 
 	public String getType() {
 		return this.type;
+	}
+	
+	public void setCrash(boolean crashStatus) {
+		this.isCrashed = crashStatus;
 	}
 }

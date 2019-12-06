@@ -143,12 +143,12 @@ public class Server extends Thread {
 					if (playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame
 							|| playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame
 							|| playerFrameZ <= zInFrame && playerFrameZ + carHeight >= zOutFrame) {
-						serverGUI.appendResponse(
-								controllers.get(i).getType() + "and" + controllers.get(j).getType() + " are crashing!");
+						serverGUI.appendResponse(controllers.get(i).getType() + " and " + controllers.get(j).getType()
+								+ " are crashing!");
 
-//						CrashPacket crashPacket = new CrashPacket(controllers.get(i).getType(),
-//								controllers.get(j).getType());
-//						crashPacket.writeData(this);
+						CrashPacket crashPacket = new CrashPacket(controllers.get(i).getType(),
+								controllers.get(j).getType());
+						crashPacket.writeData(this);
 					}
 				}
 			}
