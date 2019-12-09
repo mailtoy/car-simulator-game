@@ -73,7 +73,7 @@ public abstract class WindowDisplay {
 		TextMaster.init(loader);
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		new GUIText("This is test text!", 3f, font, new Vector2f(0f, 0f), 1f, true);
-		
+			
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
