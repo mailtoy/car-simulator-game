@@ -13,16 +13,15 @@ import renderEngine.Loader;
 import toolbox.Maths;
 
 public class GuiRenderer {
-	
 	private final RawModel quad;
 	private GuiShader shader;
-	
+
 	public GuiRenderer(Loader loader) {
-		float[] positions = {-1, 1, -1, -1, 1, 1, 1, -1};
-		quad = loader.loadToVAO(positions);
+		float[] positions = { -1, 1, -1, -1, 1, 1, 1, -1 };
+		quad = loader.loadToVAO(positions, 2);
 		shader = new GuiShader();
 	}
-	
+
 	public void render(List<GuiTexture> guis) {
 		shader.start();
 		GL30.glBindVertexArray(quad.getVaoID());
@@ -43,8 +42,8 @@ public class GuiRenderer {
 		GL30.glBindVertexArray(0);
 		shader.stop();
 	}
-	
-	public void cleanUp(){
+
+	public void cleanUp() {
 		shader.cleanUp();
 	}
 

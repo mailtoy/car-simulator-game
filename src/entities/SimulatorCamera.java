@@ -42,10 +42,12 @@ public class SimulatorCamera extends Camera {
 //				position.x = 0;
 //			}
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || Mouse.getX() <= 1338 && Mouse.getX() >= 1256
+				&& Mouse.getY() <= 730 && Mouse.getY() >= 663 && Mouse.isButtonDown(0)) {
 			position.y += 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Mouse.getX() <= 1338 && Mouse.getX() >= 1256
+				&& Mouse.getY() <= 419 && Mouse.getY() >= 344 && Mouse.isButtonDown(0)) {
 			position.y -= 5f;
 		}
 		if (Mouse.isButtonDown(0)) {

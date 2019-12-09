@@ -1,9 +1,11 @@
 package main;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -11,6 +13,9 @@ import entities.Entity;
 import entities.Light;
 import entities.MultiplePlayer;
 import entities.Player;
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
+import fontRendering.TextMaster;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
@@ -42,6 +47,7 @@ public abstract class WindowDisplay {
 	protected Player player; // Change to Car later
 	protected Camera camera;
 	protected int round = 3;
+	protected boolean isCrashed = false;
 
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 	protected final float randPosX = new Random().nextInt(800); // for now
@@ -61,10 +67,13 @@ public abstract class WindowDisplay {
 	private void initComponents() {
 		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
-		renderer = new MasterRenderer();
+		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
-
-		// Terrain TextureStaff
+		
+		TextMaster.init(loader);
+		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
+		new GUIText("This is test text!", 3f, font, new Vector2f(0f, 0f), 1f, true);
+		
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
@@ -75,7 +84,6 @@ public abstract class WindowDisplay {
 
 		TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
-
 		TexturedModel grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
 				new ModelTexture(loader.loadTexture("grassTexture")));
 		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
@@ -169,7 +177,7 @@ public abstract class WindowDisplay {
 	public Loader geLoader() {
 		return this.loader;
 	}
-	
+
 	public TexturedModel getCarModel() {
 		return this.car;
 	}
@@ -184,5 +192,13 @@ public abstract class WindowDisplay {
 
 	public String getDefaultMap() {
 		return this.defaultMap;
+	}
+
+	public String getType() {
+		return this.type;
+	}
+
+	public void setCrash(boolean crashStatus) {
+		this.isCrashed = crashStatus;
 	}
 }
