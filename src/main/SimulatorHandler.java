@@ -22,10 +22,9 @@ public class SimulatorHandler {
 	}
 
 	private void initGUIs() {
-		Loader loader = simulator.geLoader();
+		Loader loader = simulator.getLoader();
 		zoomIn = new GuiTexture(loader.loadTexture("plus"), new Vector2f(0.8f, 0.55f), new Vector2f(0.06f, 0.08f));
 		zoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f), new Vector2f(0.06f, 0.08f));
-	
 
 		guis.add(zoomIn);
 		guis.add(zoomOut);

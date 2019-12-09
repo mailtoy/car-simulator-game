@@ -74,11 +74,10 @@ public class Controller extends WindowDisplay {
 		}
 		renderer.render(light, camera);
 		controllerHandler.render();
-		
+
 		if (isCrashed) {
 			TextMaster.render();
 		}
-
 		DisplayManager.updateDisplay();
 	}
 

@@ -22,7 +22,7 @@ public class ControllerHandler {
 	}
 
 	private void initGUIs() {
-		Loader loader = controller.geLoader();
+		Loader loader = controller.getLoader();
 		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
 		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
 		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f), new Vector2f(0.06f, 0.08f));
