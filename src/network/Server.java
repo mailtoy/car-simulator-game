@@ -186,7 +186,6 @@ public class Server extends Thread {
 
 	private void removeConnection(DisconnectPacket packet) {
 		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
-		
 		serverGUI.removeClient(packet.getType());
 		if (connectedPlayers.size() == 0) {
 			serverGUI.setMapEnabled(true);

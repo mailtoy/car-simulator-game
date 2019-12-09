@@ -5,7 +5,6 @@ import org.lwjgl.opengl.Display;
 import entities.Entity;
 import entities.SimulatorCamera;
 import network.packet.ConnectPacket;
-import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
 
@@ -34,8 +33,6 @@ public class Simulator extends WindowDisplay {
 			render();
 		}
 		super.closeqRequest();
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
-		disconnectPacket.writeData(client);
 	}
 	
 	@Override

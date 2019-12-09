@@ -9,7 +9,6 @@ import entities.Entity;
 import entities.MultiplePlayer;
 import fontRendering.TextMaster;
 import network.packet.ConnectPacket;
-import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
@@ -58,10 +57,6 @@ public class Controller extends WindowDisplay {
 		TextMaster.cleanUp();
 		controllerHandler.cleanUp();
 		super.closeqRequest();
-
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
-		disconnectPacket.writeData(client);
 	}
 
 	@Override

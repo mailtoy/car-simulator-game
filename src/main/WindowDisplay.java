@@ -19,6 +19,7 @@ import fontRendering.TextMaster;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
+import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -133,6 +134,9 @@ public abstract class WindowDisplay {
 		loader.cleanUp();
 
 		DisplayManager.closeDisplay();
+
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
+		disconnectPacket.writeData(client);
 	}
 
 	protected void reloadMap() {
