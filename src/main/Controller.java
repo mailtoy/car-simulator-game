@@ -15,12 +15,14 @@ import terrains.Terrain;
 
 public class Controller extends WindowDisplay {
 	protected ControllerHandler controllerHandler;
+	protected Gauge gauge;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
 		controllerHandler = new ControllerHandler(this);
+		gauge = new Gauge(this, player.getCurrentSpeed());
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
@@ -35,6 +37,8 @@ public class Controller extends WindowDisplay {
 		while (!Display.isCloseRequested()) {
 			checkMapChanged();
 			checkForceQuit();
+			gauge = new Gauge(this, player.getCurrentSpeed());
+
 			if (!isCrashed) {
 				camera.move();
 				player.move();
