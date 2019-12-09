@@ -25,7 +25,7 @@ public class Gauge {
 
 		GaugeTextMaster.init(loader);
 		FontType gauge = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
-		new GaugeGUIText(player.getCurrentSpeed() + "", 3f, gauge, new Vector2f(0f, 0f), 1f, true);
+		new GaugeGUIText(Math.abs(player.getCurrentSpeed()) + "", 3f, gauge, new Vector2f(0f, 0f), 1f, true);
 	}
 
 	public void render() {

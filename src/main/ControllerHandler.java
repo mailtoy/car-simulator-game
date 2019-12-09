@@ -6,8 +6,8 @@ import org.lwjgl.util.vector.Vector2f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
-import fontRendering.GaugeTextMaster;
 import fontRendering.TextMaster;
+
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import renderEngine.Loader;

@@ -9,6 +9,8 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.Entity;
 import entities.MultiplePlayer;
+
+import fontRendering.GaugeTextMaster;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
@@ -18,13 +20,14 @@ public class Controller extends WindowDisplay {
 	protected final float randPosX = new Random().nextInt(800); // for now
 	protected final float randPosZ = new Random().nextInt(800); // for now
 	protected Gauge gauge;
+	protected float speed = 0;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
 		handler = new ControllerHandler(this);
-		gauge = new Gauge(this, player.getCurrentSpeed());
+		gauge = new Gauge(this, speed);
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
@@ -60,6 +63,7 @@ public class Controller extends WindowDisplay {
 			render();
 		}
 		handler.cleanUp();
+		GaugeTextMaster.cleanUp();
 		super.closeqRequest();
 	}
 
@@ -73,11 +77,20 @@ public class Controller extends WindowDisplay {
 		}
 		renderer.render(light, camera);
 		handler.render();
+		GaugeTextMaster.render();
 
 		if (isCrashed) {
 			((ControllerHandler) handler).textRender();
 		}
 		DisplayManager.updateDisplay();
+	}
+
+	public void setGauge(float speed) {
+		this.speed = speed;
+	}
+
+	public float getSpeed() {
+		return speed;
 	}
 
 	public static void main(String[] args) {
