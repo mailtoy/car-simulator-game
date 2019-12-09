@@ -10,7 +10,6 @@ import entities.MultiplePlayer;
 import fontRendering.GaugeTextMaster;
 import fontRendering.TextMaster;
 import network.packet.ConnectPacket;
-import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
@@ -28,7 +27,7 @@ public class Controller extends WindowDisplay {
 		gauge = new Gauge(this, speed);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
 
@@ -38,11 +37,10 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
+			checkMapChanged();
+			checkForceQuit();
 			gauge = new Gauge(this, player.getCurrentSpeed());
-//			setGauge(player.getCurrentSpeed());
-			if (!map.equals(defaultMap) && !isMapChanged()) {
-				reloadMap();
-			}
+
 			if (!isCrashed) {
 				camera.move();
 				player.move();
@@ -65,10 +63,6 @@ public class Controller extends WindowDisplay {
 		GaugeTextMaster.cleanUp();
 		controllerHandler.cleanUp();
 		super.closeqRequest();
-
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
-		disconnectPacket.writeData(client);
 	}
 
 	@Override

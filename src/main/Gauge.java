@@ -10,22 +10,23 @@ import fontMeshCreator.GaugeGUIText;
 import fontRendering.GaugeTextMaster;
 import renderEngine.Loader;
 
-public class Gauge  {
+public class Gauge {
 	private Controller controller;
 	private Player player;
 
-	public Gauge(Controller controller,  float speed) {
+	public Gauge(Controller controller, float speed) {
 		this.controller = controller;
 		this.player = controller.player;
 		initGaugeGUIs();
 	}
-	
+
 	private void initGaugeGUIs() {
 		Loader loader = controller.getLoader();
 
 		GaugeTextMaster.init(loader);
 		FontType gauge = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		new GaugeGUIText(Math.abs(player.getCurrentSpeed())+"", 3f, gauge, new Vector2f(0f, 0f), 1f, true);
+
 	}
 
 	public void render() {

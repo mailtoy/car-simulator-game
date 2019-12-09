@@ -19,6 +19,7 @@ import fontRendering.TextMaster;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
+import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -31,7 +32,10 @@ import textures.TerrainTexturePack;
 public abstract class WindowDisplay {
 	private Loader loader;
 	private TerrainTexturePack texturePack;
+	private final String defaultMap = "map1";
+	private String map = defaultMap;
 	private boolean isMapChanged = false;
+	private boolean isKicked = false;
 
 	protected MasterRenderer renderer;
 	protected Light light;
@@ -39,9 +43,6 @@ public abstract class WindowDisplay {
 	protected List<Entity> entities;
 	protected TexturedModel car;
 	protected TerrainTexture blendMap;
-
-	protected final String defaultMap = "map1";
-	protected String map = defaultMap;
 
 	protected Client client;
 	protected Player player; // Change to Car later
@@ -72,8 +73,7 @@ public abstract class WindowDisplay {
 
 		TextMaster.init(loader);
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
-
-		new GUIText("This is test text!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
+		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
@@ -129,18 +129,33 @@ public abstract class WindowDisplay {
 		}
 	}
 
+	private void reloadMap() {
+		terrains.clear();
+		loadMap();
+
+		isMapChanged = true;
+	}
+
 	protected void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
 
 		DisplayManager.closeDisplay();
+
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
+		disconnectPacket.writeData(client);
 	}
 
-	protected void reloadMap() {
-		terrains.clear();
-		loadMap();
+	protected void checkMapChanged() {
+		if (!map.equals(defaultMap) && !isMapChanged) {
+			reloadMap();
+		}
+	}
 
-		isMapChanged = true;
+	protected void checkForceQuit() {
+		if (isKicked) {
+			closeqRequest();
+		}
 	}
 
 	private int getMultiplayerIndex(String type) {
@@ -183,10 +198,6 @@ public abstract class WindowDisplay {
 		return this.car;
 	}
 
-	public boolean isMapChanged() {
-		return isMapChanged;
-	}
-
 	public void setMap(String map) {
 		this.map = map;
 	}
@@ -201,5 +212,9 @@ public abstract class WindowDisplay {
 
 	public void setCrash(boolean crashStatus) {
 		this.isCrashed = crashStatus;
+	}
+
+	public void setKick(boolean kickStatus) {
+		this.isKicked = kickStatus;
 	}
 }
