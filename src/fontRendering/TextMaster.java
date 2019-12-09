@@ -47,6 +47,8 @@ public class TextMaster {
 	}
 
 	public static void cleanUp() {
-		renderer.cleanUp();
+		if (texts != null) {
+			renderer.cleanUp();
+		}
 	}
 }

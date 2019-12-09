@@ -69,11 +69,12 @@ public abstract class WindowDisplay {
 		loader = new Loader();
 		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
-		
+
 		TextMaster.init(loader);
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
-		new GUIText("This is test text!", 3f, font, new Vector2f(0f, 0f), 1f, true);
-			
+
+		new GUIText("This is test text!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
+
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
@@ -174,7 +175,7 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
-	public Loader geLoader() {
+	public Loader getLoader() {
 		return this.loader;
 	}
 

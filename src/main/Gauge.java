@@ -21,7 +21,7 @@ public class Gauge  {
 	}
 	
 	private void initGaugeGUIs() {
-		Loader loader = controller.geLoader();
+		Loader loader = controller.getLoader();
 
 		GaugeTextMaster.init(loader);
 		FontType gauge = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
