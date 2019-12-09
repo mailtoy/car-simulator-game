@@ -1,11 +1,9 @@
 package main;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.Camera;
@@ -13,9 +11,6 @@ import entities.Entity;
 import entities.Light;
 import entities.MultiplePlayer;
 import entities.Player;
-import fontMeshCreator.FontType;
-import fontMeshCreator.GUIText;
-import fontRendering.TextMaster;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
@@ -44,15 +39,13 @@ public abstract class WindowDisplay {
 	protected TexturedModel car;
 	protected TerrainTexture blendMap;
 
+	protected Handler handler;
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
 	protected int round = 3;
 	protected boolean isCrashed = false;
-
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
-	protected final float randPosX = new Random().nextInt(800); // for now
-	protected final float randPosZ = new Random().nextInt(800); // for now
 
 	public WindowDisplay() {
 		this.client = new Client(this);
@@ -70,10 +63,6 @@ public abstract class WindowDisplay {
 		loader = new Loader();
 		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
-
-		TextMaster.init(loader);
-		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
-		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));

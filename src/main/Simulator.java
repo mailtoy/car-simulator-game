@@ -9,11 +9,10 @@ import renderEngine.DisplayManager;
 import terrains.Terrain;
 
 public class Simulator extends WindowDisplay {
-	protected SimulatorHandler simulatorHandler;
 
 	public Simulator() {
 		super();
-		simulatorHandler = new SimulatorHandler(this);
+		handler = new SimulatorHandler(this);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
 
@@ -43,7 +42,7 @@ public class Simulator extends WindowDisplay {
 			renderer.processEntity(entity);
 		}
 		renderer.render(light, camera);
-		simulatorHandler.render();
+		handler.render();
 		DisplayManager.updateDisplay();
 	}
 

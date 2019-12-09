@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -7,21 +9,21 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.Entity;
 import entities.MultiplePlayer;
-import fontRendering.TextMaster;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
 
 public class Controller extends WindowDisplay {
-	protected ControllerHandler controllerHandler;
+	protected final float randPosX = new Random().nextInt(800); // for now
+	protected final float randPosZ = new Random().nextInt(800); // for now
 	protected Gauge gauge;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
-		controllerHandler = new ControllerHandler(this);
+		handler = new ControllerHandler(this);
 		gauge = new Gauge(this, player.getCurrentSpeed());
 		camera = new ControllerCamera(player);
 
@@ -57,8 +59,7 @@ public class Controller extends WindowDisplay {
 			}
 			render();
 		}
-		TextMaster.cleanUp();
-		controllerHandler.cleanUp();
+		handler.cleanUp();
 		super.closeqRequest();
 	}
 
@@ -71,10 +72,10 @@ public class Controller extends WindowDisplay {
 			renderer.processEntity(entity);
 		}
 		renderer.render(light, camera);
-		controllerHandler.render();
+		handler.render();
 
 		if (isCrashed) {
-			TextMaster.render();
+			((ControllerHandler) handler).textRender();
 		}
 		DisplayManager.updateDisplay();
 	}

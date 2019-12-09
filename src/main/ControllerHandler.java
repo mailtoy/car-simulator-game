@@ -1,34 +1,35 @@
 package main;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
 
 import org.lwjgl.util.vector.Vector2f;
 
+import fontMeshCreator.FontType;
+import fontMeshCreator.GUIText;
 import fontRendering.GaugeTextMaster;
+import fontRendering.TextMaster;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import renderEngine.Loader;
 
-public class ControllerHandler {
-	private Controller controller;
-	private GuiRenderer guiRenderer;
-	private List<GuiTexture> guis;
-	private GuiTexture forward, backward, right, left, bg;
+public class ControllerHandler extends Handler {
 
-	public ControllerHandler(Controller controller) {
-		this.controller = controller;
-		this.guis = new ArrayList<GuiTexture>();
-		initGUIs();
+	public ControllerHandler(WindowDisplay windowDisplay) {
+		super(windowDisplay);
+		initText();
 	}
 
-	private void initGUIs() {
-		Loader loader = controller.getLoader();
-		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
-		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
-		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f), new Vector2f(0.06f, 0.08f));
-		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
-//		bg = new GuiTexture(loader.loadTexture("table"), new Vector2f(0.8f, -0.6f), new Vector2f(0.8f, 0.4f));
+	@Override
+	protected void initGUIs() {
+		Loader loader = windowDisplay.getLoader();
+		GuiTexture forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f),
+				new Vector2f(0.06f, 0.08f));
+		GuiTexture backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f),
+				new Vector2f(0.06f, 0.08f));
+		GuiTexture left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.6f, -0.5f),
+				new Vector2f(0.06f, 0.08f));
+		GuiTexture right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f),
+				new Vector2f(0.06f, 0.08f));
 
 		guis.add(forward);
 		guis.add(backward);
@@ -37,15 +38,22 @@ public class ControllerHandler {
 
 		guiRenderer = new GuiRenderer(loader);
 	}
-	
-	public void render() {
-		GaugeTextMaster.render();
-		guiRenderer.render(guis);
+
+	private void initText() {
+		Loader loader = windowDisplay.getLoader();
+		TextMaster.init(loader);
+		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
+		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
 	}
 
+	public void textRender() {
+		TextMaster.render();
+	}
+
+	@Override
 	public void cleanUp() {
-		GaugeTextMaster.cleanUp();
 		guiRenderer.cleanUp();
+		TextMaster.cleanUp();
 	}
 
 }
