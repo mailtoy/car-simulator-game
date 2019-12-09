@@ -41,5 +41,9 @@ public class ControllerHandler {
 	public void render() {
 		guiRenderer.render(guis);
 	}
+	
+	public void cleanUp() {
+		guiRenderer.cleanUp();
+	}
 
 }

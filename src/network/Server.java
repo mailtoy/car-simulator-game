@@ -105,8 +105,6 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-//		serverGUI.appendResponse(packet.getType() + " has move to " + packet.getPosition());
-
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
 			MultiplePlayer player = connectedPlayers.get(index);

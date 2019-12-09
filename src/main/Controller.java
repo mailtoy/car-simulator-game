@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.Entity;
 import entities.MultiplePlayer;
+import fontRendering.TextMaster;
 import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
@@ -21,7 +22,6 @@ public class Controller extends WindowDisplay {
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
 		controllerHandler = new ControllerHandler(this);
-
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
@@ -52,12 +52,13 @@ public class Controller extends WindowDisplay {
 							player.getRotY(), player.getRotZ());
 					movePacket.writeData(client);
 				}
-			} else {
-				System.out.println("crash!!!"); // for now
 			}
 			render();
 		}
+		TextMaster.cleanUp();
+		controllerHandler.cleanUp();
 		super.closeqRequest();
+
 		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());
 		disconnectPacket.writeData(client);
@@ -73,6 +74,11 @@ public class Controller extends WindowDisplay {
 		}
 		renderer.render(light, camera);
 		controllerHandler.render();
+		
+		if (isCrashed) {
+			TextMaster.render();
+		}
+
 		DisplayManager.updateDisplay();
 	}
 
