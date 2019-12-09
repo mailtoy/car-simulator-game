@@ -7,6 +7,7 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.Entity;
 import entities.MultiplePlayer;
+import fontRendering.GaugeTextMaster;
 import fontRendering.TextMaster;
 import network.packet.ConnectPacket;
 import network.packet.DisconnectPacket;
@@ -17,13 +18,14 @@ import terrains.Terrain;
 public class Controller extends WindowDisplay {
 	protected ControllerHandler controllerHandler;
 	protected Gauge gauge;
+	protected float speed = 0;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
 		controllerHandler = new ControllerHandler(this);
-		gauge = new Gauge(this, player.getCurrentSpeed());
+		gauge = new Gauge(this, speed);
 		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
@@ -37,6 +39,7 @@ public class Controller extends WindowDisplay {
 	protected void run() {
 		while (!Display.isCloseRequested()) {
 			gauge = new Gauge(this, player.getCurrentSpeed());
+//			setGauge(player.getCurrentSpeed());
 			if (!map.equals(defaultMap) && !isMapChanged()) {
 				reloadMap();
 			}
@@ -59,6 +62,7 @@ public class Controller extends WindowDisplay {
 			render();
 		}
 		TextMaster.cleanUp();
+		GaugeTextMaster.cleanUp();
 		controllerHandler.cleanUp();
 		super.closeqRequest();
 
@@ -77,11 +81,21 @@ public class Controller extends WindowDisplay {
 		}
 		renderer.render(light, camera);
 		controllerHandler.render();
+		GaugeTextMaster.render();
 
 		if (isCrashed) {
 			TextMaster.render();
 		}
 		DisplayManager.updateDisplay();
+	}
+
+	public void setGauge(float speed) {
+		this.speed = speed;
+
+	}
+
+	public float getSpeed() {
+		return speed;
 	}
 
 	public static void main(String[] args) {
