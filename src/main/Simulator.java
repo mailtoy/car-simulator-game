@@ -17,7 +17,7 @@ public class Simulator extends WindowDisplay {
 		camera = new SimulatorCamera();
 		camera.setRound(round);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, map);
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap());
 		connectPacket.writeData(client);
 
 		run();
@@ -26,15 +26,14 @@ public class Simulator extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			if (!map.equals(defaultMap) && !isMapChanged()) {
-				reloadMap();
-			}
+			checkMapChanged();
+			checkForceQuit();
 			camera.move();
 			render();
 		}
 		super.closeqRequest();
 	}
-	
+
 	@Override
 	protected void render() {
 		for (Terrain terrain : terrains) {

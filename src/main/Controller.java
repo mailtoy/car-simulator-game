@@ -23,7 +23,7 @@ public class Controller extends WindowDisplay {
 		controllerHandler = new ControllerHandler(this);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
 
@@ -33,9 +33,8 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			if (!map.equals(defaultMap) && !isMapChanged()) {
-				reloadMap();
-			}
+			checkMapChanged();
+			checkForceQuit();
 			if (!isCrashed) {
 				camera.move();
 				player.move();
