@@ -9,6 +9,9 @@ public class CrashPacket extends Packet {
 
 	public CrashPacket(byte[] data) {
 		super(03);
+		String[] dataArray = readData(data).split(":");
+		this.player1 = dataArray[0];
+		this.player2 = dataArray[1];
 	}
 
 	public CrashPacket(String player1, String player2) {

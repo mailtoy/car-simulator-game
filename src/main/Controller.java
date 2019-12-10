@@ -37,22 +37,26 @@ public class Controller extends WindowDisplay {
 			if (!map.equals(defaultMap) && !isMapChanged()) {
 				reloadMap();
 			}
+			if (!isCrashed) {
+				camera.move();
+				player.move();
 
-			camera.move();
-			player.move();
-			render();
+				boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
+				boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+				boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+				boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+				// boolean for mouse detect here
 
-			boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
-			boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
-			boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-			boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
-			// boolean for mouse detect here
-
-			if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0) {
-				MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
-						player.getRotY(), player.getRotZ());
-				movePacket.writeData(client);
+				if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0) {
+					MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
+							player.getRotY(), player.getRotZ());
+					movePacket.writeData(client);
+				}
+			} else {
+				System.out.println("crash!!!"); // for now
+				
 			}
+			render();
 		}
 		super.closeqRequest();
 		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
