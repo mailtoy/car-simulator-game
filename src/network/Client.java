@@ -115,6 +115,10 @@ public class Client extends Thread {
 		if (packetType.contains("Controller")) {
 			windowDisplay.removeMultiplePlayer(packetType);
 		}
+		if (packetType.equals(windowDisplay.getType())) {
+			windowDisplay.setKick(true);
+			System.exit(0); // for now
+		}
 	}
 
 	private void handleMove(MovePacket packet) {

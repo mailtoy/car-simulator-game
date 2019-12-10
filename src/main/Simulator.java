@@ -5,20 +5,18 @@ import org.lwjgl.opengl.Display;
 import entities.Entity;
 import entities.SimulatorCamera;
 import network.packet.ConnectPacket;
-import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
 
 public class Simulator extends WindowDisplay {
-	protected SimulatorHandler simulatorHandler;
 
 	public Simulator() {
 		super();
-		simulatorHandler = new SimulatorHandler(this);
+		handler = new SimulatorHandler(this);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, map);
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap());
 		connectPacket.writeData(client);
 
 		run();
@@ -27,17 +25,14 @@ public class Simulator extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			if (!map.equals(defaultMap) && !isMapChanged()) {
-				reloadMap();
-			}
+			checkMapChanged();
+			checkForceQuit();
 			camera.move();
 			render();
 		}
 		super.closeqRequest();
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
-		disconnectPacket.writeData(client);
 	}
-	
+
 	@Override
 	protected void render() {
 		for (Terrain terrain : terrains) {
@@ -47,7 +42,7 @@ public class Simulator extends WindowDisplay {
 			renderer.processEntity(entity);
 		}
 		renderer.render(light, camera);
-		simulatorHandler.render();
+		handler.render();
 		DisplayManager.updateDisplay();
 	}
 

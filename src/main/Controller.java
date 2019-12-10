@@ -1,5 +1,7 @@
 package main;
 
+import java.util.Random;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -7,24 +9,28 @@ import org.lwjgl.util.vector.Vector3f;
 import entities.ControllerCamera;
 import entities.Entity;
 import entities.MultiplePlayer;
+
+import fontRendering.GaugeTextMaster;
 import network.packet.ConnectPacket;
-import network.packet.DisconnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 import terrains.Terrain;
 
 public class Controller extends WindowDisplay {
-	protected ControllerHandler controllerHandler;
+	protected final float randPosX = new Random().nextInt(800); // for now
+	protected final float randPosZ = new Random().nextInt(800); // for now
+	protected Gauge gauge;
+	protected float speed = 0;
 
 	public Controller() {
 		super();
 
 		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
-		controllerHandler = new ControllerHandler(this);
-
+		handler = new ControllerHandler(this);
+		gauge = new Gauge(this, speed);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, map, player.getPosition(), player.getRotX(),
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
 				player.getRotY(), player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
 
@@ -34,9 +40,10 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			if (!map.equals(defaultMap) && !isMapChanged()) {
-				reloadMap();
-			}
+			checkMapChanged();
+			checkForceQuit();
+			gauge = new Gauge(this, player.getCurrentSpeed());
+
 			if (!isCrashed) {
 				camera.move();
 				player.move();
@@ -52,16 +59,12 @@ public class Controller extends WindowDisplay {
 							player.getRotY(), player.getRotZ());
 					movePacket.writeData(client);
 				}
-			} else {
-				System.out.println("crash!!!"); // for now
-				
 			}
 			render();
 		}
+		handler.cleanUp();
+		GaugeTextMaster.cleanUp();
 		super.closeqRequest();
-		DisconnectPacket disconnectPacket = new DisconnectPacket(type, player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
-		disconnectPacket.writeData(client);
 	}
 
 	@Override
@@ -73,8 +76,21 @@ public class Controller extends WindowDisplay {
 			renderer.processEntity(entity);
 		}
 		renderer.render(light, camera);
-		controllerHandler.render();
+		handler.render();
+		GaugeTextMaster.render();
+
+		if (isCrashed) {
+			((ControllerHandler) handler).textRender();
+		}
 		DisplayManager.updateDisplay();
+	}
+
+	public void setGauge(float speed) {
+		this.speed = speed;
+	}
+
+	public float getSpeed() {
+		return speed;
 	}
 
 	public static void main(String[] args) {

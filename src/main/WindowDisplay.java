@@ -14,6 +14,7 @@ import entities.Player;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
+import network.packet.DisconnectPacket;
 import renderEngine.DisplayManager;
 import renderEngine.Loader;
 import renderEngine.MasterRenderer;
@@ -26,7 +27,10 @@ import textures.TerrainTexturePack;
 public abstract class WindowDisplay {
 	private Loader loader;
 	private TerrainTexturePack texturePack;
+	private final String defaultMap = "map1";
+	private String map = defaultMap;
 	private boolean isMapChanged = false;
+	private boolean isKicked = false;
 
 	protected MasterRenderer renderer;
 	protected Light light;
@@ -35,18 +39,13 @@ public abstract class WindowDisplay {
 	protected TexturedModel car;
 	protected TerrainTexture blendMap;
 
-	protected final String defaultMap = "map1";
-	protected String map = defaultMap;
-
+	protected Handler handler;
 	protected Client client;
 	protected Player player; // Change to Car later
 	protected Camera camera;
 	protected int round = 3;
 	protected boolean isCrashed = false;
-
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
-	protected final float randPosX = new Random().nextInt(800); // for now
-	protected final float randPosZ = new Random().nextInt(800); // for now
 
 	public WindowDisplay() {
 		this.client = new Client(this);
@@ -65,7 +64,6 @@ public abstract class WindowDisplay {
 		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
 
-		// Terrain TextureStaff
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
 		TerrainTexture gTexture = new TerrainTexture(loader.loadTexture("road"));
@@ -76,7 +74,6 @@ public abstract class WindowDisplay {
 
 		TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
 				new ModelTexture(loader.loadTexture("tree")));
-
 		TexturedModel grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
 				new ModelTexture(loader.loadTexture("grassTexture")));
 		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
@@ -121,18 +118,33 @@ public abstract class WindowDisplay {
 		}
 	}
 
+	private void reloadMap() {
+		terrains.clear();
+		loadMap();
+
+		isMapChanged = true;
+	}
+
 	protected void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
 
 		DisplayManager.closeDisplay();
+
+		DisconnectPacket disconnectPacket = new DisconnectPacket(type);
+		disconnectPacket.writeData(client);
 	}
 
-	protected void reloadMap() {
-		terrains.clear();
-		loadMap();
+	protected void checkMapChanged() {
+		if (!map.equals(defaultMap) && !isMapChanged) {
+			reloadMap();
+		}
+	}
 
-		isMapChanged = true;
+	protected void checkForceQuit() {
+		if (isKicked) {
+			closeqRequest();
+		}
 	}
 
 	private int getMultiplayerIndex(String type) {
@@ -167,16 +179,12 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
-	public Loader geLoader() {
+	public Loader getLoader() {
 		return this.loader;
 	}
 
 	public TexturedModel getCarModel() {
 		return this.car;
-	}
-
-	public boolean isMapChanged() {
-		return isMapChanged;
 	}
 
 	public void setMap(String map) {
@@ -190,8 +198,12 @@ public abstract class WindowDisplay {
 	public String getType() {
 		return this.type;
 	}
-	
+
 	public void setCrash(boolean crashStatus) {
 		this.isCrashed = crashStatus;
+	}
+
+	public void setKick(boolean kickStatus) {
+		this.isKicked = kickStatus;
 	}
 }

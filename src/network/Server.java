@@ -105,8 +105,6 @@ public class Server extends Thread {
 	}
 
 	private void handleMove(MovePacket packet) {
-//		serverGUI.appendResponse(packet.getType() + " has move to " + packet.getPosition());
-
 		if (getMultiplePlayer(packet.getType()) != null) {
 			int index = getMultiplePlayerIndex(packet.getType());
 			MultiplePlayer player = connectedPlayers.get(index);
@@ -178,6 +176,7 @@ public class Server extends Thread {
 		}
 		if (!isConnected) {
 			connectedPlayers.add(multiplePlayer);
+			serverGUI.addClient(multiplePlayer.getType());
 			packet.writeData(this);
 		}
 		if (connectedPlayers.size() != 0) {
@@ -187,10 +186,10 @@ public class Server extends Thread {
 
 	private void removeConnection(DisconnectPacket packet) {
 		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
+		serverGUI.removeClient(packet.getType());
 		if (connectedPlayers.size() == 0) {
 			serverGUI.setMapEnabled(true);
 		}
-
 		packet.writeData(this);
 	}
 
