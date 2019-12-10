@@ -31,6 +31,7 @@ public abstract class WindowDisplay {
 	private String map = defaultMap;
 	private boolean isMapChanged = false;
 	private boolean isKicked = false;
+	private List<String> carColor;
 
 	protected MasterRenderer renderer;
 	protected Light light;
@@ -63,6 +64,7 @@ public abstract class WindowDisplay {
 		loader = new Loader();
 		renderer = new MasterRenderer(loader);
 		terrains = new ArrayList<Terrain>();
+		setcarColor();
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
@@ -92,7 +94,8 @@ public abstract class WindowDisplay {
 
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 		RawModel carModel = OBJLoader.loadObjModel("Car", loader);
-		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture("carTexture2")));
+		int rnd = new Random().nextInt(carColor.size());
+		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture(carColor.get(rnd))));
 	}
 
 	private void loadMap() {
@@ -205,5 +208,15 @@ public abstract class WindowDisplay {
 
 	public void setKick(boolean kickStatus) {
 		this.isKicked = kickStatus;
+	}
+
+	public void setcarColor() {
+		carColor = new ArrayList<String>();
+		carColor.add("greenColor");
+		carColor.add("grayColor");
+		carColor.add("redColor");
+		carColor.add("blueColor");
+		carColor.add("purpleColor");
+		carColor.add("yellowColor");
 	}
 }
