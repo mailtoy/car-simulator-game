@@ -7,17 +7,28 @@ import guis.GuiTexture;
 import renderEngine.Loader;
 
 public class SimulatorHandler extends Handler {
+	private GuiTexture zoomIn;
+	private GuiTexture zoomOut;
 
 	public SimulatorHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
 	}
 
+	
+	public GuiTexture getZoomIn() {
+		return zoomIn;
+	}
+
+	public GuiTexture getZoomOut() {
+		return zoomOut;
+	}
+
 	@Override
 	protected void initGUIs() {
 		Loader loader = windowDisplay.getLoader();
-		GuiTexture zoomIn = new GuiTexture(loader.loadTexture("plus"), new Vector2f(0.8f, 0.55f),
+		zoomIn = new GuiTexture(loader.loadTexture("plus"), new Vector2f(0.8f, 0.55f),
 				new Vector2f(0.06f, 0.08f));
-		GuiTexture zoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f),
+		zoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f),
 				new Vector2f(0.06f, 0.08f));
 
 		guis.add(zoomIn);
@@ -25,6 +36,7 @@ public class SimulatorHandler extends Handler {
 
 		guiRenderer = new GuiRenderer(loader);
 	}
+	
 
 	@Override
 	public void cleanUp() {
