@@ -1,10 +1,11 @@
-package main;
+package handlers;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import guis.GuiRenderer;
 import guis.GuiTexture;
+import main.WindowDisplay;
 
 public abstract class Handler {
 	protected WindowDisplay windowDisplay;

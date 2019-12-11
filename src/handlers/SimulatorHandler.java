@@ -1,9 +1,10 @@
-package main;
+package handlers;
 
 import org.lwjgl.util.vector.Vector2f;
 
 import guis.GuiRenderer;
 import guis.GuiTexture;
+import main.WindowDisplay;
 import renderEngine.Loader;
 
 public class SimulatorHandler extends Handler {

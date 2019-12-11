@@ -2,11 +2,10 @@ package main;
 
 import org.lwjgl.opengl.Display;
 
-import entities.Entity;
 import entities.SimulatorCamera;
+import handlers.SimulatorHandler;
 import network.packet.ConnectPacket;
 import renderEngine.DisplayManager;
-import terrains.Terrain;
 
 public class Simulator extends WindowDisplay {
 
@@ -35,14 +34,7 @@ public class Simulator extends WindowDisplay {
 
 	@Override
 	protected void render() {
-		for (Terrain terrain : terrains) {
-			renderer.processTerrain(terrain);
-		}
-		for (Entity entity : entities) {
-			renderer.processEntity(entity);
-		}
-		renderer.render(light, camera);
-		handler.render();
+		super.renderComponents();
 		DisplayManager.updateDisplay();
 	}
 

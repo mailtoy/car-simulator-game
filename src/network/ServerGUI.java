@@ -41,9 +41,7 @@ public class ServerGUI extends JFrame {
 
 	private void setFrame() {
 		setTitle("Server");
-		setSize(new Dimension(750, 500));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setResizable(false);
 
 		initWidgets();
 		setLocationRelativeTo(null);
@@ -59,9 +57,8 @@ public class ServerGUI extends JFrame {
 		mapSelectPanel.add(mapSelectLabel);
 		mapSelectPanel.add(mapList);
 
-		responsesArea = new JTextArea();
+		responsesArea = new JTextArea(25, 25);
 		responsesArea.setEditable(false);
-		responsesArea.setPreferredSize(new Dimension(500, 250));
 		JScrollPane responsesScroller = new JScrollPane(responsesArea);
 		JLabel responsesLabel = new JLabel("Status");
 		responsesLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -74,9 +71,8 @@ public class ServerGUI extends JFrame {
 		clientModel = new DefaultListModel<String>();
 		clientsList = new JList<String>(clientModel);
 		clientsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		clientsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		clientsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 		clientsList.setVisibleRowCount(-1);
-		clientsList.setPreferredSize(new Dimension(150, 250));
 		JScrollPane clientsScroller = new JScrollPane(clientsList);
 		clientsLabel = new JLabel("Clients in Server: " + clientModel.getSize());
 		clientsLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -123,6 +119,7 @@ public class ServerGUI extends JFrame {
 
 		JPanel clientsPanel = new JPanel();
 		clientsPanel.setLayout(new BoxLayout(clientsPanel, BoxLayout.Y_AXIS));
+		clientsPanel.setPreferredSize(new Dimension(250, 150));
 		clientsPanel.add(clientsLabel);
 		clientsPanel.add(clientsScroller);
 		clientsPanel.add(removeClientBtn);
@@ -136,6 +133,7 @@ public class ServerGUI extends JFrame {
 
 	public void appendResponse(String response) {
 		responsesArea.append(response + "\n");
+		responsesArea.setCaretPosition(responsesArea.getDocument().getLength());
 	}
 
 	public void addClient(String client) {

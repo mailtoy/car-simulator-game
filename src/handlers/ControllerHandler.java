@@ -1,4 +1,4 @@
-package main;
+package handlers;
 
 import java.io.File;
 
@@ -10,6 +10,7 @@ import fontRendering.TextMaster;
 
 import guis.GuiRenderer;
 import guis.GuiTexture;
+import main.WindowDisplay;
 import renderEngine.Loader;
 
 public class ControllerHandler extends Handler {

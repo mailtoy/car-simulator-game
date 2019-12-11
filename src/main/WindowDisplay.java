@@ -1,6 +1,7 @@
 package main;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import entities.Entity;
 import entities.Light;
 import entities.MultiplePlayer;
 import entities.Player;
+import handlers.Handler;
 import models.RawModel;
 import models.TexturedModel;
 import network.Client;
@@ -123,6 +125,20 @@ public abstract class WindowDisplay {
 		loadMap();
 
 		isMapChanged = true;
+	}
+	
+	protected void renderComponents() {
+		for (Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
+			Terrain terrain = iterator.next();
+			renderer.processTerrain(terrain);
+		}
+		for (Iterator<Entity> iterator = entities.iterator(); iterator.hasNext();) {
+			Entity entity = iterator.next();
+			renderer.processEntity(entity);
+		}
+
+		renderer.render(light, camera);
+		handler.render();
 	}
 
 	protected void closeqRequest() {

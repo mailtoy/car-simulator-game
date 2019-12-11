@@ -2,19 +2,17 @@ package main;
 
 import java.util.Random;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.ControllerCamera;
-import entities.Entity;
 import entities.MultiplePlayer;
 
 import fontRendering.GaugeTextMaster;
+import handlers.ControllerHandler;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
-import terrains.Terrain;
 
 public class Controller extends WindowDisplay {
 	protected final float randPosX = new Random().nextInt(800); // for now
@@ -42,19 +40,13 @@ public class Controller extends WindowDisplay {
 		while (!Display.isCloseRequested()) {
 			checkMapChanged();
 			checkForceQuit();
-			gauge = new Gauge(this, player.getCurrentSpeed());
+//			gauge = new Gauge(this, player.getCurrentSpeed());
 
 			if (!isCrashed) {
 				camera.move();
 				player.move();
 
-				boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
-				boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
-				boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-				boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
-				// boolean for mouse detect here
-
-				if (isForward || isBackward || isLeft || isRight || player.getCurrentSpeed() != 0) {
+				if (player.getCurrentSpeed() != 0) {
 					MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 							player.getRotY(), player.getRotZ());
 					movePacket.writeData(client);
@@ -69,14 +61,7 @@ public class Controller extends WindowDisplay {
 
 	@Override
 	protected void render() {
-		for (Terrain terrain : terrains) {
-			renderer.processTerrain(terrain);
-		}
-		for (Entity entity : entities) {
-			renderer.processEntity(entity);
-		}
-		renderer.render(light, camera);
-		handler.render();
+		super.renderComponents();
 		GaugeTextMaster.render();
 
 		if (isCrashed) {
