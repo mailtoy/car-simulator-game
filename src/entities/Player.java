@@ -41,9 +41,10 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
-//		System.out.println("x: " + Mouse.getX());
-//		System.out.println("y: " + Mouse.getY());
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		System.out.println("x: " + Mouse.getX());
+		System.out.println("y: " + Mouse.getY());
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (Mouse.getX() <= 1110 && Mouse.getX() >= 1055 && Mouse.getY() <= 285
+				&& Mouse.getY() >= 245 && Mouse.isButtonDown(0))) {
 			if (this.speedIncrease < MAX_ACC) {
 				this.speedIncrease += 0.5;
 			}
