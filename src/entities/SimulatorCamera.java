@@ -14,6 +14,10 @@ public class SimulatorCamera extends Camera {
 
 	@Override
 	public void move() {
+//		float buttonZInPoX = simulatorHandler.getZoomIn().getPosition().getX();
+//		float buttonZInPoY = simulatorHandler.getZoomIn().getPosition().getY();
+//		float buttonZOutPoX = simulatorHandler.getZoomOut().getPosition().getX();
+//		float buttonZOutPoY = simulatorHandler.getZoomOut().getPosition().getY();
 		calculateMouseZoom();
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
@@ -32,16 +36,16 @@ public class SimulatorCamera extends Camera {
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 			position.x += 5f;
-//			if (position.x >= ((round+1) * 800) ) {
-//				position.x = (round+1) * 800;
-//			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			position.x -= 5f;
-//			if (position.x < 0) {
-//				position.x = 0;
-//			}
 		}
+//		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || Mouse.getX() == buttonZInPoX && Mouse.getY() == buttonZInPoY) {
+//			position.y += 5f;
+//		}
+//		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)|| Mouse.getX() == buttonZOutPoX && Mouse.getY() == buttonZOutPoY ) {
+//			position.y -= 5f;
+//		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || Mouse.getX() <= 1338 && Mouse.getX() >= 1256
 				&& Mouse.getY() <= 730 && Mouse.getY() >= 663 && Mouse.isButtonDown(0)) {
 			position.y += 5f;

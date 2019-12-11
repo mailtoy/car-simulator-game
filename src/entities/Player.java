@@ -14,6 +14,7 @@ public class Player extends Entity {
 
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
+	private String direction;
 
 	private String type;
 	protected Vector3f frame;
@@ -29,6 +30,7 @@ public class Player extends Entity {
 
 	public void move() {
 		checkInputs();
+		checkEndMap();
 		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
@@ -43,13 +45,17 @@ public class Player extends Entity {
 		int mouseY = Mouse.getY();
 		boolean isBtnDown = Mouse.isButtonDown(0);
 
-		currentSpeed += (Keyboard.isKeyDown(Keyboard.KEY_UP)
-				|| (mouseX <= 1110 && mouseX >= 1055 && mouseY <= 285 && mouseY >= 245 && isBtnDown))
-						? ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0)
-						: (Keyboard.isKeyDown(Keyboard.KEY_DOWN)
-								|| (mouseX <= 1107 && mouseX >= 1060 && mouseY <= 165 && mouseY >= 125 && isBtnDown))
-										? ((currentSpeed >= -MAX_SPEED) ? -RUN_SPEED * 2 : 0)
-										: ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP)
+				|| (mouseX <= 1110 && mouseX >= 1055 && mouseY <= 285 && mouseY >= 245 && isBtnDown)) {
+			currentSpeed += ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0);
+			direction = "forward";
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)
+				|| (mouseX <= 1107 && mouseX >= 1060 && mouseY <= 165 && mouseY >= 125 && isBtnDown)) {
+			currentSpeed += ((currentSpeed >= -MAX_SPEED) ? -RUN_SPEED * 2 : 0);
+			direction = "backward";
+		} else {
+			currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
+		}
 
 		currentTurnSpeed = (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_RIGHT)
 				|| (mouseX <= 1170 && mouseX >= 1120 && mouseY <= 230 && mouseY >= 186 && isBtnDown))
@@ -58,6 +64,14 @@ public class Player extends Entity {
 								|| (mouseX <= 1037 && mouseX >= 992 && mouseY <= 228 && mouseY >= 186 && isBtnDown))
 										? TURN_SPEED
 										: 0;
+	}
+
+	private void checkEndMap() {
+		float x = getPosition().getX();
+		float z = getPosition().getZ();
+		if (x <= 8 || z <= 8 || x >= 3112 || z >= 3112) {
+			currentSpeed = (direction.equals("forward")) ? -5 : (direction.equals("backward")) ? 5 : 0;
+		}
 	}
 
 	private void setFrame() {
@@ -74,5 +88,9 @@ public class Player extends Entity {
 
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
+	}
+
+	public void setCurrentSpeed(int currentSpeed) {
+		this.currentSpeed = currentTurnSpeed;
 	}
 }
