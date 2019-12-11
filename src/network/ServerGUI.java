@@ -71,7 +71,7 @@ public class ServerGUI extends JFrame {
 		clientModel = new DefaultListModel<String>();
 		clientsList = new JList<String>(clientModel);
 		clientsList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		clientsList.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+		clientsList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		clientsList.setVisibleRowCount(-1);
 		JScrollPane clientsScroller = new JScrollPane(clientsList);
 		clientsLabel = new JLabel("Clients in Server: " + clientModel.getSize());
@@ -84,7 +84,14 @@ public class ServerGUI extends JFrame {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				DisconnectPacket disconnectPacket = new DisconnectPacket(clientsList.getSelectedValue());
+				DisconnectPacket disconnectPacket = null;
+				String selectedValue = clientsList.getSelectedValue();
+				if (server.isController(selectedValue)) {
+					String type = selectedValue.substring(0, selectedValue.indexOf(" "));
+					disconnectPacket = new DisconnectPacket(type);
+				} else {
+					disconnectPacket = new DisconnectPacket(selectedValue);
+				}
 				disconnectPacket.writeData(server);
 
 				int index = clientsList.getSelectedIndex();
@@ -137,12 +144,23 @@ public class ServerGUI extends JFrame {
 	}
 
 	public void addClient(String client) {
-		clientModel.addElement(client);
+		if (server.isController(client)) {
+			String[] splitClient = client.split(":");
+			String color = splitClient[1].substring(0, splitClient[1].indexOf("Color"));
+			String capColor = Character.toUpperCase(color.charAt(0)) + color.substring(1);
+			clientModel.addElement(splitClient[0] + " (" + capColor + " Car)");
+		} else {
+			clientModel.addElement(client);
+		}
 		clientsLabel.setText("Clients in Server: " + clientModel.getSize());
 	}
 
 	public void removeClient(String client) {
-		clientModel.removeElement(client);
+		for (int i = 0; i < clientModel.getSize(); i++) {
+			if (clientModel.get(i).contains(client)) {
+				clientModel.remove(i);
+			}
+		}
 		clientsLabel.setText("Clients in Server: " + clientModel.getSize());
 	}
 

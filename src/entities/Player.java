@@ -17,12 +17,14 @@ public class Player extends Entity {
 	private String direction;
 
 	private String type;
+	private String color;
 	protected Vector3f frame;
 
-	public Player(String type, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
+	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
+		this.color = color;
 		if (model != null || scale != 0.0) {
 			setFrame();
 		}
@@ -84,6 +86,10 @@ public class Player extends Entity {
 
 	public String getType() {
 		return this.type;
+	}
+	
+	public String getColor() {
+		return this.color;
 	}
 
 	public float getCurrentSpeed() {

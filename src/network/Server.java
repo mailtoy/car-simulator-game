@@ -85,15 +85,19 @@ public class Server extends Thread {
 			sendData(data, player.getIpAddress(), player.getPort());
 		}
 	}
+	
+	public boolean isController(String type) {
+		return type.contains("Controller");
+	}
 
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has connected.");
 
 		MultiplePlayer multiplePlayer = new MultiplePlayer(((ConnectPacket) packet).getType(),
-				((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
-				((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
-				((ConnectPacket) packet).getScale(), address, port);
+				((ConnectPacket) packet).getCarColor(), ((ConnectPacket) packet).getPosition(),
+				((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
+				((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
 		addConnection(multiplePlayer, packet);
 	}
 
@@ -170,14 +174,19 @@ public class Server extends Thread {
 
 				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
-				ConnectPacket updatePacket = new ConnectPacket(player.getType(), serverGUI.getSelectedMap(),
-						player.getPosition(), player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
+				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getColor(),
+						serverGUI.getSelectedMap(), player.getPosition(), player.getRotX(), player.getRotY(),
+						player.getRotZ(), player.getScale());
 				sendData(updatePacket.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}
 		}
 		if (!isConnected) {
 			connectedPlayers.add(multiplePlayer);
-			serverGUI.addClient(multiplePlayer.getType());
+			if (isController(multiplePlayer.getType())) {
+				serverGUI.addClient(multiplePlayer.getType() + ":" + multiplePlayer.getColor());
+			} else {
+				serverGUI.addClient(multiplePlayer.getType());
+			}
 			packet.writeData(this);
 		}
 		if (connectedPlayers.size() != 0) {
@@ -217,7 +226,7 @@ public class Server extends Thread {
 	private ArrayList<MultiplePlayer> getConnectedControllers() {
 		ArrayList<MultiplePlayer> controllers = new ArrayList<MultiplePlayer>();
 		for (MultiplePlayer player : connectedPlayers) {
-			if (player.getType().contains("Controller")) {
+			if (isController(player.getType())) {
 				controllers.add(player);
 			}
 		}

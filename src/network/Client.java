@@ -98,10 +98,11 @@ public class Client extends Thread {
 
 		String packetType = ((ConnectPacket) packet).getType();
 		if (packetType.contains("Controller") && !windowDisplay.isAdded(packetType)) {
-			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, windowDisplay.getCarModel(),
-					((ConnectPacket) packet).getPosition(), ((ConnectPacket) packet).getRotX(),
-					((ConnectPacket) packet).getRotY(), ((ConnectPacket) packet).getRotZ(),
-					((ConnectPacket) packet).getScale(), address, port);
+			MultiplePlayer multiplePlayer = new MultiplePlayer(packetType, ((ConnectPacket) packet).getCarColor(),
+					windowDisplay.getCarModel(), ((ConnectPacket) packet).getPosition(),
+					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
+					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
+			// fixed color here
 			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
 	}
@@ -111,12 +112,12 @@ public class Client extends Thread {
 				+ " has left from the server.");
 
 		String packetType = ((DisconnectPacket) packet).getType();
-		if (packetType.contains("Controller")) {
-			windowDisplay.removeMultiplePlayer(packetType);
-		}
 		if (packetType.equals(windowDisplay.getType())) {
 			windowDisplay.setKick(true);
 			System.exit(0); // for now
+		}
+		if (packetType.contains("Controller")) {
+			windowDisplay.removeMultiplePlayer(packetType);
 		}
 	}
 

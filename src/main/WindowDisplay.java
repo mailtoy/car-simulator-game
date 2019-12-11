@@ -29,11 +29,12 @@ import textures.TerrainTexturePack;
 public abstract class WindowDisplay {
 	private Loader loader;
 	private TerrainTexturePack texturePack;
+	private RawModel carModel;
 	private final String defaultMap = "map1";
 	private String map = defaultMap;
 	private boolean isMapChanged = false;
 	private boolean isKicked = false;
-	private List<String> carColor;
+	private List<String> carColorList;
 
 	protected MasterRenderer renderer;
 	protected Light light;
@@ -44,8 +45,9 @@ public abstract class WindowDisplay {
 
 	protected Handler handler;
 	protected Client client;
-	protected Player player; // Change to Car later
+	protected Player player;
 	protected Camera camera;
+	protected String carColor;
 	protected int round = 3;
 	protected boolean isCrashed = false;
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
@@ -93,18 +95,27 @@ public abstract class WindowDisplay {
 			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
 			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
 		}
-
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
-		RawModel carModel = OBJLoader.loadObjModel("Car", loader);
-		int rnd = new Random().nextInt(carColor.size());
-		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture(carColor.get(rnd))));
+
+		carModel = OBJLoader.loadObjModel("Car", loader);
+		carColor = carColorList.get(new Random().nextInt(carColorList.size()));
+		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture(carColor)));
+	}
+
+	private void setcarColor() {
+		carColorList = new ArrayList<String>();
+		carColorList.add("greenColor");
+		carColorList.add("grayColor");
+		carColorList.add("redColor");
+		carColorList.add("blueColor");
+		carColorList.add("purpleColor");
+		carColorList.add("yellowColor");
 	}
 
 	private void loadMap() {
 		blendMap = new TerrainTexture(loader.loadTexture(map));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
 
-		// * for big map size logic
 		int x = 1, z = 1;
 		for (int i = 0; i < round; i++) {
 			terrains.add(new Terrain(x + i, i, loader, texturePack, blendMap));
@@ -129,7 +140,7 @@ public abstract class WindowDisplay {
 
 		isMapChanged = true;
 	}
-	
+
 	protected void renderComponents() {
 		for (Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
 			Terrain terrain = iterator.next();
@@ -224,15 +235,5 @@ public abstract class WindowDisplay {
 
 	public void setKick(boolean kickStatus) {
 		this.isKicked = kickStatus;
-	}
-
-	public void setcarColor() {
-		carColor = new ArrayList<String>();
-		carColor.add("greenColor");
-		carColor.add("grayColor");
-		carColor.add("redColor");
-		carColor.add("blueColor");
-		carColor.add("purpleColor");
-		carColor.add("yellowColor");
 	}
 }

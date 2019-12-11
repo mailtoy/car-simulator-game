@@ -10,16 +10,16 @@ public class MultiplePlayer extends Player {
 	private InetAddress ipAddress;
 	private int port;
 
-	public MultiplePlayer(String name, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
-			float scale, InetAddress ipAddress, int port) {
-		super(name, model, position, rotX, rotY, rotZ, scale);
+	public MultiplePlayer(String name, String color, TexturedModel model, Vector3f position, float rotX, float rotY,
+			float rotZ, float scale, InetAddress ipAddress, int port) {
+		super(name, color, model, position, rotX, rotY, rotZ, scale);
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}
 
-	public MultiplePlayer(String name, Vector3f position, float rotX, float rotY, float rotZ, float scale,
+	public MultiplePlayer(String name, String color, Vector3f position, float rotX, float rotY, float rotZ, float scale,
 			InetAddress ipAddress, int port) {
-		super(name, null, position, rotX, rotY, rotZ, scale);
+		super(name, color, null, position, rotX, rotY, rotZ, scale);
 		this.ipAddress = ipAddress;
 		this.port = port;
 	}

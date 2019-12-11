@@ -23,13 +23,14 @@ public class Controller extends WindowDisplay {
 	public Controller() {
 		super();
 
-		player = new MultiplePlayer(type, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null, -1);
+		player = new MultiplePlayer(type, carColor, car, new Vector3f(randPosX, 0, randPosZ), 0, 180, 0, 0.6f, null,
+				-1);
 		handler = new ControllerHandler(this);
 		gauge = new Gauge(this, speed);
 		camera = new ControllerCamera(player);
 
-		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getPosition(), player.getRotX(),
-				player.getRotY(), player.getRotZ(), player.getScale());
+		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getColor(), player.getPosition(),
+				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());
 		connectPacket.writeData(client);
 
 		run();

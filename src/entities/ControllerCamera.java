@@ -53,7 +53,6 @@ public class ControllerCamera extends Camera {
 	private void calculateZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
-		System.out.println(distanceFromPlayer);
 		if (distanceFromPlayer >= 200) {
 			distanceFromPlayer = 200;
 		}
