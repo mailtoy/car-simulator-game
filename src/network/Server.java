@@ -125,7 +125,7 @@ public class Server extends Thread {
 	}
 
 	private void handleCrash(ArrayList<MultiplePlayer> controllers) {
-		serverGUI.appendResponse("is check?");
+//		serverGUI.appendResponse("is check?");
 		final int carWidth = 8;
 		final int carHeight = 16;
 		for (int i = 0; i < controllers.size() - 1; i++) {
@@ -174,9 +174,9 @@ public class Server extends Thread {
 
 				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
-				ConnectPacket updatePacket = new ConnectPacket(player.getType(), player.getColor(),
-						serverGUI.getSelectedMap(), player.getPosition(), player.getRotX(), player.getRotY(),
-						player.getRotZ(), player.getScale());
+				ConnectPacket updatePacket = new ConnectPacket(player.getType(), serverGUI.getSelectedMap(),
+						player.getColor(), player.getPosition(), player.getRotX(), player.getRotY(), player.getRotZ(),
+						player.getScale());
 				sendData(updatePacket.getData(), multiplePlayer.getIpAddress(), multiplePlayer.getPort());
 			}
 		}

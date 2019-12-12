@@ -111,12 +111,12 @@ public class Client extends Thread {
 				+ " has left from the server.");
 
 		String packetType = ((DisconnectPacket) packet).getType();
+		if (packetType.contains("Controller")) {
+			windowDisplay.removeMultiplePlayer(packetType);
+		}
 		if (packetType.equals(windowDisplay.getType())) {
 			windowDisplay.setKick(true);
 			System.exit(0); // for now
-		}
-		if (packetType.contains("Controller")) {
-			windowDisplay.removeMultiplePlayer(packetType);
 		}
 	}
 

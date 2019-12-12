@@ -85,6 +85,7 @@ public abstract class WindowDisplay {
 		TerrainTexture bTexture = new TerrainTexture(loader.loadTexture("middleRoad"));
 
 		texturePack = new TerrainTexturePack(backgroundTexture, rTexture, gTexture, bTexture);
+		terrains = new ArrayList<Terrain>();
 		loadMap();
 
 		TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
@@ -112,7 +113,6 @@ public abstract class WindowDisplay {
 	}
 
 	private void loadMap() {
-		terrains = new ArrayList<Terrain>();
 		blendMap = new TerrainTexture(loader.loadTexture(map));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
 
@@ -147,6 +147,7 @@ public abstract class WindowDisplay {
 
 	private void checkMapChanged() {
 		if (!map.equals(defaultMap) && !isMapChanged) {
+			terrains.clear();
 			loadMap();
 			isMapChanged = true;
 		}
