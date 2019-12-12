@@ -24,8 +24,7 @@ public class Simulator extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			checkMapChanged();
-			checkForceQuit();
+			check();
 			camera.move();
 			render();
 		}

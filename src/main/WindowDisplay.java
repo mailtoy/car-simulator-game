@@ -1,8 +1,9 @@
 package main;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -30,26 +31,27 @@ public abstract class WindowDisplay {
 	private Loader loader;
 	private TerrainTexturePack texturePack;
 	private RawModel carModel;
+	private MasterRenderer renderer;
+	private Light light;
+	private TerrainTexture blendMap;
+
 	private final String defaultMap = "map1";
 	private String map = defaultMap;
 	private boolean isMapChanged = false;
 	private boolean isKicked = false;
+	private boolean isCrashed = false;
+	private List<Terrain> terrains;
+	private List<Entity> entities;
 	private List<String> carColorList;
-
-	protected MasterRenderer renderer;
-	protected Light light;
-	protected List<Terrain> terrains;
-	protected List<Entity> entities;
-	protected TexturedModel car;
-	protected TerrainTexture blendMap;
+	private Map<String, Boolean> carColorMap;
 
 	protected Handler handler;
+	protected Camera camera;
 	protected Client client;
 	protected Player player;
-	protected Camera camera;
+	protected TexturedModel car;
 	protected String carColor;
 	protected int round = 3;
-	protected boolean isCrashed = false;
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 
 	public WindowDisplay() {
@@ -67,8 +69,15 @@ public abstract class WindowDisplay {
 		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
 		renderer = new MasterRenderer(loader);
-		terrains = new ArrayList<Terrain>();
-		setcarColor();
+
+		carColorMap = new HashMap<String, Boolean>();
+		carColorList = new ArrayList<String>();
+		carColorList.add("greenColor");
+		carColorList.add("grayColor");
+		carColorList.add("redColor");
+		carColorList.add("blueColor");
+		carColorList.add("purpleColor");
+		carColorList.add("yellowColor");
 
 		TerrainTexture backgroundTexture = new TerrainTexture(loader.loadTexture("grassy"));
 		TerrainTexture rTexture = new TerrainTexture(loader.loadTexture("sideRoad"));
@@ -102,17 +111,8 @@ public abstract class WindowDisplay {
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture(carColor)));
 	}
 
-	private void setcarColor() {
-		carColorList = new ArrayList<String>();
-		carColorList.add("greenColor");
-		carColorList.add("grayColor");
-		carColorList.add("redColor");
-		carColorList.add("blueColor");
-		carColorList.add("purpleColor");
-		carColorList.add("yellowColor");
-	}
-
 	private void loadMap() {
+		terrains = new ArrayList<Terrain>();
 		blendMap = new TerrainTexture(loader.loadTexture(map));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
 
@@ -134,23 +134,47 @@ public abstract class WindowDisplay {
 		}
 	}
 
-	private void reloadMap() {
-		terrains.clear();
-		loadMap();
+	private int getMultiplayerIndex(String type) {
+		int index = 0;
+		for (Entity entity : entities) {
+			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
+				break;
+			}
+			index++;
+		}
+		return index;
+	}
 
-		isMapChanged = true;
+	private void checkMapChanged() {
+		if (!map.equals(defaultMap) && !isMapChanged) {
+			loadMap();
+			isMapChanged = true;
+		}
+	}
+
+	private void checkModelsColor() {
+		for (Map.Entry<String, Boolean> playerCar : carColorMap.entrySet()) {
+			if (!playerCar.getValue()) {
+				MultiplePlayer player = (MultiplePlayer) entities.get(getMultiplayerIndex(playerCar.getKey()));
+				player.setModel(new TexturedModel(carModel, new ModelTexture(loader.loadTexture(player.getColor()))));
+				playerCar.setValue(true);
+			}
+		}
+	}
+
+	private void checkForceQuit() {
+		if (isKicked) {
+			closeqRequest();
+		}
 	}
 
 	protected void renderComponents() {
-		for (Iterator<Terrain> iterator = terrains.iterator(); iterator.hasNext();) {
-			Terrain terrain = iterator.next();
+		for (Terrain terrain : terrains) {
 			renderer.processTerrain(terrain);
 		}
-		for (Iterator<Entity> iterator = entities.iterator(); iterator.hasNext();) {
-			Entity entity = iterator.next();
+		for (Entity entity : entities) {
 			renderer.processEntity(entity);
 		}
-
 		renderer.render(light, camera);
 		handler.render();
 	}
@@ -165,35 +189,20 @@ public abstract class WindowDisplay {
 		disconnectPacket.writeData(client);
 	}
 
-	protected void checkMapChanged() {
-		if (!map.equals(defaultMap) && !isMapChanged) {
-			reloadMap();
-		}
-	}
-
-	protected void checkForceQuit() {
-		if (isKicked) {
-			closeqRequest();
-		}
-	}
-
-	private int getMultiplayerIndex(String type) {
-		int index = 0;
-		for (Entity entity : entities) {
-			if (entity instanceof MultiplePlayer && ((MultiplePlayer) entity).getType().equals(type)) {
-				break;
-			}
-			index++;
-		}
-		return index;
+	protected void check() {
+		checkMapChanged();
+		checkModelsColor();
+		checkForceQuit();
 	}
 
 	public void addMultiplePlayer(MultiplePlayer player) {
 		entities.add(player);
+		carColorMap.put(player.getType(), false);
 	}
 
 	public void removeMultiplePlayer(String type) {
 		entities.remove(getMultiplayerIndex(type));
+		carColorMap.remove(type);
 	}
 
 	public boolean isAdded(String type) {
@@ -227,6 +236,10 @@ public abstract class WindowDisplay {
 
 	public String getType() {
 		return this.type;
+	}
+
+	public boolean isCrashed() {
+		return this.isCrashed;
 	}
 
 	public void setCrash(boolean crashStatus) {

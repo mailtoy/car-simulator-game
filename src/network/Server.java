@@ -85,7 +85,7 @@ public class Server extends Thread {
 			sendData(data, player.getIpAddress(), player.getPort());
 		}
 	}
-	
+
 	public boolean isController(String type) {
 		return type.contains("Controller");
 	}
@@ -182,11 +182,8 @@ public class Server extends Thread {
 		}
 		if (!isConnected) {
 			connectedPlayers.add(multiplePlayer);
-			if (isController(multiplePlayer.getType())) {
-				serverGUI.addClient(multiplePlayer.getType() + ":" + multiplePlayer.getColor());
-			} else {
-				serverGUI.addClient(multiplePlayer.getType());
-			}
+			String type = multiplePlayer.getType();
+			serverGUI.addClient(isController(type) ? type + ":" + multiplePlayer.getColor() : type);
 			packet.writeData(this);
 		}
 		if (connectedPlayers.size() != 0) {

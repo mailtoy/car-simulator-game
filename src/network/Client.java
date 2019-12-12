@@ -102,7 +102,6 @@ public class Client extends Thread {
 					windowDisplay.getCarModel(), ((ConnectPacket) packet).getPosition(),
 					((ConnectPacket) packet).getRotX(), ((ConnectPacket) packet).getRotY(),
 					((ConnectPacket) packet).getRotZ(), ((ConnectPacket) packet).getScale(), address, port);
-			// fixed color here
 			windowDisplay.addMultiplePlayer(multiplePlayer);
 		}
 	}

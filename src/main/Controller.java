@@ -15,8 +15,10 @@ import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 
 public class Controller extends WindowDisplay {
-	protected final float randPosX = new Random().nextInt(800); // for now
-	protected final float randPosZ = new Random().nextInt(800); // for now
+	private final int MAX = 3112;
+	private final int MIN = 8;
+	protected final float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
+	protected final float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected Gauge gauge;
 	protected float speed = 0;
 
@@ -39,11 +41,10 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
-			checkMapChanged();
-			checkForceQuit();
+			check();
 //			gauge = new Gauge(this, player.getCurrentSpeed());
 
-			if (!isCrashed) {
+			if (!isCrashed()) {
 				camera.move();
 				player.move();
 
@@ -65,7 +66,7 @@ public class Controller extends WindowDisplay {
 		super.renderComponents();
 		GaugeTextMaster.render();
 
-		if (isCrashed) {
+		if (isCrashed()) {
 			((ControllerHandler) handler).textRender();
 		}
 		DisplayManager.updateDisplay();
