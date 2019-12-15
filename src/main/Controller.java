@@ -15,7 +15,7 @@ import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 
 public class Controller extends WindowDisplay {
-	private final int MAX = 3112;
+	private final int MAX = 500;
 	private final int MIN = 8;
 	protected final float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected final float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now

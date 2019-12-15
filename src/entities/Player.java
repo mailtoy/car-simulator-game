@@ -10,7 +10,7 @@ import renderEngine.DisplayManager;
 public class Player extends Entity {
 	private static final float RUN_SPEED = 1f;
 	private static final float TURN_SPEED = 45;
-	private static final float MAX_SPEED = 60;
+	private static final float MAX_SPEED = 85;
 
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
@@ -34,7 +34,7 @@ public class Player extends Entity {
 		checkInputs();
 		checkEndMap();
 		setFrame();
-		super.increaseRotation(0,currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
@@ -87,7 +87,7 @@ public class Player extends Entity {
 	public String getType() {
 		return this.type;
 	}
-	
+
 	public String getColor() {
 		return this.color;
 	}

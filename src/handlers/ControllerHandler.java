@@ -32,14 +32,10 @@ public class ControllerHandler extends Handler {
 		GuiTexture right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f),
 				new Vector2f(0.06f, 0.08f));
 
-		GuiTexture speedup = new GuiTexture(loader.loadTexture("ABTN"), new Vector2f(-0.7f, -0.5f),
-				new Vector2f(0.17f, 0.17f));
-
 		guis.add(forward);
 		guis.add(backward);
 		guis.add(right);
 		guis.add(left);
-		guis.add(speedup);
 
 		guiRenderer = new GuiRenderer(loader);
 	}
