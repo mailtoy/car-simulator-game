@@ -250,4 +250,8 @@ public abstract class WindowDisplay {
 	public void setKick(boolean kickStatus) {
 		this.isKicked = kickStatus;
 	}
+	
+	public Handler getHandler() {
+		return handler;
+	}
 }
