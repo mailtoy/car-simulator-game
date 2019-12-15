@@ -34,7 +34,7 @@ public class Player extends Entity {
 		checkInputs();
 		checkEndMap();
 		setFrame();
-		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
+		super.increaseRotation(0,currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
@@ -71,7 +71,7 @@ public class Player extends Entity {
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
-		if (x <= 8 || z <= 8 || x >= 3112 || z >= 3112) {
+		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
 			currentSpeed = (direction.equals("forward")) ? -5 : (direction.equals("backward")) ? 5 : 0;
 		}
 	}
