@@ -29,7 +29,7 @@ public class Controller extends WindowDisplay {
 				-1);
 		handler = new ControllerHandler(this);
 		gauge = new Gauge(this, speed);
-		camera = new ControllerCamera(this, player);
+		camera = new ControllerCamera(player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getColor(), player.getPosition(),
 				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());

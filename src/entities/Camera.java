@@ -12,8 +12,7 @@ public abstract class Camera {
 	protected int round;
 	protected WindowDisplay windowDisplay;
 
-	public Camera(WindowDisplay windowDisplay) {
-		this.windowDisplay = windowDisplay;
+	public Camera() {
 		setPosition(new Vector3f(-650, 6, 6));
 		setPitch(20);
 	}

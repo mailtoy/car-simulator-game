@@ -2,8 +2,12 @@ package entities;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import guis.GuiTexture;
+import handlers.ControllerHandler;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
@@ -15,10 +19,12 @@ public class Player extends Entity {
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
 	private String direction;
+	private ControllerHandler cHandler;
 
 	private String type;
 	private String color;
 	protected Vector3f frame;
+	protected Vector2f position;
 
 	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
@@ -45,10 +51,11 @@ public class Player extends Entity {
 		// fixed mouse detection here
 		int mouseX = Mouse.getX();
 		int mouseY = Mouse.getY();
+		// System.out.println("mouseX" + mouseX);
 		boolean isBtnDown = Mouse.isButtonDown(0);
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)
-				|| (mouseX <= 1110 && mouseX >= 1055 && mouseY <= 285 && mouseY >= 245 && isBtnDown)) {
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
+				&& getMouseYCoords() >= -0.39 && getMouseYCoords() <= -0.27 && isBtnDown)) {
 			currentSpeed += ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0);
 			direction = "forward";
 		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)
@@ -66,24 +73,16 @@ public class Player extends Entity {
 								|| (mouseX <= 1037 && mouseX >= 992 && mouseY <= 228 && mouseY >= 186 && isBtnDown))
 										? TURN_SPEED
 										: 0;
-		
-//		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (Mouse.getX() <= 1170 && Mouse.getX() >= 1120
-//				&& Mouse.getY() <= 230 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
-//			this.currentTurnSpeed -= TURN_SPEED;
-//			this.currentSpeed -=1;
-//			if(this.currentSpeed == -45) {
-//				this.currentTurnSpeed = -45;
-//			}
-//		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) || (Mouse.getX() <= 1037 && Mouse.getX() >= 992
-//				&& Mouse.getY() <= 228 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
-//			this.currentTurnSpeed += TURN_SPEED;
-//			this.currentSpeed -=1;
-//			if(this.currentSpeed == 45) {
-//				this.currentTurnSpeed = 45;
-//			}
-//		} else {
-//			this.currentTurnSpeed = 0;
-//		}
+	}
+
+	private static float getMouseXCoords() {
+		float x = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		return x;
+	}
+
+	private static float getMouseYCoords() {
+		float y = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		return y;
 	}
 
 	private void checkEndMap() {

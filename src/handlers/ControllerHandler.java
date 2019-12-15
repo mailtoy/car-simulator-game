@@ -3,6 +3,7 @@ package handlers;
 import java.io.File;
 
 import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector3f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
@@ -14,6 +15,7 @@ import main.WindowDisplay;
 import renderEngine.Loader;
 
 public class ControllerHandler extends Handler {
+	GuiTexture forward ;
 
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
@@ -23,7 +25,7 @@ public class ControllerHandler extends Handler {
 	@Override
 	protected void initGUIs() {
 		Loader loader = windowDisplay.getLoader();
-		GuiTexture forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f),
+		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f),
 				new Vector2f(0.06f, 0.08f));
 		GuiTexture backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f),
 				new Vector2f(0.06f, 0.08f));
