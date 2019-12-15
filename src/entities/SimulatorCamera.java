@@ -7,6 +7,8 @@ import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.util.vector.Vector3f;
 
+import main.WindowDisplay;
+
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
 	private static Dimension screenSize;

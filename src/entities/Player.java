@@ -66,6 +66,24 @@ public class Player extends Entity {
 								|| (mouseX <= 1037 && mouseX >= 992 && mouseY <= 228 && mouseY >= 186 && isBtnDown))
 										? TURN_SPEED
 										: 0;
+		
+//		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (Mouse.getX() <= 1170 && Mouse.getX() >= 1120
+//				&& Mouse.getY() <= 230 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
+//			this.currentTurnSpeed -= TURN_SPEED;
+//			this.currentSpeed -=1;
+//			if(this.currentSpeed == -45) {
+//				this.currentTurnSpeed = -45;
+//			}
+//		} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT) || (Mouse.getX() <= 1037 && Mouse.getX() >= 992
+//				&& Mouse.getY() <= 228 && Mouse.getY() >= 186 && Mouse.isButtonDown(0))) {
+//			this.currentTurnSpeed += TURN_SPEED;
+//			this.currentSpeed -=1;
+//			if(this.currentSpeed == 45) {
+//				this.currentTurnSpeed = 45;
+//			}
+//		} else {
+//			this.currentTurnSpeed = 0;
+//		}
 	}
 
 	private void checkEndMap() {
