@@ -3,12 +3,15 @@ package entities;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
+import main.WindowDisplay;
+
 public class ControllerCamera extends Camera {
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
 	private Player player;
 
-	public ControllerCamera(Player player) {
+	public ControllerCamera(WindowDisplay windowDisplay, Player player) {
+		super(windowDisplay);
 		this.player = player;
 	}
 
