@@ -15,7 +15,7 @@ import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 
 public class Controller extends WindowDisplay {
-	private final int MAX = 3112;
+	private final int MAX = 500;
 	private final int MIN = 8;
 	protected final float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected final float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
@@ -29,7 +29,7 @@ public class Controller extends WindowDisplay {
 				-1);
 		handler = new ControllerHandler(this);
 		gauge = new Gauge(this, speed);
-		camera = new ControllerCamera(player);
+		camera = new ControllerCamera(this, player);
 
 		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap(), player.getColor(), player.getPosition(),
 				player.getRotX(), player.getRotY(), player.getRotZ(), player.getScale());

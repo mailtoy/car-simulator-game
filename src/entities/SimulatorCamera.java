@@ -14,7 +14,8 @@ public class SimulatorCamera extends Camera {
 	private static Dimension screenSize;
 	private int decreaseLimit = 650;
 
-	public SimulatorCamera() {
+	public SimulatorCamera(WindowDisplay windowDisplay) {
+		super(windowDisplay);
 		setPosition(position);
 		setPitch(90);
 	}
