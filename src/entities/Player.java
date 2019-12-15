@@ -10,7 +10,7 @@ import renderEngine.DisplayManager;
 public class Player extends Entity {
 	private static final float RUN_SPEED = 1f;
 	private static final float TURN_SPEED = 45;
-	private static final float MAX_SPEED = 60;
+	private static final float MAX_SPEED = 85;
 
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
