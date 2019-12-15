@@ -48,31 +48,26 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
-		// fixed mouse detection here
-		int mouseX = Mouse.getX();
-		int mouseY = Mouse.getY();
-		// System.out.println("mouseX" + mouseX);
 		boolean isBtnDown = Mouse.isButtonDown(0);
-		
+
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
 				&& getMouseYCoords() >= -0.39 && getMouseYCoords() <= -0.27 && isBtnDown)) {
 			currentSpeed += ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0);
 			direction = "forward";
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)
-				|| (mouseX <= 1107 && mouseX >= 1060 && mouseY <= 165 && mouseY >= 125 && isBtnDown)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
+				&& getMouseYCoords() >= -0.69 && getMouseYCoords() <= -0.57 && isBtnDown)) {
 			currentSpeed += ((currentSpeed >= -MAX_SPEED) ? -RUN_SPEED * 2 : 0);
 			direction = "backward";
 		} else {
 			currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 		}
 
-		currentTurnSpeed = (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_RIGHT)
-				|| (mouseX <= 1170 && mouseX >= 1120 && mouseY <= 230 && mouseY >= 186 && isBtnDown))
+		currentTurnSpeed = (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (getMouseXCoords() <= 0.83
+				&& getMouseXCoords() >= 0.74 && getMouseYCoords() >= -0.55 && getMouseYCoords() <= -0.42 && isBtnDown))
 						? -TURN_SPEED
 						: (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_LEFT)
-								|| (mouseX <= 1037 && mouseX >= 992 && mouseY <= 228 && mouseY >= 186 && isBtnDown))
-										? TURN_SPEED
-										: 0;
+								|| (getMouseXCoords() <= 0.63 && getMouseXCoords() >= 0.54 && getMouseYCoords() >= -0.55
+										&& getMouseYCoords() <= -0.42 && isBtnDown)) ? TURN_SPEED : 0;
 	}
 
 	private static float getMouseXCoords() {
