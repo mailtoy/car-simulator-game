@@ -3,8 +3,6 @@ package entities;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 
-import main.WindowDisplay;
-
 public class ControllerCamera extends Camera {
 	private float distanceFromPlayer = 50;
 	private float angleAroundPlayer = 0;
@@ -23,7 +21,6 @@ public class ControllerCamera extends Camera {
 		float verticalDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
 		this.yaw = 180 - (player.getRotY() + angleAroundPlayer);
-
 	}
 
 	public void zoom(String zoom) {

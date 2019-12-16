@@ -2,15 +2,12 @@ package entities;
 
 import org.lwjgl.util.vector.Vector3f;
 
-import main.WindowDisplay;
-
 public abstract class Camera {
 	protected Vector3f position = new Vector3f();
 	protected float pitch = 20;
 	protected float yaw;
 	protected float roll;
 	protected int round;
-	protected WindowDisplay windowDisplay;
 
 	public Camera() {
 		setPosition(new Vector3f(-650, 6, 6));

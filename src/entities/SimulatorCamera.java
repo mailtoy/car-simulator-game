@@ -5,9 +5,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import handlers.SimulatorHandler;
-import main.WindowDisplay;
-
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
 	private int decreaseLimit = 650;

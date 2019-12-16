@@ -6,8 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import guis.GuiTexture;
-import handlers.ControllerHandler;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
@@ -19,7 +17,6 @@ public class Player extends Entity {
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
 	private String direction;
-	private ControllerHandler cHandler;
 
 	private String type;
 	private String color;
@@ -62,12 +59,12 @@ public class Player extends Entity {
 			currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 		}
 
-		currentTurnSpeed = (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (getMouseXCoords() <= 0.83
-				&& getMouseXCoords() >= 0.74 && getMouseYCoords() >= -0.55 && getMouseYCoords() <= -0.42 && isBtnDown))
+		currentTurnSpeed = (currentSpeed != 0 && (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (getMouseXCoords() <= 0.83
+				&& getMouseXCoords() >= 0.74 && getMouseYCoords() >= -0.55 && getMouseYCoords() <= -0.42 && isBtnDown)))
 						? -TURN_SPEED
-						: (currentSpeed != 0 && Keyboard.isKeyDown(Keyboard.KEY_LEFT)
+						: (currentSpeed != 0 && (Keyboard.isKeyDown(Keyboard.KEY_LEFT)
 								|| (getMouseXCoords() <= 0.63 && getMouseXCoords() >= 0.54 && getMouseYCoords() >= -0.55
-										&& getMouseYCoords() <= -0.42 && isBtnDown)) ? TURN_SPEED : 0;
+										&& getMouseYCoords() <= -0.42 && isBtnDown))) ? TURN_SPEED : 0;
 	}
 
 	private static float getMouseXCoords() {
@@ -110,5 +107,9 @@ public class Player extends Entity {
 
 	public void setCurrentSpeed(int currentSpeed) {
 		this.currentSpeed = currentTurnSpeed;
+	}
+
+	public float getCurrentTurnSpeed() {
+		return this.currentTurnSpeed;
 	}
 }

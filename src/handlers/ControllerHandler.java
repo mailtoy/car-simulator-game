@@ -3,7 +3,6 @@ package handlers;
 import java.io.File;
 
 import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector3f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
