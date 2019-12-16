@@ -43,13 +43,13 @@ public class SimulatorCamera extends Camera {
 			position.x -= 5f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 6.8 && getMouseYCoords() >= 6.55
-				&& getMouseYCoords() <= 0.47 && Mouse.isButtonDown(0))) {
+				&& getMouseXCoords() <= 0.86 && getMouseYCoords() >= 0.47
+				&& getMouseYCoords() <= 0.63 && Mouse.isButtonDown(0))) {
 			position.y += 5f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 6.8 && getMouseYCoords() >=-0.23
-				&& getMouseYCoords() <= 7.85 && Mouse.isButtonDown(0))) {
+				&& getMouseXCoords() <= 0.86 && getMouseYCoords() >=-0.23
+				&& getMouseYCoords() <= -0.07 && Mouse.isButtonDown(0))) {
 			position.y -= 5f;
 		}
 		if (Mouse.isButtonDown(0)) {
