@@ -21,8 +21,6 @@ public class Server extends Thread {
 	private List<MultiplePlayer> connectedPlayers;
 	private ServerGUI serverGUI;
 
-	private int i = 0;
-
 	public Server() {
 		this.serverGUI = new ServerGUI(this);
 		this.connectedPlayers = new ArrayList<MultiplePlayer>();
@@ -127,7 +125,6 @@ public class Server extends Thread {
 	}
 
 	private void handleCrash(ArrayList<MultiplePlayer> controllers) {
-		serverGUI.appendResponse("is check?: " + i++);
 		final int carWidth = 6;
 		final int carHeight = 14;
 		for (int i = 0; i < controllers.size() - 1; i++) {

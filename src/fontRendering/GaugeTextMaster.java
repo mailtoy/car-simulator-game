@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import fontMeshCreator.FontType;
-import fontMeshCreator.GUIText;
 import fontMeshCreator.GaugeGUIText;
 import fontMeshCreator.TextMeshData;
 import renderEngine.Loader;
@@ -22,8 +21,8 @@ public class GaugeTextMaster {
 		texts = new HashMap<FontType, List<GaugeGUIText>>();
 	}
 
-	public static void render() {
-		renderer.renderGauge(texts);
+	public static void render(String currentSpeed) {
+		renderer.renderGauge(texts, currentSpeed);
 	}
 
 	public static void loadText(GaugeGUIText text) {

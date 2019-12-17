@@ -5,7 +5,6 @@ import org.lwjgl.util.vector.Vector2f;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import main.WindowDisplay;
-import renderEngine.Loader;
 
 public class SimulatorHandler extends Handler {
 	private GuiTexture zoomIn;
@@ -25,7 +24,6 @@ public class SimulatorHandler extends Handler {
 
 	@Override
 	protected void initGUIs() {
-		Loader loader = windowDisplay.getLoader();
 		zoomIn = new GuiTexture(loader.loadTexture("plus"), new Vector2f(0.8f, 0.55f), new Vector2f(0.06f, 0.08f));
 		zoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f), new Vector2f(0.06f, 0.08f));
 

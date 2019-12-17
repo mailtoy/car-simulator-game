@@ -28,6 +28,7 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
 		this.color = color;
+
 		if (model != null || scale != 0.0) {
 			setFrame();
 		}

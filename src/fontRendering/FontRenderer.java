@@ -30,14 +30,16 @@ public class FontRenderer {
 		}
 		endRendering();
 	}
-	
-	public void renderGauge(Map<FontType, List<GaugeGUIText>> texts) {
+
+	public void renderGauge(Map<FontType, List<GaugeGUIText>> texts, String gaugeSpeed) {
 		prepare();
 		for (FontType font : texts.keySet()) {
 			GL13.glActiveTexture(GL13.GL_TEXTURE0);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, font.getTextureAtlas());
 			for (GaugeGUIText text : texts.get(font)) {
-				renderText(text);
+				if (gaugeSpeed.equals(text.getTextString())) {
+					renderText(text);
+				}
 			}
 		}
 		endRendering();
@@ -65,7 +67,7 @@ public class FontRenderer {
 		GL20.glDisableVertexAttribArray(1);
 		GL30.glBindVertexArray(0);
 	}
-	
+
 	private void renderText(GaugeGUIText text) {
 		GL30.glBindVertexArray(text.getMesh());
 		GL20.glEnableVertexAttribArray(0);
