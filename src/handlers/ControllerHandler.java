@@ -16,7 +16,8 @@ public class ControllerHandler extends Handler {
 
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
-
+		
+		TextMaster.init(loader);
 		initTexts();
 		initGauges();
 	}
@@ -41,13 +42,11 @@ public class ControllerHandler extends Handler {
 	}
 
 	private void initTexts() {
-		TextMaster.init(loader);
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
 	}
 
 	private void initGauges() {
-		TextMaster.init(loader);
 		FontType gaugeFont = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		for (int i = 0; i < 180; i++) {
 			new GUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
