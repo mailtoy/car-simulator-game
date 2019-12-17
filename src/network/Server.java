@@ -132,20 +132,18 @@ public class Server extends Thread {
 		final int carHeight = 14;
 		for (int i = 0; i < controllers.size() - 1; i++) {
 			for (int j = i + 1; j < controllers.size(); j++) {
+				controllers.get(i).setFrame();
+				controllers.get(j).setFrame();
 				float playerFrameX = controllers.get(i).getFrame().getX();
 				float playerFrameZ = controllers.get(i).getFrame().getZ();
-				float nextPlayerPosX = controllers.get(j).getPosition().getX();
-				float nextPlayerPosZ = controllers.get(j).getPosition().getZ();
-				float xInFrame = nextPlayerPosX - 3.5f;
-				float xOutFrame = nextPlayerPosX + 3.5f;
-				float zInFrame = nextPlayerPosZ - 7.5f;
-				float zOutFrame = nextPlayerPosZ + 7.5f;
+				float nextPlayerPosX = controllers.get(j).getFrame().getX();
+				float nextPlayerPosZ = controllers.get(j).getFrame().getZ();
 
-				if ((playerFrameX >= xInFrame && playerFrameX <= xOutFrame)
-						||( playerFrameX + carWidth >= xInFrame && playerFrameX + carWidth <= xOutFrame)) {
+				if ((playerFrameX >= nextPlayerPosX && playerFrameX <= nextPlayerPosX+carWidth)
+						|| (playerFrameX + carWidth >= nextPlayerPosX && playerFrameX + carWidth <= nextPlayerPosX+carWidth)) {
 					// System.out.println("crash?");
-					if ((playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame)
-							|| (playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame)) {
+					if ((playerFrameZ >= nextPlayerPosZ && playerFrameZ <= nextPlayerPosZ + carHeight)
+							|| (playerFrameZ + carHeight >= nextPlayerPosZ && playerFrameZ + carHeight <= nextPlayerPosZ + carHeight)) {
 						serverGUI.appendResponse(controllers.get(i).getType() + " and " + controllers.get(j).getType()
 								+ " are crashing!");
 
@@ -154,8 +152,7 @@ public class Server extends Thread {
 						crashPacket.writeData(this);
 					}
 				}
-
-			
+				
 			}
 		}
 	}

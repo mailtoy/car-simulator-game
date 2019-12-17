@@ -36,7 +36,6 @@ public class Player extends Entity {
 	public void move() {
 		checkInputs();
 		checkEndMap();
-		setFrame();
 		super.increaseRotation(0, currentTurnSpeed * DisplayManager.getFrameTimeSeconds(), 0);
 		float distance = currentSpeed * DisplayManager.getFrameTimeSeconds();
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
@@ -85,7 +84,7 @@ public class Player extends Entity {
 		}
 	}
 
-	private void setFrame() {
+	public void setFrame() {
 		frame = new Vector3f(getPosition().getX() - 3.5f, 0, getPosition().getZ() - 7.5f);
 	}
 
