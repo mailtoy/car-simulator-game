@@ -86,7 +86,7 @@ public class Player extends Entity {
 	}
 
 	private void setFrame() {
-		frame = new Vector3f(getPosition().getX() - 4, 0, getPosition().getZ() - 8);
+		frame = new Vector3f(getPosition().getX() - 3.5f, 0, getPosition().getZ() - 7.5f);
 	}
 
 	public Vector3f getFrame() {

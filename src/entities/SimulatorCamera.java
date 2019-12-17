@@ -17,7 +17,7 @@ public class SimulatorCamera extends Camera {
 	@Override
 	public void move() {
 		calculateMouseZoom();
-		calculateLimitMap();
+//		calculateLimitMap();
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
 			if (position.z < 15) {

@@ -128,26 +128,24 @@ public class Server extends Thread {
 
 	private void handleCrash(ArrayList<MultiplePlayer> controllers) {
 		serverGUI.appendResponse("is check?: " + i++);
-		final int carWidth = 8;
-		final int carHeight = 16;
+		final int carWidth = 6;
+		final int carHeight = 14;
 		for (int i = 0; i < controllers.size() - 1; i++) {
 			for (int j = i + 1; j < controllers.size(); j++) {
 				float playerFrameX = controllers.get(i).getFrame().getX();
 				float playerFrameZ = controllers.get(i).getFrame().getZ();
 				float nextPlayerPosX = controllers.get(j).getPosition().getX();
 				float nextPlayerPosZ = controllers.get(j).getPosition().getZ();
+				float xInFrame = nextPlayerPosX - 3.5f;
+				float xOutFrame = nextPlayerPosX + 3.5f;
+				float zInFrame = nextPlayerPosZ - 7.5f;
+				float zOutFrame = nextPlayerPosZ + 7.5f;
 
-				float xInFrame = nextPlayerPosX - 4;
-				float xOutFrame = nextPlayerPosX + 4;
-				float zInFrame = nextPlayerPosZ - 8;
-				float zOutFrame = nextPlayerPosZ + 8;
-
-				if (playerFrameX >= xInFrame && playerFrameX <= xOutFrame
-						|| playerFrameX + carWidth >= xInFrame && playerFrameX + carWidth <= xOutFrame
-						|| playerFrameX <= xInFrame && playerFrameX + carWidth >= xOutFrame) {
-					if (playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame
-							|| playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame
-							|| playerFrameZ <= zInFrame && playerFrameZ + carHeight >= zOutFrame) {
+				if ((playerFrameX >= xInFrame && playerFrameX <= xOutFrame)
+						||( playerFrameX + carWidth >= xInFrame && playerFrameX + carWidth <= xOutFrame)) {
+					// System.out.println("crash?");
+					if ((playerFrameZ >= zInFrame && playerFrameZ <= zOutFrame)
+							|| (playerFrameZ + carHeight >= zInFrame && playerFrameZ + carHeight <= zOutFrame)) {
 						serverGUI.appendResponse(controllers.get(i).getType() + " and " + controllers.get(j).getType()
 								+ " are crashing!");
 
@@ -156,6 +154,8 @@ public class Server extends Thread {
 						crashPacket.writeData(this);
 					}
 				}
+
+			
 			}
 		}
 	}
