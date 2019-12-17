@@ -7,7 +7,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.ControllerCamera;
 import entities.MultiplePlayer;
-import fontRendering.GaugeTextMaster;
 import handlers.ControllerHandler;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
@@ -52,18 +51,17 @@ public class Controller extends WindowDisplay {
 			render();
 		}
 		handler.cleanUp();
-		GaugeTextMaster.cleanUp();
 		super.closeqRequest();
 	}
 
 	@Override
 	protected void render() {
 		super.renderComponents();
-		
+
 		ControllerHandler conHandler = ((ControllerHandler) handler);
 		conHandler.gaugeRender(player.getCurrentSpeed());
 		if (isCrashed()) {
-			((ControllerHandler) handler).textRender();
+			conHandler.textRender();
 		}
 		DisplayManager.updateDisplay();
 	}

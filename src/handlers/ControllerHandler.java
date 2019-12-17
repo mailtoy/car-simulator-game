@@ -6,8 +6,6 @@ import org.lwjgl.util.vector.Vector2f;
 
 import fontMeshCreator.FontType;
 import fontMeshCreator.GUIText;
-import fontMeshCreator.GaugeGUIText;
-import fontRendering.GaugeTextMaster;
 import fontRendering.TextMaster;
 
 import guis.GuiRenderer;
@@ -49,26 +47,25 @@ public class ControllerHandler extends Handler {
 	}
 
 	private void initGauges() {
-		GaugeTextMaster.init(loader);
+		TextMaster.init(loader);
 		FontType gaugeFont = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		for (int i = 0; i < 180; i++) {
-			new GaugeGUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
+			new GUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
 		}
 	}
 
 	public void textRender() {
-		TextMaster.render();
+		TextMaster.renderText();
 	}
 
 	public void gaugeRender(float currentSpeed) {
-		GaugeTextMaster.render((int) Math.abs(currentSpeed) + "");
+		TextMaster.renderGaugeText((int) Math.abs(currentSpeed) + "");
 	}
 
 	@Override
 	public void cleanUp() {
 		guiRenderer.cleanUp();
 		TextMaster.cleanUp();
-		GaugeTextMaster.cleanUp();
 	}
 
 }
