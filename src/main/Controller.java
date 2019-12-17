@@ -62,6 +62,7 @@ public class Controller extends WindowDisplay {
 		conHandler.gaugeRender(player.getCurrentSpeed());
 		if (isCrashed()) {
 			conHandler.textRender();
+			conHandler.initGUIWhenCarCash();
 		}
 		DisplayManager.updateDisplay();
 	}
