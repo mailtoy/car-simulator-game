@@ -32,18 +32,30 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		GuiTexture right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f),
 				new Vector2f(0.06f, 0.08f));
+		GuiTexture speedup = new GuiTexture(loader.loadTexture("ABTN"), new Vector2f(-0.7f, -0.5f),
+				new Vector2f(0.17f, 0.17f));
+		
 
 		guis.add(forward);
 		guis.add(backward);
 		guis.add(right);
 		guis.add(left);
+		guis.add(speedup);
 
+		guiRenderer = new GuiRenderer(loader);
+	}
+	
+	public void initGUIWhenCarCash() {
+		GuiTexture replay = new GuiTexture(loader.loadTexture("Replay_BTN"), new Vector2f(0.0f, 0.0f),
+				new Vector2f(0.17f, 0.17f));
+		guis.add(replay);
 		guiRenderer = new GuiRenderer(loader);
 	}
 
 	private void initTexts() {
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
+
 	}
 
 	private void initGauges() {

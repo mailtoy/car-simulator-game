@@ -28,5 +28,6 @@ public abstract class Handler {
 	
 	protected abstract void initGUIs();
 	
+	
 	public abstract void cleanUp();
 }
