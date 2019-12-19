@@ -4,9 +4,11 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Enumeration;
 
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
@@ -25,7 +27,7 @@ import network.packet.Packet.PacketTypes;
  */
 public class Server extends Thread {
 	private DatagramSocket socket;
-	private List<MultiplePlayer> connectedPlayers;
+	private ArrayList<MultiplePlayer> connectedPlayers;
 	private ServerGUI serverGUI;
 
 	/**
@@ -52,7 +54,6 @@ public class Server extends Thread {
 		while (true) {
 			byte[] data = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
-
 			try {
 				socket.receive(packet);
 			} catch (IOException e) {
@@ -334,6 +335,28 @@ public class Server extends Thread {
 			}
 		}
 		return controllers;
+	}
+
+	/**
+	 * Get a local IP address of the server.
+	 * 
+	 * @return The server's host IP address.
+	 */
+	public String getLocalIPAddr() {
+		String ipAddress = null;
+		try {
+			Enumeration<NetworkInterface> netEnum = NetworkInterface.getNetworkInterfaces();
+			while (netEnum.hasMoreElements()) {
+				for (InterfaceAddress interfaceAddr : netEnum.nextElement().getInterfaceAddresses()) {
+					if (interfaceAddr.getAddress().isSiteLocalAddress()) {
+						ipAddress = interfaceAddr.getAddress().getHostAddress().trim();
+					}
+				}
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		return ipAddress;
 	}
 
 	public static void main(String[] args) {
