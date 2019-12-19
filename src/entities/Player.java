@@ -12,7 +12,11 @@ import renderEngine.DisplayManager;
 public class Player extends Entity {
 	private static final float RUN_SPEED = 1f;
 	private static final float TURN_SPEED = 45;
+	private static final float AVERAGE_SPEED = 60;
 	private static final float MAX_SPEED = 180;
+
+	private static final String FORWARD = "forward";
+	private static final String BACKWARD = "backward";
 
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
@@ -28,10 +32,6 @@ public class Player extends Entity {
 		super(model, position, rotX, rotY, rotZ, scale);
 		this.type = type;
 		this.color = color;
-
-		if (model != null || scale != 0.0) {
-			setFrame();
-		}
 	}
 
 	public void move() {
@@ -45,51 +45,54 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
-		boolean isBtnDown = Mouse.isButtonDown(0);
+		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
+		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+		boolean isAccelerate = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+		boolean isBrake = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
 
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Keyboard.isKeyDown(Keyboard.KEY_UP)) {
-			currentSpeed += ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
-			currentSpeed += ((currentSpeed >= -MAX_SPEED) ? -RUN_SPEED * 2 : 0);
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			//TODO
-		}
-
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
-				&& getMouseYCoords() >= -0.39 && getMouseYCoords() <= -0.27 && isBtnDown)) {
-			currentSpeed += ((currentSpeed < 60) ? RUN_SPEED : 0);
-			direction = "forward";
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
-				&& getMouseYCoords() >= -0.69 && getMouseYCoords() <= -0.57 && isBtnDown)) {
-			currentSpeed += ((currentSpeed > -60) ? -RUN_SPEED * 2 : 0);
-			direction = "backward";
+		if (!isBrake) {
+			// accelerate
+			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
+					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0) : 0;
+			
+			// direction movement
+			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
+				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
+				direction = FORWARD;
+			} else if (isBackward || isPressButton(0.73, 0.64, -0.69, -0.57)) {
+				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
+				direction = BACKWARD;
+			} else {
+				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
+			}
+			
+			// turn movement
+			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
+					: (currentSpeed != 0 && (isLeft || isPressButton(0.63, 0.54, -0.55, -0.42))) ? TURN_SPEED : 0;
 		} else {
-			currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
+			// brake
+			currentSpeed += (currentSpeed > 0)
+					? (currentSpeed == RUN_SPEED * 2 ? -RUN_SPEED * 2
+							: (currentSpeed == RUN_SPEED) ? -RUN_SPEED : -RUN_SPEED * 3)
+					: (currentSpeed < 0) ? (currentSpeed == -RUN_SPEED * 2 ? RUN_SPEED * 2
+							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
 		}
-
-		currentTurnSpeed = (currentSpeed != 0 && (Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || (getMouseXCoords() <= 0.83
-				&& getMouseXCoords() >= 0.74 && getMouseYCoords() >= -0.55 && getMouseYCoords() <= -0.42 && isBtnDown)))
-						? -TURN_SPEED
-						: (currentSpeed != 0 && (Keyboard.isKeyDown(Keyboard.KEY_LEFT)
-								|| (getMouseXCoords() <= 0.63 && getMouseXCoords() >= 0.54 && getMouseYCoords() >= -0.55
-										&& getMouseYCoords() <= -0.42 && isBtnDown))) ? TURN_SPEED : 0;
 	}
 
-	private static float getMouseXCoords() {
-		float x = (2f * Mouse.getX()) / Display.getWidth() - 1f;
-		return x;
-	}
-
-	private static float getMouseYCoords() {
-		float y = (2f * Mouse.getY()) / Display.getHeight() - 1f;
-		return y;
+	private boolean isPressButton(double d, double e, double f, double g) {
+		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		boolean isBtnDown = Mouse.isButtonDown(0);
+		return (mouseXCoords <= d && mouseXCoords >= e && mouseYCoords >= f && mouseYCoords <= g && isBtnDown);
 	}
 
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
 		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
-			currentSpeed = (direction.equals("forward")) ? -5 : (direction.equals("backward")) ? 5 : 0;
+			currentSpeed = (direction.equals(FORWARD)) ? -5 : (direction.equals(BACKWARD)) ? 5 : 0;
 		}
 	}
 
@@ -111,13 +114,5 @@ public class Player extends Entity {
 
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
-	}
-
-	public void setCurrentSpeed(int currentSpeed) {
-		this.currentSpeed = currentTurnSpeed;
-	}
-
-	public float getCurrentTurnSpeed() {
-		return this.currentTurnSpeed;
 	}
 }

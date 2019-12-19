@@ -16,7 +16,7 @@ public class ControllerHandler extends Handler {
 
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
-		
+
 		TextMaster.init(loader);
 		initTexts();
 		initGauges();
@@ -34,7 +34,6 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		GuiTexture speedup = new GuiTexture(loader.loadTexture("ABTN"), new Vector2f(-0.7f, -0.5f),
 				new Vector2f(0.17f, 0.17f));
-		
 
 		guis.add(forward);
 		guis.add(backward);
@@ -44,7 +43,7 @@ public class ControllerHandler extends Handler {
 
 		guiRenderer = new GuiRenderer(loader);
 	}
-	
+
 	public void initGUIWhenCarCash() {
 		GuiTexture replay = new GuiTexture(loader.loadTexture("Replay_BTN"), new Vector2f(0.0f, 0.0f),
 				new Vector2f(0.17f, 0.17f));
@@ -60,7 +59,7 @@ public class ControllerHandler extends Handler {
 
 	private void initGauges() {
 		FontType gaugeFont = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
-		for (int i = 0; i < 180; i++) {
+		for (int i = 0; i < 181; i++) {
 			new GUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
 		}
 	}
