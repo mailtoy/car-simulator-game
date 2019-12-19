@@ -31,7 +31,7 @@ public class Server extends Thread {
 	private ServerGUI serverGUI;
 
 	/**
-	 * Start the UDP connection server with requested port.
+	 * Create a socket to listen on provided port.
 	 * 
 	 * @param port Port the server listens on.
 	 */
@@ -67,8 +67,8 @@ public class Server extends Thread {
 	 * Organize the packet based on its type.
 	 * 
 	 * @param data    Data of packet
-	 * @param address IP address of packet
-	 * @param port    Port of packet
+	 * @param address IP address of sender's packet
+	 * @param port    Port of sender's packet
 	 */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		PacketTypes packetTypes = Packet.lookupPacket(new String(data).trim().substring(0, 2));
@@ -97,7 +97,7 @@ public class Server extends Thread {
 	/**
 	 * Send a data packet to the provided IP address and port.
 	 * 
-	 * @param data      Data that wants to send through
+	 * @param data      Data that wants to send through clients
 	 * @param ipAddress Receiver's IP address
 	 * @param port      Receiver's port
 	 */
@@ -138,8 +138,8 @@ public class Server extends Thread {
 	 * the server interface.
 	 * 
 	 * @param packet  ConnectPacket sent from client
-	 * @param address IP address of the client
-	 * @param port    Port of the client
+	 * @param address IP address of the new connected client
+	 * @param port    Port of the new connected client
 	 */
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
@@ -156,9 +156,9 @@ public class Server extends Thread {
 	 * Handle a disconnection of clients. Append a status of disconnection in the
 	 * server interface.
 	 * 
-	 * @param packet
-	 * @param address
-	 * @param port
+	 * @param packet  DisconnectPacket sent from client
+	 * @param address IP address of the disconnected client
+	 * @param port    Port of the disconnected client
 	 */
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] "
@@ -235,9 +235,9 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * AIf this client already in the server then update just its IP address and
-	 * port otherwise, add a new connection of this client and update to other
-	 * existing clients that there is a new client in the server.
+	 * If this client already in the server then update just its IP address and port
+	 * otherwise, add a new connection of this client and update to other existing
+	 * clients that there is a new client in the server.
 	 * 
 	 * @param multiplePlayer A player created based on the ConnectPacket.
 	 * @param packet         ConnectPacket sent from client.
