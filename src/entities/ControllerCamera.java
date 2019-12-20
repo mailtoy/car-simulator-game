@@ -74,4 +74,8 @@ public class ControllerCamera extends Camera {
 		}
 	}
 
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
 }

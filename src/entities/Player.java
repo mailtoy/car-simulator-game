@@ -6,7 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import main.Controller;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
@@ -88,16 +87,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public void checkReplayandQuit() {
-		if (isPressButton(-0.06, -0.3, 0.06, 0.3)) {
-			// replay
-		} else if (isPressButton(0.28, 0.05, 0.06, 0.3)) {
-			// close
-			System.exit(0);
-		}
-	}
-
-	private boolean isPressButton(double d, double e, double f, double g) {
+	public boolean isPressButton(double d, double e, double f, double g) {
 		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		boolean isBtnDown = Mouse.isButtonDown(0);
@@ -126,6 +116,10 @@ public class Player extends Entity {
 
 	public String getColor() {
 		return this.color;
+	}
+
+	public void setCurrentSpeed(float currentSpeed) {
+		this.currentSpeed = currentSpeed;
 	}
 
 	public float getCurrentSpeed() {

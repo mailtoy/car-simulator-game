@@ -180,7 +180,7 @@ public abstract class WindowDisplay {
 		handler.render();
 	}
 
-	protected void closeqRequest() {
+	public void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
 
@@ -239,6 +239,10 @@ public abstract class WindowDisplay {
 		return this.type;
 	}
 
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
+
 	public boolean isCrashed() {
 		return this.isCrashed;
 	}
@@ -250,7 +254,7 @@ public abstract class WindowDisplay {
 	public void setKick(boolean kickStatus) {
 		this.isKicked = kickStatus;
 	}
-	
+
 	public Handler getHandler() {
 		return handler;
 	}

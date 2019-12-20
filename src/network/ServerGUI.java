@@ -173,7 +173,7 @@ public class ServerGUI extends JFrame implements WindowListener {
 	 * Add a latest connected client into the list. If the client's type is a
 	 * controller, then show the color of the car in the list as well.
 	 * 
-	 * @param client A type of new client.
+	 * @param client A type of new client
 	 */
 	public void addClient(String client) {
 		if (server.isController(client)) {
