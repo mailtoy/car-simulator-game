@@ -46,6 +46,8 @@ public class Player extends Entity {
 
 	protected void checkInputs() {
 		boolean isBtnDown = Mouse.isButtonDown(0);
+//		System.out.println("x:"+getMouseXCoords());
+//		System.out.println("y:"+getMouseYCoords());
 
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			currentSpeed += ((currentSpeed <= MAX_SPEED) ? RUN_SPEED : 0);
@@ -59,8 +61,8 @@ public class Player extends Entity {
 				&& getMouseYCoords() >= -0.39 && getMouseYCoords() <= -0.27 && isBtnDown)) {
 			currentSpeed += ((currentSpeed < 60) ? RUN_SPEED : 0);
 			direction = "forward";
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (getMouseXCoords() <= 0.73 && getMouseXCoords() >= 0.64
-				&& getMouseYCoords() >= -0.69 && getMouseYCoords() <= -0.57 && isBtnDown)) {
+		} else if (Keyboard.isKeyDown(Keyboard.KEY_DOWN) || (getMouseXCoords() <= 0.70 && getMouseXCoords() >= 0.64
+				&& getMouseYCoords() >= -0.71 && getMouseYCoords() <= -0.58 && isBtnDown)) {
 			currentSpeed += ((currentSpeed > -60) ? -RUN_SPEED * 2 : 0);
 			direction = "backward";
 		} else {
@@ -71,7 +73,7 @@ public class Player extends Entity {
 				&& getMouseXCoords() >= 0.74 && getMouseYCoords() >= -0.55 && getMouseYCoords() <= -0.42 && isBtnDown)))
 						? -TURN_SPEED
 						: (currentSpeed != 0 && (Keyboard.isKeyDown(Keyboard.KEY_LEFT)
-								|| (getMouseXCoords() <= 0.63 && getMouseXCoords() >= 0.54 && getMouseYCoords() >= -0.55
+								|| (getMouseXCoords() <= 0.69 && getMouseXCoords() >= 0.49 && getMouseYCoords() >= -0.55
 										&& getMouseYCoords() <= -0.42 && isBtnDown))) ? TURN_SPEED : 0;
 	}
 
