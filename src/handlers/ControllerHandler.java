@@ -60,7 +60,10 @@ public class ControllerHandler extends Handler {
 	private void initGauges() {
 		FontType gaugeFont = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		for (int i = 0; i < 181; i++) {
-			new GUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
+			GUIText gauge = new GUIText(i + "", 3f, gaugeFont, new Vector2f(0f, 0f), 1f, true);
+			if (i >= 120) {
+				gauge.setColour(1, 0, 0);
+			}
 		}
 	}
 
