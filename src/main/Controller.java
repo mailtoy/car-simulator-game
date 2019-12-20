@@ -42,7 +42,7 @@ public class Controller extends WindowDisplay {
 				camera.move();
 				player.move();
 
-				if (player.getCurrentSpeed() != 0 || player.getCurrentSpeed() != 0) {
+				if (player.getCurrentSpeed() != 0) {
 					MovePacket movePacket = new MovePacket(player.getType(), player.getPosition(), player.getRotX(),
 							player.getRotY(), player.getRotZ());
 					movePacket.writeData(client);
