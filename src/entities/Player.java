@@ -80,7 +80,12 @@ public class Player extends Entity {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
 		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
-			currentSpeed = (direction.equals("forward")) ? -5 : (direction.equals("backward")) ? 5 : 0;
+//			currentSpeed = (direction.equals("forward")) ? -5 : (direction.equals("backward")) ? 5 : 0;
+			if (direction.equals("forward")) {
+				currentSpeed = -5;
+			} else if (direction.equals("backward")) {
+				currentSpeed = 5;
+			}
 		}
 	}
 

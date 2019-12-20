@@ -7,7 +7,6 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
-	private int decreaseLimit = 650;
 
 	public SimulatorCamera() {
 		setPosition(position);
@@ -17,21 +16,11 @@ public class SimulatorCamera extends Camera {
 	@Override
 	public void move() {
 		calculateMouseZoom();
-//		calculateLimitMap();
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
-			if (position.z < 15) {
-				position.z = 15;
-				if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-					position.z -= 5f;
-				}
-			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			position.z += 5f;
-			if (position.z >= (Math.pow(2, round + 1) * 100)) {
-				position.z = (float) (Math.pow(2, round + 1) * 100);
-			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 			position.x += 5f;
@@ -63,21 +52,6 @@ public class SimulatorCamera extends Camera {
 		}
 		if (position.y <= 30) {
 			position.y = 30;
-		}
-	}
-
-	public void calculateLimitMap() {
-		if (position.x >= 3200) {
-			position.x = 3200;
-		}
-		if (position.x <= decreaseLimit) {
-			position.x = decreaseLimit;
-		}
-		if (position.z >= 3200) {
-			position.z = 3200;
-		}
-		if (position.z <= 0) {
-			position.z = 0;
 		}
 	}
 

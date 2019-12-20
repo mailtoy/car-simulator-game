@@ -11,6 +11,7 @@ public abstract class Handler {
 	protected WindowDisplay windowDisplay;
 	protected GuiRenderer guiRenderer;
 	protected List<GuiTexture> guis;
+	protected Boolean isClick = false;
 	
 	public Handler(WindowDisplay windowDisplay) {
 		this.windowDisplay = windowDisplay;
@@ -26,4 +27,6 @@ public abstract class Handler {
 	protected abstract void initGUIs();
 	
 	public abstract void cleanUp();
+	
+
 }

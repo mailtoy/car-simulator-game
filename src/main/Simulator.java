@@ -14,7 +14,7 @@ public class Simulator extends WindowDisplay {
 		handler = new SimulatorHandler(this);
 		camera = new SimulatorCamera();
 		camera.setRound(round);
-
+		
 		ConnectPacket connectPacket = new ConnectPacket(type, getDefaultMap());
 		connectPacket.writeData(client);
 
