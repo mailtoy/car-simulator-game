@@ -6,6 +6,7 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import main.Controller;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
@@ -45,6 +46,12 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
+		// check x and y
+		// float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		// float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		// System.out.println("x: " + mouseXCoords);
+		// System.out.println("y: " + mouseYCoords);
+
 		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
 		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -56,7 +63,7 @@ public class Player extends Entity {
 			// accelerate
 			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
 					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0) : 0;
-			
+
 			// direction movement
 			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
@@ -67,7 +74,7 @@ public class Player extends Entity {
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
-			
+
 			// turn movement
 			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
 					: (currentSpeed != 0 && (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42))) ? TURN_SPEED : 0;
@@ -78,6 +85,15 @@ public class Player extends Entity {
 							: (currentSpeed == RUN_SPEED) ? -RUN_SPEED : -RUN_SPEED * 3)
 					: (currentSpeed < 0) ? (currentSpeed == -RUN_SPEED * 2 ? RUN_SPEED * 2
 							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
+		}
+	}
+
+	public void checkReplayandQuit() {
+		if (isPressButton(-0.06, -0.3, 0.06, 0.3)) {
+			// replay
+		} else if (isPressButton(0.28, 0.05, 0.06, 0.3)) {
+			// close
+			System.exit(0);
 		}
 	}
 

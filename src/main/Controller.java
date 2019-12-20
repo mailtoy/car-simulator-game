@@ -15,8 +15,8 @@ import renderEngine.DisplayManager;
 public class Controller extends WindowDisplay {
 	private final int MAX = 500;
 	private final int MIN = 8;
-	protected final float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
-	protected final float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
+	protected float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
+	protected float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
 
 	public Controller() {
 		super();
@@ -37,7 +37,6 @@ public class Controller extends WindowDisplay {
 	protected void run() {
 		while (!Display.isCloseRequested()) {
 			check();
-
 			if (!isCrashed()) {
 				camera.move();
 				player.move();
@@ -48,6 +47,7 @@ public class Controller extends WindowDisplay {
 					movePacket.writeData(client);
 				}
 			}
+			player.checkReplayandQuit();
 			render();
 		}
 		handler.cleanUp();

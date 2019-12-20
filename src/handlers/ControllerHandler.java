@@ -34,18 +34,6 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		GuiTexture speedup = new GuiTexture(loader.loadTexture("ABTN"), new Vector2f(-0.7f, -0.5f),
 				new Vector2f(0.17f, 0.17f));
-		
-		GuiTexture bg = new GuiTexture(loader.loadTexture("f"), new Vector2f(0.1f, 0.0f),
-				new Vector2f(0.5f, 0.5f));
-		GuiTexture replay = new GuiTexture(loader.loadTexture("button"), new Vector2f(-0.1f, 0.1f),
-				new Vector2f(0.2f, 0.2f));
-		GuiTexture close = new GuiTexture(loader.loadTexture("button"), new Vector2f(0.25f, 0.1f),
-				new Vector2f(0.2f, 0.2f));
-		
-		guis.add(bg);
-		guis.add(replay);
-		guis.add(close);
-		
 
 		guis.add(forward);
 		guis.add(backward);
@@ -54,17 +42,20 @@ public class ControllerHandler extends Handler {
 		guis.add(speedup);
 
 		guiRenderer = new GuiRenderer(loader);
-		
+
 	}
 
 	public void initGUIWhenCarCash() {
-//		GuiTexture replay = new GuiTexture(loader.loadTexture("Replay_BTN"), new Vector2f(-0.16f, 0.0f),
-//				new Vector2f(0.15f, 0.15f));
-//		GuiTexture close = new GuiTexture(loader.loadTexture("Close_BTN"), new Vector2f(0.16f, 0.0f),
-//				new Vector2f(0.15f, 0.15f));
-//		guis.add(replay);
-//		guis.add(close);
-//		guiRenderer = new GuiRenderer(loader);
+		GuiTexture bg = new GuiTexture(loader.loadTexture("f"), new Vector2f(0.1f, 0.0f), new Vector2f(0.5f, 0.5f));
+		GuiTexture replay = new GuiTexture(loader.loadTexture("ReplayBTN"), new Vector2f(-0.1f, 0.1f),
+				new Vector2f(0.2f, 0.2f));
+		GuiTexture close = new GuiTexture(loader.loadTexture("QuitBTN"), new Vector2f(0.25f, 0.1f),
+				new Vector2f(0.2f, 0.2f));
+		guis.add(bg);
+		guis.add(replay);
+		guis.add(close);
+
+		guiRenderer = new GuiRenderer(loader);
 	}
 
 	private void initTexts() {
