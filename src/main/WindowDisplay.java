@@ -100,11 +100,6 @@ public abstract class WindowDisplay {
 		fernModel.getTexture().setHasTransparency(true);
 
 		entities = new ArrayList<Entity>();
-//		for (int i = 0; i < 500; i++) {
-//			entities.add(new Entity(staticModel, new Vector3f(800, 0, 800), 0, 0, 0, 3));
-//			entities.add(new Entity(grassModel, new Vector3f(0, 0, 0), 0, 0, 0, 1));
-//			entities.add(new Entity(fernModel, new Vector3f(0, 0, 0), 0, 0, 0, 0.6f));
-//		}
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
 		carModel = OBJLoader.loadObjModel("Car", loader);
