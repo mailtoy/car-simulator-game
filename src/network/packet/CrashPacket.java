@@ -3,6 +3,11 @@ package network.packet;
 import network.Client;
 import network.Server;
 
+/**
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public class CrashPacket extends Packet {
 	private String player1;
 	private String player2;

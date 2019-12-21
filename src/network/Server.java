@@ -10,8 +10,6 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import org.lwjgl.util.vector.Vector3f;
-
 import entities.MultiplePlayer;
 import network.packet.ConnectPacket;
 import network.packet.CrashPacket;
@@ -35,8 +33,7 @@ public class Server extends Thread {
 	/**
 	 * Create a socket to listen on provided port.
 	 * 
-	 * @param port
-	 *            Port the server listens on.
+	 * @param port Port the server listens on.
 	 */
 	public Server(int port) {
 		this.serverGUI = new ServerGUI(this);
@@ -69,12 +66,9 @@ public class Server extends Thread {
 	/**
 	 * Organize the packet based on its type.
 	 * 
-	 * @param data
-	 *            Data of packet
-	 * @param address
-	 *            IP address of sender's packet
-	 * @param port
-	 *            Port of sender's packet
+	 * @param data    Data of packet
+	 * @param address IP address of sender's packet
+	 * @param port    Port of sender's packet
 	 */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		PacketTypes packetTypes = Packet.lookupPacket(new String(data).trim().substring(0, 2));
@@ -103,12 +97,9 @@ public class Server extends Thread {
 	/**
 	 * Send a data packet to the provided IP address and port.
 	 * 
-	 * @param data
-	 *            Data that wants to send through clients
-	 * @param ipAddress
-	 *            Receiver's IP address
-	 * @param port
-	 *            Receiver's port
+	 * @param data      Data that wants to send through clients
+	 * @param ipAddress Receiver's IP address
+	 * @param port      Receiver's port
 	 */
 	public void sendData(byte[] data, InetAddress ipAddress, int port) {
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
@@ -122,8 +113,7 @@ public class Server extends Thread {
 	/**
 	 * Send a data packet to all connected clients within the server.
 	 * 
-	 * @param data
-	 *            Data that wants to send through.
+	 * @param data Data that wants to send through.
 	 */
 	public void broadcast(byte[] data) {
 		for (MultiplePlayer player : connectedPlayers) {
@@ -134,10 +124,9 @@ public class Server extends Thread {
 	/**
 	 * Check the type of client whether it is controller or not.
 	 * 
-	 * @param type
-	 *            Type specified of provided client.
-	 * @return boolean Return true if this client is a controller otherwise,
-	 *         return false.
+	 * @param type Type specified of provided client.
+	 * @return boolean Return true if this client is a controller otherwise, return
+	 *         false.
 	 */
 	public boolean isController(String type) {
 		return type.contains("Controller");
@@ -145,15 +134,12 @@ public class Server extends Thread {
 
 	/**
 	 * Handle a connection of clients by creating a new player using the connect
-	 * packet's data and add it into the server. Append a status of connection
-	 * in the server interface.
+	 * packet's data and add it into the server. Append a status of connection in
+	 * the server interface.
 	 * 
-	 * @param packet
-	 *            ConnectPacket sent from client
-	 * @param address
-	 *            IP address of the new connected client
-	 * @param port
-	 *            Port of the new connected client
+	 * @param packet  ConnectPacket sent from client
+	 * @param address IP address of the new connected client
+	 * @param port    Port of the new connected client
 	 */
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
@@ -167,15 +153,12 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Handle a disconnection of clients. Append a status of disconnection in
-	 * the server interface.
+	 * Handle a disconnection of clients. Append a status of disconnection in the
+	 * server interface.
 	 * 
-	 * @param packet
-	 *            DisconnectPacket sent from client
-	 * @param address
-	 *            IP address of the disconnected client
-	 * @param port
-	 *            Port of the disconnected client
+	 * @param packet  DisconnectPacket sent from client
+	 * @param address IP address of the disconnected client
+	 * @param port    Port of the disconnected client
 	 */
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		serverGUI.appendResponse("[" + address.getHostAddress() + ":" + port + "] "
@@ -185,16 +168,15 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Handle movement of each client (controller). Check by the packet type
-	 * whether it exists in the server or not. If it does, set a new position
-	 * and rotation followed by the packet data and broadcast to all clients
-	 * within the server that this controller's car is changing the position.
-	 * And if there are two or more controllers' car connected to the server,
-	 * then check a car crash situation.
+	 * Handle movement of each client (controller). Check by the packet type whether
+	 * it exists in the server or not. If it does, set a new position and rotation
+	 * followed by the packet data and broadcast to all clients within the server
+	 * that this controller's car is changing the position. And if there are two or
+	 * more controllers' car connected to the server, then check a car crash
+	 * situation.
 	 * 
-	 * @param packet
-	 *            Packet contains a new position and a rotation view of the
-	 *            client.
+	 * @param packet Packet contains a new position and a rotation view of the
+	 *               client.
 	 */
 	private void handleMove(MovePacket packet) {
 		if (getMultiplePlayer(packet.getType()) != null) {
@@ -214,13 +196,12 @@ public class Server extends Thread {
 
 	/**
 	 * Handle a crash situation occurred by two or more controllers' car. Set a
-	 * frame of each car based on its position and then check if their frames
-	 * are currently overlapped or not. If there is a car crash then send a
-	 * CrashPacket contained the type of injured cars and broadcast to all the
-	 * connected clients.
+	 * frame of each car based on its position and then check if their frames are
+	 * currently overlapped or not. If there is a car crash then send a CrashPacket
+	 * contained the type of injured cars and broadcast to all the connected
+	 * clients.
 	 * 
-	 * @param controllers
-	 *            ArrayList contained only clients that are controller.
+	 * @param controllers ArrayList contained only clients that are controller.
 	 */
 	private void handleCrash(ArrayList<MultiplePlayer> controllers) {
 		final int carWidth = 6;
@@ -241,9 +222,6 @@ public class Server extends Thread {
 					if ((playerFrameZ >= nextPlayerPosZ && playerFrameZ <= nextPlayerPosZ + carHeight)
 							|| (playerFrameZ + carHeight >= nextPlayerPosZ
 									&& playerFrameZ + carHeight <= nextPlayerPosZ + carHeight)) {
-						// change position
-//						controllers.get(i).setPosition(new Vector3f(10, 0, 10));
-//						controllers.get(j).setPosition(new Vector3f(20, 0, 20));
 						serverGUI.appendResponse(controllers.get(i).getType() + " and " + controllers.get(j).getType()
 								+ " are crashing!");
 
@@ -257,14 +235,12 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * If this client already in the server then update just its IP address and
-	 * port otherwise, add a new connection of this client and update to other
-	 * existing clients that there is a new client in the server.
+	 * If this client already in the server then update just its IP address and port
+	 * otherwise, add a new connection of this client and update to other existing
+	 * clients that there is a new client in the server.
 	 * 
-	 * @param multiplePlayer
-	 *            A player created based on the ConnectPacket.
-	 * @param packet
-	 *            ConnectPacket sent from client.
+	 * @param multiplePlayer A player created based on the ConnectPacket.
+	 * @param packet         ConnectPacket sent from client.
 	 */
 	private void addConnection(MultiplePlayer multiplePlayer, ConnectPacket packet) {
 		boolean isConnected = false;
@@ -276,13 +252,11 @@ public class Server extends Thread {
 				player.setPort(multiplePlayer.getPort());
 				isConnected = true;
 			} else {
-				// relay to the current connected player (multiplePlayer) that
-				// there is a new
+				// relay to the current connected player (multiplePlayer) that there is a new
 				// player (player)
 				sendData(packet.getData(), player.getIpAddress(), player.getPort());
 
-				// relay to the new player (player) that the currently connected
-				// player
+				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
 				ConnectPacket updatePacket = new ConnectPacket(player.getType(), serverGUI.getSelectedMap(),
 						player.getColor(), player.getPosition(), player.getRotX(), player.getRotY(), player.getRotZ(),
@@ -302,11 +276,9 @@ public class Server extends Thread {
 	}
 
 	/**
-	 * Remove a client from the server then broadcast to all the connected
-	 * clients.
+	 * Remove a client from the server then broadcast to all the connected clients.
 	 * 
-	 * @param packet
-	 *            DisconnectPacket sent from client.
+	 * @param packet DisconnectPacket sent from client.
 	 */
 	private void removeConnection(DisconnectPacket packet) {
 		this.connectedPlayers.remove(getMultiplePlayerIndex(packet.getType()));
@@ -320,10 +292,8 @@ public class Server extends Thread {
 	/**
 	 * Get a player (car) of provided client type.
 	 * 
-	 * @param type
-	 *            A client's type
-	 * @return Return the player if it exists in the server otherwise, return
-	 *         null.
+	 * @param type A client's type
+	 * @return Return the player if it exists in the server otherwise, return null.
 	 */
 	private MultiplePlayer getMultiplePlayer(String type) {
 		for (MultiplePlayer player : connectedPlayers) {
@@ -337,8 +307,7 @@ public class Server extends Thread {
 	/**
 	 * Get an index of a player (car) of provided client type.
 	 * 
-	 * @param type
-	 *            A client's type
+	 * @param type A client's type
 	 * @return Return the index of player if it exists in the server otherwise,
 	 *         return the index of 0.
 	 */

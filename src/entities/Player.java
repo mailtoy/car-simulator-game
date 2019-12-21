@@ -6,6 +6,8 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
+import handlers.ControllerHandler;
+import handlers.Handler;
 import main.Controller;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
@@ -27,6 +29,10 @@ public class Player extends Entity {
 	private String color;
 	protected Vector3f frame;
 	protected Vector2f position;
+	private boolean isActive = false;
+	private boolean isActiveLR = false;
+	private int arrow;
+	private int arrowLR;
 
 	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
@@ -46,6 +52,8 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
+		setActive(false);
+		setActiveLR(false);
 		// check x and y
 		// float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		// float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
@@ -62,22 +70,36 @@ public class Player extends Entity {
 		if (!isBrake) {
 			// accelerate
 			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
-					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0) : 0;
+					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0)
+							: (!isAccelerate && currentSpeed > AVERAGE_SPEED) ? -RUN_SPEED
+									: (!isAccelerate && currentSpeed < -AVERAGE_SPEED) ? +RUN_SPEED : 0;
 
 			// direction movement
 			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
 				direction = FORWARD;
+				setArrow(1);
+				setActive(true);
 			} else if (isBackward || isPressButton(0.73, 0.64, -0.69, -0.57)) {
 				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
 				direction = BACKWARD;
+				setArrow(2);
+				setActive(true);
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
-
+			
 			// turn movement
 			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
 					: (currentSpeed != 0 && (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42))) ? TURN_SPEED : 0;
+			if (isRight || isPressButton(0.83, 0.74, -0.55, -0.42)) {
+				setArrowLR(3);
+				setActiveLR(true);
+			} else if (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42)) {
+				setArrowLR(4);
+				setActiveLR(true);
+			} 
+			
 		} else {
 			// brake
 			currentSpeed += (currentSpeed > 0)
@@ -88,16 +110,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public void checkReplayandQuit() {
-		if (isPressButton(-0.06, -0.3, 0.06, 0.3)) {
-			// replay
-		} else if (isPressButton(0.28, 0.05, 0.06, 0.3)) {
-			// close
-			System.exit(0);
-		}
-	}
-
-	private boolean isPressButton(double d, double e, double f, double g) {
+	public boolean isPressButton(double d, double e, double f, double g) {
 		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		boolean isBtnDown = Mouse.isButtonDown(0);
@@ -110,6 +123,38 @@ public class Player extends Entity {
 		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
 			currentSpeed = (direction.equals(FORWARD)) ? -5 : (direction.equals(BACKWARD)) ? 5 : 0;
 		}
+	}
+
+	public void setActive(boolean active) {
+		this.isActive = active;
+	}
+
+	public boolean getActive() {
+		return this.isActive;
+	}
+
+	public void setArrow(int arrow) {
+		this.arrow = arrow;
+	}
+
+	public int getArrow() {
+		return this.arrow;
+	}
+	
+	public void setActiveLR(boolean active) {
+		this.isActiveLR = active;
+	}
+	
+	public boolean getActiveLR() {
+		return this.isActiveLR;
+	}
+
+	public void setArrowLR(int arrow) {
+		this.arrowLR = arrow;
+	}
+
+	public int getArrowLR() {
+		return this.arrowLR;
 	}
 
 	public void setFrame() {
@@ -126,6 +171,10 @@ public class Player extends Entity {
 
 	public String getColor() {
 		return this.color;
+	}
+
+	public void setCurrentSpeed(float currentSpeed) {
+		this.currentSpeed = currentSpeed;
 	}
 
 	public float getCurrentSpeed() {
