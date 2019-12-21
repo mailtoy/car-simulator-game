@@ -45,6 +45,12 @@ public class Player extends Entity {
 	}
 
 	protected void checkInputs() {
+		// check x and y
+		// float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		// float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		// System.out.println("x: " + mouseXCoords);
+		// System.out.println("y: " + mouseYCoords);
+
 		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
 		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
 		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
@@ -55,8 +61,10 @@ public class Player extends Entity {
 		if (!isBrake) {
 			// accelerate
 			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
-					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0) : 0;
-			
+					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0)
+							: (!isAccelerate && currentSpeed > AVERAGE_SPEED) ? -RUN_SPEED
+									: (!isAccelerate && currentSpeed < -AVERAGE_SPEED) ? +RUN_SPEED : 0;
+
 			// direction movement
 			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
@@ -67,7 +75,7 @@ public class Player extends Entity {
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
-			
+
 			// turn movement
 			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
 					: (currentSpeed != 0 && (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42))) ? TURN_SPEED : 0;
@@ -81,7 +89,7 @@ public class Player extends Entity {
 		}
 	}
 
-	private boolean isPressButton(double d, double e, double f, double g) {
+	public boolean isPressButton(double d, double e, double f, double g) {
 		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		boolean isBtnDown = Mouse.isButtonDown(0);
@@ -110,6 +118,10 @@ public class Player extends Entity {
 
 	public String getColor() {
 		return this.color;
+	}
+
+	public void setCurrentSpeed(float currentSpeed) {
+		this.currentSpeed = currentSpeed;
 	}
 
 	public float getCurrentSpeed() {
