@@ -17,8 +17,8 @@ public class ControllerHandler extends Handler {
 	private ArrayList<GuiTexture> carCrashGUIs;
 	private boolean isAdded = false;
 	private boolean isActive = false;
-	private GuiTexture forwardActive, backwardActive, rightActive, leftActive;
-	private GuiTexture forward, backward, right, left;
+	private GuiTexture forwardActive, backwardActive, rightActive, leftActive, accActive, breakActive;
+	private GuiTexture forward, backward, right, left, acc, breakdown;
 
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
@@ -38,14 +38,17 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f),
 				new Vector2f(0.06f, 0.08f));
-		GuiTexture speedup = new GuiTexture(loader.loadTexture("ABTN"), new Vector2f(-0.7f, -0.5f),
-				new Vector2f(0.17f, 0.17f));
+		acc = new GuiTexture(loader.loadTexture("AccBTN"), new Vector2f(-0.58f, -0.62f),
+				new Vector2f(0.08f, 0.2f));
+		breakdown = new GuiTexture(loader.loadTexture("BreakBTN"), new Vector2f(-0.7f, -0.55f),
+				new Vector2f(0.1f, 0.1f));
 
 		guis.add(forward);
 		guis.add(backward);
 		guis.add(right);
 		guis.add(left);
-		guis.add(speedup);
+		guis.add(acc);
+		guis.add(breakdown);
 
 		GuiTexture bg = new GuiTexture(loader.loadTexture("f"), new Vector2f(0.1f, 0.0f), new Vector2f(0.5f, 0.5f));
 		GuiTexture replay = new GuiTexture(loader.loadTexture("ReplayBTN"), new Vector2f(-0.1f, 0.1f),
@@ -66,6 +69,11 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		rightActive = new GuiTexture(loader.loadTexture("ClickedRBTN"), new Vector2f(0.8f, -0.5f),
 				new Vector2f(0.06f, 0.08f));
+		
+		accActive = new GuiTexture(loader.loadTexture("ClickedAccBTN"), new Vector2f(-0.58f, -0.62f),
+				new Vector2f(0.08f, 0.2f));
+		breakActive = new GuiTexture(loader.loadTexture("ClickedBreakBTN"), new Vector2f(-0.7f, -0.55f),
+				new Vector2f(0.1f, 0.1f));
 
 		guiRenderer = new GuiRenderer(loader);
 
@@ -83,7 +91,6 @@ public class ControllerHandler extends Handler {
 	
 	public void changeButtonGUIs(int arrow) {
 		if(arrow == 1) {
-			System.out.println("remove ^");
 			guis.remove(forward);
 			guis.add(forwardActive);
 		} else if (arrow == 2) {
@@ -93,16 +100,20 @@ public class ControllerHandler extends Handler {
 			guis.remove(right);
 			guis.add(rightActive);
 		}  else if (arrow == 4) {
-			System.out.println("remove <");
 			guis.remove(left);
 			guis.add(leftActive);
+		} else if (arrow == 5) {
+			guis.remove(breakdown);
+			guis.add(breakActive);
+		} else if (arrow == 6) {
+			guis.remove(acc);
+			guis.add(accActive);
 		}
 		
 	}
 	
 	public void changeButtonGUIsBack(int arrow) {
 		if (arrow == 1) {
-			System.out.println("add ^");
 			guis.remove(forwardActive);
 			guis.add(forward);
 		} else if (arrow == 2) {
@@ -112,9 +123,14 @@ public class ControllerHandler extends Handler {
 			guis.remove(rightActive);
 			guis.add(right);
 		} else if (arrow == 4) {
-			System.out.println("add >");
 			guis.remove(leftActive);
 			guis.add(left);
+		} else if (arrow == 5) {
+			guis.remove(breakActive);
+			guis.add(breakdown);
+		} else if (arrow == 6) {
+			guis.remove(accActive);
+			guis.add(acc);
 		}
 	}
 	

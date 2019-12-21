@@ -9,7 +9,6 @@ import entities.ControllerCamera;
 import entities.MultiplePlayer;
 import entities.Player;
 import handlers.ControllerHandler;
-import handlers.Handler;
 import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
@@ -19,6 +18,7 @@ public class Controller extends WindowDisplay {
 	private final int MIN = 8;
 	protected float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
+	protected ControllerHandler conHandler;
 
 	public Controller() {
 		super();
@@ -57,22 +57,10 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void render() {
 		super.renderComponents();
-
-		ControllerHandler conHandler = ((ControllerHandler) handler);
+		conHandler = ((ControllerHandler) handler);
 		if (!isCrashed()) {
 			conHandler.gaugeRender(player.getCurrentSpeed());
-			int arrow = player.getArrow();
-			int arrowLR = player.getArrowLR();
-			if (player.getActive()) {
-				conHandler.changeButtonGUIs(arrow);
-			} else {
-				conHandler.changeButtonGUIsBack(arrow);
-			}
-			if (player.getActiveLR()) {
-				conHandler.changeButtonGUIs(arrowLR);
-			} else {
-				conHandler.changeButtonGUIsBack(arrowLR);
-			}
+			checkButtonClicked();
 		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
@@ -80,6 +68,27 @@ public class Controller extends WindowDisplay {
 			}
 		}
 		DisplayManager.updateDisplay();
+	}
+
+	private void checkButtonClicked() {
+		int arrow = player.getArrow();
+		int arrowLR = player.getArrowLR();
+		int option = player.getOption();
+		if (player.getActive()) {
+			conHandler.changeButtonGUIs(arrow);
+		} else {
+			conHandler.changeButtonGUIsBack(arrow);
+		}
+		if (player.getActiveLR()) {
+			conHandler.changeButtonGUIs(arrowLR);
+		} else {
+			conHandler.changeButtonGUIsBack(arrowLR);
+		}
+		if (player.getOptionActive()) {
+			conHandler.changeButtonGUIs(option);
+		} else {
+			conHandler.changeButtonGUIsBack(option);
+		}
 	}
 
 	private void sendMove(Vector3f position) {

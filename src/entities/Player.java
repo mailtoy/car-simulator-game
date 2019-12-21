@@ -31,8 +31,10 @@ public class Player extends Entity {
 	protected Vector2f position;
 	private boolean isActive = false;
 	private boolean isActiveLR = false;
+	private boolean isOption = false;
 	private int arrow;
 	private int arrowLR;
+	private int option;
 
 	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
@@ -54,33 +56,42 @@ public class Player extends Entity {
 	protected void checkInputs() {
 		setActive(false);
 		setActiveLR(false);
+		setOption(false);
 		// check x and y
 		// float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		// float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		// System.out.println("x: " + mouseXCoords);
 		// System.out.println("y: " + mouseYCoords);
 
-		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
-		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
-		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
-		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP) || isPressButton(0.73, 0.64, -0.39, -0.27);
+		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || isPressButton(0.73, 0.64, -0.69, -0.57);
+		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || isPressButton(0.69, 0.49, -0.55, -0.42);
+		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || isPressButton(0.83, 0.74, -0.55, -0.42);
 		boolean isAccelerate = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
-		boolean isBrake = Keyboard.isKeyDown(Keyboard.KEY_SPACE);
+		boolean isBrake = Keyboard.isKeyDown(Keyboard.KEY_SPACE) || isPressButton(-0.70, -0.79, -0.63, -0.45);
 
 		if (!isBrake) {
 			// accelerate
-			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
+			currentSpeed += ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isForward)
+					? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
 					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0)
 							: (!isAccelerate && currentSpeed > AVERAGE_SPEED) ? -RUN_SPEED
 									: (!isAccelerate && currentSpeed < -AVERAGE_SPEED) ? +RUN_SPEED : 0;
+			if ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isForward) {
+				setOption(6);
+				setOption(true);
+			} else if ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isBackward) {
+				setOption(6);
+				setOption(true);
+			}
 
 			// direction movement
-			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
+			if (isForward) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
 				direction = FORWARD;
 				setArrow(1);
 				setActive(true);
-			} else if (isBackward || isPressButton(0.73, 0.64, -0.69, -0.57)) {
+			} else if (isBackward) {
 				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
 				direction = BACKWARD;
 				setArrow(2);
@@ -88,18 +99,18 @@ public class Player extends Entity {
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
-			
+
 			// turn movement
-			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
-					: (currentSpeed != 0 && (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42))) ? TURN_SPEED : 0;
+			currentTurnSpeed = (currentSpeed != 0 && isRight) ? -TURN_SPEED
+					: (currentSpeed != 0 && isLeft) ? TURN_SPEED : 0;
 			if (isRight || isPressButton(0.83, 0.74, -0.55, -0.42)) {
 				setArrowLR(3);
 				setActiveLR(true);
 			} else if (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42)) {
 				setArrowLR(4);
 				setActiveLR(true);
-			} 
-			
+			}
+
 		} else {
 			// brake
 			currentSpeed += (currentSpeed > 0)
@@ -107,6 +118,9 @@ public class Player extends Entity {
 							: (currentSpeed == RUN_SPEED) ? -RUN_SPEED : -RUN_SPEED * 3)
 					: (currentSpeed < 0) ? (currentSpeed == -RUN_SPEED * 2 ? RUN_SPEED * 2
 							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
+			setOption(5);
+			setOption(true);
+
 		}
 	}
 
@@ -140,11 +154,11 @@ public class Player extends Entity {
 	public int getArrow() {
 		return this.arrow;
 	}
-	
+
 	public void setActiveLR(boolean active) {
 		this.isActiveLR = active;
 	}
-	
+
 	public boolean getActiveLR() {
 		return this.isActiveLR;
 	}
@@ -155,6 +169,22 @@ public class Player extends Entity {
 
 	public int getArrowLR() {
 		return this.arrowLR;
+	}
+
+	public void setOption(boolean option) {
+		this.isOption = option;
+	}
+
+	public boolean getOptionActive() {
+		return this.isOption;
+	}
+
+	public void setOption(int option) {
+		this.option = option;
+	}
+
+	public int getOption() {
+		return this.option;
 	}
 
 	public void setFrame() {
