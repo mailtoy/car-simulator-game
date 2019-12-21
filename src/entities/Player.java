@@ -61,7 +61,9 @@ public class Player extends Entity {
 		if (!isBrake) {
 			// accelerate
 			currentSpeed += (isAccelerate && isForward) ? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
-					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0) : 0;
+					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0)
+							: (!isAccelerate && currentSpeed > AVERAGE_SPEED) ? -RUN_SPEED
+									: (!isAccelerate && currentSpeed < -AVERAGE_SPEED) ? +RUN_SPEED : 0;
 
 			// direction movement
 			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {

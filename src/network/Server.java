@@ -252,13 +252,11 @@ public class Server extends Thread {
 				player.setPort(multiplePlayer.getPort());
 				isConnected = true;
 			} else {
-				// relay to the current connected player (multiplePlayer) that
-				// there is a new
+				// relay to the current connected player (multiplePlayer) that there is a new
 				// player (player)
 				sendData(packet.getData(), player.getIpAddress(), player.getPort());
 
-				// relay to the new player (player) that the currently connected
-				// player
+				// relay to the new player (player) that the currently connected player
 				// (multiplePlayer) exists
 				ConnectPacket updatePacket = new ConnectPacket(player.getType(), serverGUI.getSelectedMap(),
 						player.getColor(), player.getPosition(), player.getRotX(), player.getRotY(), player.getRotZ(),

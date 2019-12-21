@@ -58,8 +58,9 @@ public class Controller extends WindowDisplay {
 		super.renderComponents();
 
 		ControllerHandler conHandler = ((ControllerHandler) handler);
-		conHandler.gaugeRender(player.getCurrentSpeed());
-		if (isCrashed()) {
+		if (!isCrashed()) {
+			conHandler.gaugeRender(player.getCurrentSpeed());
+		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
 				conHandler.addCarCrashGUIs();
