@@ -16,13 +16,25 @@ import network.packet.MovePacket;
 import network.packet.Packet;
 import network.packet.Packet.PacketTypes;
 
+/**
+ * Client creates a UDP socket to the server.
+ * 
+ * @author Issaree Srisomboon
+ *
+ */
 public class Client extends Thread {
-	private final String serverIP = "192.168.0.25";
+	
+	private final String serverIP = "192.168.0.43";
 
 	private InetAddress ipAddress;
 	private DatagramSocket socket;
 	private WindowDisplay windowDisplay;
 
+	/**
+	 * Create a socket object for carrying the data
+	 * 
+	 * @param windowDisplay An abstract class for each type of client.
+	 */
 	public Client(WindowDisplay windowDisplay) {
 		this.windowDisplay = windowDisplay;
 		try {
@@ -35,12 +47,14 @@ public class Client extends Thread {
 		}
 	}
 
+	/**
+	 * Receive incoming packets from the server.
+	 */
 	@Override
 	public void run() {
 		while (true) {
 			byte[] data = new byte[1024];
 			DatagramPacket packet = new DatagramPacket(data, data.length);
-
 			try {
 				socket.receive(packet);
 			} catch (IOException e) {
@@ -50,6 +64,13 @@ public class Client extends Thread {
 		}
 	}
 
+	/**
+	 * Organize the packet based on its type.
+	 * 
+	 * @param data    Data of packet
+	 * @param address IP address of sender's packet
+	 * @param port    Port of sender's packet
+	 */
 	private void parsePacket(byte[] data, InetAddress address, int port) {
 		PacketTypes packetTypes = Packet.lookupPacket(new String(data).trim().substring(0, 2));
 		Packet packet;
@@ -78,6 +99,11 @@ public class Client extends Thread {
 		}
 	}
 
+	/**
+	 * Send a data packet to the server.
+	 * 
+	 * @param data Data that wants to send through the server.
+	 */
 	public void sendData(byte[] data) {
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, 3001);
 		try {
@@ -87,6 +113,14 @@ public class Client extends Thread {
 		}
 	}
 
+	/**
+	 * Handle a new connection from other clients in the server. Add a new player
+	 * (car) to the local map if it is a controller and it still is not added.
+	 * 
+	 * @param packet  ConnectPacket sent from server
+	 * @param address IP address of the new client
+	 * @param port    Port of the new client
+	 */
 	private void handleConnect(ConnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((ConnectPacket) packet).getType()
 				+ " has joined the server.");
@@ -106,6 +140,14 @@ public class Client extends Thread {
 		}
 	}
 
+	/**
+	 * Handle a disconnection from other clients in the server. If the disconnected
+	 * client was a controller then remove its car from the map.
+	 * 
+	 * @param packet  DisconnectPacket sent from the server
+	 * @param address IP address of the disconnected client
+	 * @param port    Port of the disconnected client
+	 */
 	private void handleDisconnect(DisconnectPacket packet, InetAddress address, int port) {
 		System.out.println("[" + address.getHostAddress() + ":" + port + "] " + ((DisconnectPacket) packet).getType()
 				+ " has left from the server.");
@@ -114,17 +156,28 @@ public class Client extends Thread {
 		if (packetType.contains("Controller")) {
 			windowDisplay.removeMultiplePlayer(packetType);
 		}
+		// If server forces disconnecting
 		if (packetType.equals(windowDisplay.getType())) {
 			windowDisplay.setKick(true);
-			System.exit(0); // for now
+			System.exit(0);
 		}
 	}
 
+	/**
+	 * Make the client move the existing car in the map followed by MovePacket.
+	 * 
+	 * @param packet A packet contained a new position and rotation.
+	 */
 	private void handleMove(MovePacket packet) {
 		windowDisplay.movePlayer(packet.getType(), packet.getPosition(), packet.getRotX(), packet.getRotY(),
 				packet.getRotZ());
 	}
 
+	/**
+	 * Handle a crash situation. Check whether this client is crashing or not.
+	 * 
+	 * @param packet A packet contained information of two cars crashed.
+	 */
 	private void handleCrash(CrashPacket packet) {
 		String type = windowDisplay.getType();
 		if (type.equals(packet.getPlayer1()) || type.equals(packet.getPlayer2())) {

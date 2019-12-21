@@ -44,9 +44,5 @@ public class FontType {
 	public TextMeshData loadText(GUIText text) {
 		return loader.createTextMesh(text);
 	}
-	
-	public TextMeshData loadText(GaugeGUIText text) {
-		return loader.createTextMesh(text);
-	}
 
 }

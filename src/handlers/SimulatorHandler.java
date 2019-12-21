@@ -5,7 +5,6 @@ import org.lwjgl.util.vector.Vector2f;
 import guis.GuiRenderer;
 import guis.GuiTexture;
 import main.WindowDisplay;
-import renderEngine.Loader;
 
 public class SimulatorHandler extends Handler {
 	private GuiTexture zoomIn;
@@ -27,32 +26,19 @@ public class SimulatorHandler extends Handler {
 
 	@Override
 	protected void initGUIs() {
-		Loader loader = windowDisplay.getLoader();
-		zoomIn = new GuiTexture(loader.loadTexture("plus"), new Vector2f(0.8f, 0.55f), new Vector2f(0.06f, 0.08f));
-		zoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f), new Vector2f(0.06f, 0.08f));
-		ClickedZoomIn = new GuiTexture(loader.loadTexture("Clickedplus"), new Vector2f(0.8f, 0.55f), new Vector2f(0.06f, 0.08f));
+		zoomIn = new GuiTexture(loader.loadTexture("OutBTN"), new Vector2f(0.85f, 0.55f), new Vector2f(0.11f, 0.15f));
+		zoomOut = new GuiTexture(loader.loadTexture("InBTN"), new Vector2f(0.85f, -0.15f), new Vector2f(0.11f, 0.15f));
+//		ClickedZoomIn = new GuiTexture(loader.loadTexture("Clickedplus"), new Vector2f(0.8f, 0.55f), new Vector2f(0.06f, 0.08f));
 //		ClickedZoomOut = new GuiTexture(loader.loadTexture("minus"), new Vector2f(0.8f, -0.15f), new Vector2f(0.06f, 0.08f));
 
 		guis.add(zoomIn);
 		guis.add(zoomOut);
-		checkClick();
 		guiRenderer = new GuiRenderer(loader);
 	}
 
 	@Override
 	public void cleanUp() {
 		guiRenderer.render(guis);
-	}
-	
-	public void checkClick() {
-		if(isClicked == true) {
-			guis.add(ClickedZoomIn);
-			System.out.println("เติม");
-		} else {
-			guis.remove(ClickedZoomIn);
-			System.out.println("ลบ");
-		}
-		
 	}
 
 }
