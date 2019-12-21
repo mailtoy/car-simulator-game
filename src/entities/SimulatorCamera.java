@@ -7,6 +7,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
+	private Boolean isClicked;
+	private String whatButton;
 
 	public SimulatorCamera() {
 		setPosition(position);
@@ -16,6 +18,8 @@ public class SimulatorCamera extends Camera {
 	@Override
 	public void move() {
 		calculateMouseZoom();
+		whatButton = "none";
+		setIsClicked(false);
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
 		}
@@ -28,15 +32,17 @@ public class SimulatorCamera extends Camera {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			position.x -= 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 0.87 && getMouseYCoords() >= 0.52
-				&& getMouseYCoords() <= 0.70 && Mouse.isButtonDown(0))) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
+				&& getMouseYCoords() >= 0.52 && getMouseYCoords() <= 0.70 && Mouse.isButtonDown(0))) {
 			position.y += 5f;
+			setIsClicked(true);
+			whatButton = "+";
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 0.87 && getMouseYCoords() >=-0.20
-				&& getMouseYCoords() <= -0.00 && Mouse.isButtonDown(0))) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
+				&& getMouseYCoords() >= -0.20 && getMouseYCoords() <= -0.00 && Mouse.isButtonDown(0))) {
 			position.y -= 5f;
+			setIsClicked(true);
+			whatButton = "-";
 		}
 		if (Mouse.isButtonDown(0)) {
 			position.x -= Mouse.getDX();
@@ -63,6 +69,18 @@ public class SimulatorCamera extends Camera {
 	private float getMouseYCoords() {
 		float y = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		return y;
+	}
+
+	public Boolean getIsClicked() {
+		return isClicked;
+	}
+
+	public void setIsClicked(Boolean isClicked) {
+		this.isClicked = isClicked;
+	}
+
+	public String getWhatButton() {
+		return whatButton;
 	}
 
 }

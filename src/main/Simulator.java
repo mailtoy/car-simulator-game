@@ -3,6 +3,7 @@ package main;
 import org.lwjgl.opengl.Display;
 
 import entities.SimulatorCamera;
+import handlers.ControllerHandler;
 import handlers.SimulatorHandler;
 import network.packet.ConnectPacket;
 import renderEngine.DisplayManager;
@@ -34,6 +35,13 @@ public class Simulator extends WindowDisplay {
 	@Override
 	protected void render() {
 		super.renderComponents();
+		SimulatorHandler simHandler = ((SimulatorHandler) handler);
+		SimulatorCamera simCamerra = ((SimulatorCamera) camera);
+		simHandler.changeDefaultGui();
+		if(simCamerra.getIsClicked() == true) {
+				simHandler.changeGui(simCamerra.getWhatButton());
+		}
+		
 		DisplayManager.updateDisplay();
 	}
 
