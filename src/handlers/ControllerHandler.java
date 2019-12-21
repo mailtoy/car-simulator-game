@@ -157,4 +157,5 @@ public class ControllerHandler extends Handler {
 		TextMaster.cleanUp();
 	}
 
+
 }

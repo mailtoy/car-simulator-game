@@ -7,7 +7,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
-	private int decreaseLimit = 650;
+	private Boolean isClicked;
+	private String whatButton;
 
 	public SimulatorCamera() {
 		setPosition(position);
@@ -17,21 +18,13 @@ public class SimulatorCamera extends Camera {
 	@Override
 	public void move() {
 		calculateMouseZoom();
-//		calculateLimitMap();
+		whatButton = "none";
+		setIsClicked(false);
 		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
 			position.z -= 5f;
-			if (position.z < 15) {
-				position.z = 15;
-				if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-					position.z -= 5f;
-				}
-			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
 			position.z += 5f;
-			if (position.z >= (Math.pow(2, round + 1) * 100)) {
-				position.z = (float) (Math.pow(2, round + 1) * 100);
-			}
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
 			position.x += 5f;
@@ -39,15 +32,17 @@ public class SimulatorCamera extends Camera {
 		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
 			position.x -= 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 0.86 && getMouseYCoords() >= 0.47
-				&& getMouseYCoords() <= 0.63 && Mouse.isButtonDown(0))) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
+				&& getMouseYCoords() >= 0.52 && getMouseYCoords() <= 0.70 && Mouse.isButtonDown(0))) {
 			position.y += 5f;
+			setIsClicked(true);
+			whatButton = "+";
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74
-				&& getMouseXCoords() <= 0.86 && getMouseYCoords() >=-0.23
-				&& getMouseYCoords() <= -0.07 && Mouse.isButtonDown(0))) {
+		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
+				&& getMouseYCoords() >= -0.20 && getMouseYCoords() <= -0.00 && Mouse.isButtonDown(0))) {
 			position.y -= 5f;
+			setIsClicked(true);
+			whatButton = "-";
 		}
 		if (Mouse.isButtonDown(0)) {
 			position.x -= Mouse.getDX();
@@ -66,21 +61,6 @@ public class SimulatorCamera extends Camera {
 		}
 	}
 
-	public void calculateLimitMap() {
-		if (position.x >= 3200) {
-			position.x = 3200;
-		}
-		if (position.x <= decreaseLimit) {
-			position.x = decreaseLimit;
-		}
-		if (position.z >= 3200) {
-			position.z = 3200;
-		}
-		if (position.z <= 0) {
-			position.z = 0;
-		}
-	}
-
 	private float getMouseXCoords() {
 		float x = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		return x;
@@ -89,6 +69,18 @@ public class SimulatorCamera extends Camera {
 	private float getMouseYCoords() {
 		float y = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		return y;
+	}
+
+	public Boolean getIsClicked() {
+		return isClicked;
+	}
+
+	public void setIsClicked(Boolean isClicked) {
+		this.isClicked = isClicked;
+	}
+
+	public String getWhatButton() {
+		return whatButton;
 	}
 
 }
