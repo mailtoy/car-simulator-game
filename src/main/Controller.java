@@ -61,7 +61,6 @@ public class Controller extends WindowDisplay {
 			if (!isCrashed()) {
 				camera.move();
 				player.move();
-
 				if (player.getCurrentSpeed() != 0) {
 					sendMove(player.getPosition());
 				}

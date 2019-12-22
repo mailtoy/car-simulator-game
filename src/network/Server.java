@@ -194,6 +194,7 @@ public class Server extends Thread {
 		}
 	}
 
+
 	/**
 	 * Handle a crash situation occurred by two or more controllers' car. Set a
 	 * frame of each car based on its position and then check if their frames are

@@ -20,12 +20,8 @@ public class Player extends Entity {
 	private static final float AVERAGE_SPEED = 60;
 	private static final float MAX_SPEED = 180;
 
-	private static final String FORWARD = "forward";
-	private static final String BACKWARD = "backward";
-
 	private float currentSpeed = 0;
 	private float currentTurnSpeed = 0;
-	private String direction;
 
 	private String type;
 	private String color;
@@ -76,7 +72,6 @@ public class Player extends Entity {
 		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || isPressButton(0.83, 0.74, -0.55, -0.42);
 		boolean isAccelerate = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || isPressButton(-0.52, -0.65, -0.63, -0.43);
 		boolean isBrake = Keyboard.isKeyDown(Keyboard.KEY_SPACE) || isPressButton(-0.70, -0.79, -0.63, -0.45);
-
 		if (!isBrake) {
 			// accelerate speed
 			if (isAccelerate && isForward) {
@@ -96,12 +91,10 @@ public class Player extends Entity {
 			// direction movement
 			if (isForward) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
-				direction = FORWARD;
 				setArrow("forward");
 				setActive(true);
 			} else if (isBackward) {
 				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
-				direction = BACKWARD;
 				setArrow("backward");
 				setActive(true);
 			} else {
@@ -156,9 +149,26 @@ public class Player extends Entity {
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
-		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
-			currentSpeed = (direction.equals(FORWARD)) ? -5 : (direction.equals(BACKWARD)) ? 5 : 0;
+		if (x < 8) {
+			updatePlayerPosition(x + 5, 0, z);
+			currentSpeed = 1;
 		}
+		if (z < 8) {
+			updatePlayerPosition(x, 0, z + 5);
+			currentSpeed = 1;
+		}
+		if (x > 3192) {
+			updatePlayerPosition(x - 5, 0, z);
+			currentSpeed = 1;
+		}
+		if (z > 3192) {
+			updatePlayerPosition(x, 0, z - 5);
+			currentSpeed = 1;
+		}
+	}
+
+	public void updatePlayerPosition(float x, float y, float z) {
+		setPosition(new Vector3f(x, y, z));
 	}
 
 	public void setActive(boolean active) {
@@ -240,4 +250,5 @@ public class Player extends Entity {
 	public boolean isQuit() {
 		return isPressButton(0.28, 0.05, 0.06, 0.3);
 	}
+
 }
