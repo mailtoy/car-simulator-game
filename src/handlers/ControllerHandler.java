@@ -30,8 +30,7 @@ public class ControllerHandler extends Handler {
 	 * 
 	 * Create text and gauge GUI.
 	 * 
-	 * @param windowDisplay
-	 *            window of the program
+	 * @param windowDisplay window of the program
 	 */
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
@@ -108,8 +107,7 @@ public class ControllerHandler extends Handler {
 	/**
 	 * Change GUI button that button pressed
 	 * 
-	 * @param arrow
-	 *            direction's name
+	 * @param arrow direction's name
 	 */
 	public void setBtnActive(String arrow) {
 		switch (arrow) {
@@ -139,8 +137,7 @@ public class ControllerHandler extends Handler {
 	/**
 	 * Change GUI button that button released
 	 * 
-	 * @param arrow
-	 *            direction's name
+	 * @param arrow direction's name
 	 */
 	public void setBtnInactive(String arrow) {
 		switch (arrow) {
@@ -171,10 +168,8 @@ public class ControllerHandler extends Handler {
 	 * 
 	 * Add and remove gui when button pressed or released
 	 * 
-	 * @param inactiveBtn
-	 *            button's name released
-	 * @param activeBtn
-	 *            button's name pressed
+	 * @param inactiveBtn button's name released
+	 * @param activeBtn   button's name pressed
 	 */
 	private void switchActive(GuiTexture inactiveBtn, GuiTexture activeBtn) {
 		guis.remove(inactiveBtn);
@@ -219,8 +214,7 @@ public class ControllerHandler extends Handler {
 	 * 
 	 * Rendering gauge gui
 	 * 
-	 * @param currentSpeed
-	 *            The speed at that time
+	 * @param currentSpeed The speed at that time
 	 */
 	public void gaugeRender(float currentSpeed) {
 		TextMaster.renderGaugeText((int) Math.abs(currentSpeed) + "");

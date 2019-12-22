@@ -135,8 +135,8 @@ public class Controller extends WindowDisplay {
 	}
 
 	/**
-	 * Checking that if replay button clicked, create a new car will random a
-	 * new position and be able play again otherwise, quit button is close the
+	 * Checking that if replay button clicked, the car will random a new
+	 * position and be able play again otherwise, quit button is close the
 	 * program.
 	 */
 	private void checkReplayandQuit() {
