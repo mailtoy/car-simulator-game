@@ -26,6 +26,7 @@ public class Player extends Entity {
 	private String color;
 	protected Vector3f frame;
 	protected Vector2f position;
+
 	private boolean isActive = false;
 	private boolean isActiveLR = false;
 	private boolean isOption = false;
@@ -118,7 +119,7 @@ public class Player extends Entity {
 		}
 	}
 
-	public boolean isPressButton(double d, double e, double f, double g) {
+	private boolean isPressButton(double d, double e, double f, double g) {
 		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		boolean isBtnDown = Mouse.isButtonDown(0);
@@ -203,5 +204,13 @@ public class Player extends Entity {
 
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
+	}
+
+	public boolean isReplay() {
+		return isPressButton(-0.06, -0.3, 0.06, 0.3);
+	}
+
+	public boolean isQuit() {
+		return isPressButton(0.28, 0.05, 0.06, 0.3);
 	}
 }

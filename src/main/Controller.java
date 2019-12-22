@@ -61,7 +61,7 @@ public class Controller extends WindowDisplay {
 		conHandler = ((ControllerHandler) handler);
 		if (!isCrashed()) {
 			conHandler.gaugeRender(player.getCurrentSpeed());
-			checkButtonClicked();
+			renderBtns();
 		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
@@ -71,7 +71,7 @@ public class Controller extends WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
-	private void checkButtonClicked() {
+	private void renderBtns() {
 		int arrow = player.getArrow();
 		int arrowLR = player.getArrowLR();
 		int option = player.getOption();
@@ -102,7 +102,7 @@ public class Controller extends WindowDisplay {
 	}
 
 	private void checkReplayandQuit() {
-		if (player.isPressButton(-0.06, -0.3, 0.06, 0.3)) {
+		if (player.isReplay()) {
 			((ControllerHandler) handler).removeCarCrashGUIs();
 
 			Player newPlayer = new Player(type, carColor, car, new Vector3f(randPosZ, 0, randPosX), 0, 180, 0, 0.6f);
@@ -110,7 +110,7 @@ public class Controller extends WindowDisplay {
 			sendMove(newPlayer.getPosition());
 			super.setPlayer(newPlayer);
 			super.setCrash(false);
-		} else if (player.isPressButton(0.28, 0.05, 0.06, 0.3)) {
+		} else if (player.isQuit()) {
 			handler.cleanUp();
 			super.closeqRequest();
 			System.exit(0);
