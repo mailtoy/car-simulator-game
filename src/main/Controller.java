@@ -42,8 +42,7 @@ public class Controller extends WindowDisplay {
 			if (!isCrashed()) {
 				camera.move();
 				player.move();
-				checkButtonClicked();
-				
+
 				if (player.getCurrentSpeed() != 0) {
 					sendMove(player.getPosition());
 				}
@@ -62,6 +61,7 @@ public class Controller extends WindowDisplay {
 		conHandler = ((ControllerHandler) handler);
 		if (!isCrashed()) {
 			conHandler.gaugeRender(player.getCurrentSpeed());
+			checkButtonClicked();
 		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
