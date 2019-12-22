@@ -29,8 +29,7 @@ public class Controller extends WindowDisplay {
 
 	/**
 	 * 
-	 * Create player with position and scale55555`, handler, camera ,and
-	 * connectpacket
+	 * Create player with position and scale, handler, camera ,and connectpacket
 	 * 
 	 */
 	public Controller() {
@@ -136,8 +135,8 @@ public class Controller extends WindowDisplay {
 	}
 
 	/**
-	 * Checking that if replay button clicked, create a new car will random a new
-	 * position and be able play again otherwise, quit button is close the
+	 * Checking that if replay button clicked, create a new car will random a
+	 * new position and be able play again otherwise, quit button is close the
 	 * program.
 	 */
 	private void checkReplayandQuit() {
