@@ -21,10 +21,11 @@ public class SimulatorHandler extends Handler {
 	public SimulatorHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
 	}
-	
+
 	/**
 	 * 
 	 * Get gui zoom in.
+	 * 
 	 * @return zoom in button
 	 */
 	public GuiTexture getZoomIn() {
@@ -34,6 +35,7 @@ public class SimulatorHandler extends Handler {
 	/**
 	 * 
 	 * Get gui zoom out.
+	 * 
 	 * @return zoom out button
 	 */
 	public GuiTexture getZoomOut() {

@@ -130,14 +130,10 @@ public class Player extends Entity {
 	/**
 	 * Checking the button is clicked or not.
 	 * 
-	 * @param x1
-	 *            maximum value of x-axis
-	 * @param x2
-	 *            minimum value of x-axis
-	 * @param y1
-	 *            minimum value of y-axis
-	 * @param y2
-	 *            maximum value of y-axis
+	 * @param x1 maximum value of x-axis
+	 * @param x2 minimum value of x-axis
+	 * @param y1 minimum value of y-axis
+	 * @param y2 maximum value of y-axis
 	 * @return boolean, true when click and put mouse on correct position
 	 */
 	private boolean isPressButton(double x1, double x2, double y1, double y2) {
@@ -176,12 +172,9 @@ public class Player extends Entity {
 	/**
 	 * For easy to update player position when it needed.
 	 * 
-	 * @param x
-	 *            for x position
-	 * @param y
-	 *            for y position
-	 * @param z
-	 *            for z position
+	 * @param x for x position
+	 * @param y for y position
+	 * @param z for z position
 	 */
 	public void updatePlayerPosition(float x, float y, float z) {
 		setPosition(new Vector3f(x, y, z));
@@ -208,8 +201,7 @@ public class Player extends Entity {
 	/**
 	 * Setting destination of the play for forward and backward
 	 * 
-	 * @param arrow
-	 *            name of destination
+	 * @param arrow name of destination
 	 */
 	public void setArrow(String arrow) {
 		this.arrow = arrow;
@@ -245,8 +237,7 @@ public class Player extends Entity {
 	/**
 	 * Setting destination of the play for left and right
 	 * 
-	 * @param arrow
-	 *            name of destination
+	 * @param arrow name of destination
 	 */
 	public void setArrowLR(String arrow) {
 		this.arrowLR = arrow;
@@ -282,8 +273,7 @@ public class Player extends Entity {
 	/**
 	 * Setting option of the play for brake and accelerate
 	 * 
-	 * @param arrow
-	 *            name of options
+	 * @param arrow name of options
 	 */
 	public void setOption(String option) {
 		this.option = option;
