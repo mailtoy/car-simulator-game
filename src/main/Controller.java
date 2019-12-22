@@ -18,6 +18,7 @@ public class Controller extends WindowDisplay {
 	private final int MIN = 8;
 	protected float randPosX = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
+	protected ControllerHandler conHandler;
 
 	public Controller() {
 		super();
@@ -41,9 +42,9 @@ public class Controller extends WindowDisplay {
 			if (!isCrashed()) {
 				camera.move();
 				player.move();
-//				if (player.getCurrentSpeed() != 0) {
+				if (player.getCurrentSpeed() != 0) {
 					sendMove(player.getPosition());
-//				}
+				}
 			} else {
 				checkReplayandQuit();
 			}
@@ -56,10 +57,10 @@ public class Controller extends WindowDisplay {
 	@Override
 	protected void render() {
 		super.renderComponents();
-
-		ControllerHandler conHandler = ((ControllerHandler) handler);
+		conHandler = ((ControllerHandler) handler);
 		if (!isCrashed()) {
 			conHandler.gaugeRender(player.getCurrentSpeed());
+			renderBtns();
 		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
@@ -69,6 +70,30 @@ public class Controller extends WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
+	private void renderBtns() {
+		String arrow = player.getArrow();
+		String arrowLR = player.getArrowLR();
+		String option = player.getOption();
+
+		if (player.getActive()) {
+			conHandler.setBtnActive(arrow);
+		} else {
+			conHandler.setBtnInactive(arrow);
+		}
+
+		if (player.getActiveLR()) {
+			conHandler.setBtnActive(arrowLR);
+		} else {
+			conHandler.setBtnInactive(arrowLR);
+		}
+
+		if (player.getOptionActive()) {
+			conHandler.setBtnActive(option);
+		} else {
+			conHandler.setBtnInactive(option);
+		}
+	}
+
 	private void sendMove(Vector3f position) {
 		MovePacket movePacket = new MovePacket(player.getType(), position, player.getRotX(), player.getRotY(),
 				player.getRotZ());
@@ -76,7 +101,7 @@ public class Controller extends WindowDisplay {
 	}
 
 	private void checkReplayandQuit() {
-		if (player.isPressButton(-0.06, -0.3, 0.06, 0.3)) {
+		if (player.isReplay()) {
 			((ControllerHandler) handler).removeCarCrashGUIs();
 
 			Player newPlayer = new Player(type, carColor, car, new Vector3f(randPosZ, 0, randPosX), 0, 180, 0, 0.6f);
@@ -84,7 +109,7 @@ public class Controller extends WindowDisplay {
 			sendMove(newPlayer.getPosition());
 			super.setPlayer(newPlayer);
 			super.setCrash(false);
-		} else if (player.isPressButton(0.28, 0.05, 0.06, 0.3)) {
+		} else if (player.isQuit()) {
 			handler.cleanUp();
 			super.closeqRequest();
 			System.exit(0);

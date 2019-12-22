@@ -5,6 +5,8 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
+import android.R.bool;
+
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
 	private Boolean isClicked;
@@ -20,34 +22,47 @@ public class SimulatorCamera extends Camera {
 		calculateMouseZoom();
 		whatButton = "none";
 		setIsClicked(false);
-		if (Keyboard.isKeyDown(Keyboard.KEY_UP)) {
+		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP);
+		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN);
+		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT);
+		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT);
+		boolean isZoomIn = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || isPressButton(0.87,0.74 , 0.52, 0.70);
+		boolean isZoomOut = Keyboard.isKeyDown(Keyboard.KEY_SPACE) || isPressButton(0.87,  0.74, -0.20, -0.0);
+		boolean isMouseClicked = Mouse.isButtonDown(0);
+		
+		if (isForward) {
 			position.z -= 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_DOWN)) {
+		if (isBackward) {
 			position.z += 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) {
+		if (isRight) {
 			position.x += 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LEFT)) {
+		if (isLeft) {
 			position.x -= 5f;
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
-				&& getMouseYCoords() >= 0.52 && getMouseYCoords() <= 0.70 && Mouse.isButtonDown(0))) {
+		if (isZoomOut) {
 			position.y += 5f;
 			setIsClicked(true);
 			whatButton = "+";
 		}
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || (getMouseXCoords() >= 0.74 && getMouseXCoords() <= 0.87
-				&& getMouseYCoords() >= -0.20 && getMouseYCoords() <= -0.00 && Mouse.isButtonDown(0))) {
+		if (isZoomIn) {
 			position.y -= 5f;
 			setIsClicked(true);
 			whatButton = "-";
 		}
-		if (Mouse.isButtonDown(0)) {
+		if (isMouseClicked) {
 			position.x -= Mouse.getDX();
 			position.z += Mouse.getDY();
 		}
+	}
+	
+	private boolean isPressButton(double d, double e, double f, double g) {
+		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		boolean isBtnDown = Mouse.isButtonDown(0);
+		return (mouseXCoords <= d && mouseXCoords >= e && mouseYCoords >= f && mouseYCoords <= g && isBtnDown);
 	}
 
 	public void calculateMouseZoom() {
@@ -59,16 +74,6 @@ public class SimulatorCamera extends Camera {
 		if (position.y <= 30) {
 			position.y = 30;
 		}
-	}
-
-	private float getMouseXCoords() {
-		float x = (2f * Mouse.getX()) / Display.getWidth() - 1f;
-		return x;
-	}
-
-	private float getMouseYCoords() {
-		float y = (2f * Mouse.getY()) / Display.getHeight() - 1f;
-		return y;
 	}
 
 	public Boolean getIsClicked() {
