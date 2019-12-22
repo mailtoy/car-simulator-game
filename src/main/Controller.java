@@ -13,6 +13,13 @@ import network.packet.ConnectPacket;
 import network.packet.MovePacket;
 import renderEngine.DisplayManager;
 
+/**
+ * 
+ * Controller acts as the player that control the car.
+ * 
+ * @author Kanchanok Kannee
+ *
+ */
 public class Controller extends WindowDisplay {
 	private final int MAX = 500;
 	private final int MIN = 8;
@@ -20,6 +27,12 @@ public class Controller extends WindowDisplay {
 	protected float randPosZ = new Random().nextInt(MAX - MIN) + MIN; // for now
 	protected ControllerHandler conHandler;
 
+	/**
+	 * 
+	 * Create player with position and scale55555`, handler, camera ,and
+	 * connectpacket
+	 * 
+	 */
 	public Controller() {
 		super();
 
@@ -35,6 +48,12 @@ public class Controller extends WindowDisplay {
 		run();
 	}
 
+	/**
+	 * 
+	 * Running display with player and camera that move position when have input
+	 * command.
+	 * 
+	 */
 	@Override
 	protected void run() {
 		while (!Display.isCloseRequested()) {
@@ -54,6 +73,11 @@ public class Controller extends WindowDisplay {
 		super.closeqRequest();
 	}
 
+	/**
+	 * 
+	 * Rendering controller handler
+	 * 
+	 */
 	@Override
 	protected void render() {
 		super.renderComponents();
@@ -70,6 +94,11 @@ public class Controller extends WindowDisplay {
 		DisplayManager.updateDisplay();
 	}
 
+	/**
+	 * 
+	 * Rendering the button
+	 * 
+	 */
 	private void renderBtns() {
 		String arrow = player.getArrow();
 		String arrowLR = player.getArrowLR();
@@ -94,12 +123,23 @@ public class Controller extends WindowDisplay {
 		}
 	}
 
+	/**
+	 * 
+	 * Sending new positions that player move to server.
+	 * 
+	 * @param position
+	 */
 	private void sendMove(Vector3f position) {
 		MovePacket movePacket = new MovePacket(player.getType(), position, player.getRotX(), player.getRotY(),
 				player.getRotZ());
 		movePacket.writeData(client);
 	}
 
+	/**
+	 * Checking that if replay button clicked, the car will random a new
+	 * position and be able play again otherwise, quit button is close the
+	 * program.
+	 */
 	private void checkReplayandQuit() {
 		if (player.isReplay()) {
 			((ControllerHandler) handler).removeCarCrashGUIs();
