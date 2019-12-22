@@ -14,10 +14,11 @@ The prospect of autonomous cars may still seem impossibly futuristic. In history
 * [Blender](https://www.blender.org/) - Open source 3D creation suite
 * [Gimp](https://www.gimp.org/) - GNU Image Manipulation Program 
 
-### Results
-
 ### Diagram
 ![diagram](https://github.com/mailtoy/car-simulator-game/blob/master/res/diagram.png)
+
+### Results
+![controller](https://github.com/mailtoy/car-simulator-game/blob/master/res/Screen%20Shot%202562-12-23%20at%2002.10.27.png)
 
 ### References
 * [ThinMatrix](https://www.youtube.com/watch?v=VS8wlS9hF8E) - OPENGL Tutorial
