@@ -30,16 +30,11 @@ public class ControllerHandler extends Handler {
 
 	@Override
 	protected void initGUIs() {
-		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f),
-				new Vector2f(0.06f, 0.08f));
-		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f),
-				new Vector2f(0.06f, 0.08f));
-		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.55f, -0.5f),
-				new Vector2f(0.06f, 0.08f));
-		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f),
-				new Vector2f(0.06f, 0.08f));
-		acc = new GuiTexture(loader.loadTexture("AccBTN"), new Vector2f(-0.58f, -0.62f),
-				new Vector2f(0.08f, 0.2f));
+		forward = new GuiTexture(loader.loadTexture("FBTN"), new Vector2f(0.7f, -0.35f), new Vector2f(0.06f, 0.08f));
+		backward = new GuiTexture(loader.loadTexture("BBTN"), new Vector2f(0.7f, -0.65f), new Vector2f(0.06f, 0.08f));
+		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.55f, -0.5f), new Vector2f(0.06f, 0.08f));
+		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
+		acc = new GuiTexture(loader.loadTexture("AccBTN"), new Vector2f(-0.58f, -0.62f), new Vector2f(0.08f, 0.2f));
 		breakdown = new GuiTexture(loader.loadTexture("BreakBTN"), new Vector2f(-0.7f, -0.55f),
 				new Vector2f(0.1f, 0.1f));
 
@@ -60,7 +55,7 @@ public class ControllerHandler extends Handler {
 		carCrashGUIs.add(bg);
 		carCrashGUIs.add(replay);
 		carCrashGUIs.add(close);
-		
+
 		forwardActive = new GuiTexture(loader.loadTexture("ClickedFBTN"), new Vector2f(0.7f, -0.35f),
 				new Vector2f(0.06f, 0.08f));
 		backwardActive = new GuiTexture(loader.loadTexture("ClickedBBTN"), new Vector2f(0.7f, -0.65f),
@@ -69,7 +64,7 @@ public class ControllerHandler extends Handler {
 				new Vector2f(0.06f, 0.08f));
 		rightActive = new GuiTexture(loader.loadTexture("ClickedRBTN"), new Vector2f(0.8f, -0.5f),
 				new Vector2f(0.06f, 0.08f));
-		
+
 		accActive = new GuiTexture(loader.loadTexture("ClickedAccBTN"), new Vector2f(-0.58f, -0.62f),
 				new Vector2f(0.08f, 0.2f));
 		breakActive = new GuiTexture(loader.loadTexture("ClickedBreakBTN"), new Vector2f(-0.7f, -0.55f),
@@ -88,57 +83,65 @@ public class ControllerHandler extends Handler {
 		guis.removeAll(carCrashGUIs);
 		isAdded = false;
 	}
-	
-	public void changeButtonGUIs(int arrow) {
-		if(arrow == 1) {
-			guis.remove(forward);
-			guis.add(forwardActive);
-		} else if (arrow == 2) {
-			guis.remove(backward);
-			guis.add(backwardActive);
-		}  else if (arrow == 3) {
-			guis.remove(right);
-			guis.add(rightActive);
-		}  else if (arrow == 4) {
-			guis.remove(left);
-			guis.add(leftActive);
-		} else if (arrow == 5) {
-			guis.remove(breakdown);
-			guis.add(breakActive);
-		} else if (arrow == 6) {
-			guis.remove(acc);
-			guis.add(accActive);
-		}
-		
-	}
-	
-	public void changeButtonGUIsBack(int arrow) {
-		if (arrow == 1) {
-			guis.remove(forwardActive);
-			guis.add(forward);
-		} else if (arrow == 2) {
-			guis.remove(backwardActive);
-			guis.add(backward);
-		} else if (arrow == 3) {
-			guis.remove(rightActive);
-			guis.add(right);
-		} else if (arrow == 4) {
-			guis.remove(leftActive);
-			guis.add(left);
-		} else if (arrow == 5) {
-			guis.remove(breakActive);
-			guis.add(breakdown);
-		} else if (arrow == 6) {
-			guis.remove(accActive);
-			guis.add(acc);
+
+	public void setBtnActive(int arrow) {
+		switch (arrow) {
+		case 1:
+			switchActive(forward, forwardActive);
+			break;
+		case 2:
+			switchActive(backward, backwardActive);
+			break;
+		case 3:
+			switchActive(right, rightActive);
+			break;
+		case 4:
+			switchActive(left, leftActive);
+			break;
+		case 5:
+			switchActive(breakdown, breakActive);
+			break;
+		case 6:
+			switchActive(acc, accActive);
+			break;
+		default:
+			break;
 		}
 	}
-	
+
+	public void setBtnInactive(int arrow) {
+		switch (arrow) {
+		case 1:
+			switchActive(forwardActive, forward);
+			break;
+		case 2:
+			switchActive(backwardActive, backward);
+			break;
+		case 3:
+			switchActive(rightActive, right);
+			break;
+		case 4:
+			switchActive(leftActive, left);
+			break;
+		case 5:
+			switchActive(breakActive, breakdown);
+			break;
+		case 6:
+			switchActive(accActive, acc);
+			break;
+		default:
+			break;
+		}
+	}
+
+	private void switchActive(GuiTexture inactiveBtn, GuiTexture activeBtn) {
+		guis.remove(inactiveBtn);
+		guis.add(activeBtn);
+	}
 
 	private void initTexts() {
 		FontType font = new FontType(loader.loadFontTexture("font"), new File("res/font.fnt"));
 		new GUIText("Crash!", 3f, font, new Vector2f(0f, 0f), 1f, true).setColour(255, 255, 255);
-
 	}
 
 	private void initGauges() {
@@ -162,8 +165,8 @@ public class ControllerHandler extends Handler {
 	public boolean isAdded() {
 		return isAdded;
 	}
-	
-	public boolean isActive(){
+
+	public boolean isActive() {
 		return isActive;
 	}
 
@@ -172,6 +175,5 @@ public class ControllerHandler extends Handler {
 		guiRenderer.cleanUp();
 		TextMaster.cleanUp();
 	}
-
 
 }

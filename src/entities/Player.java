@@ -6,9 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
-import handlers.ControllerHandler;
-import handlers.Handler;
-import main.Controller;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
@@ -57,32 +54,28 @@ public class Player extends Entity {
 		setActive(false);
 		setActiveLR(false);
 		setOption(false);
-		// check x and y
-		// float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
-		// float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
-		// System.out.println("x: " + mouseXCoords);
-		// System.out.println("y: " + mouseYCoords);
 
 		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP) || isPressButton(0.73, 0.64, -0.39, -0.27);
 		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || isPressButton(0.73, 0.64, -0.69, -0.57);
 		boolean isLeft = Keyboard.isKeyDown(Keyboard.KEY_LEFT) || isPressButton(0.69, 0.49, -0.55, -0.42);
 		boolean isRight = Keyboard.isKeyDown(Keyboard.KEY_RIGHT) || isPressButton(0.83, 0.74, -0.55, -0.42);
-		boolean isAccelerate = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+		boolean isAccelerate = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || isPressButton(-0.52, -0.65, -0.63, -0.43);
 		boolean isBrake = Keyboard.isKeyDown(Keyboard.KEY_SPACE) || isPressButton(-0.70, -0.79, -0.63, -0.45);
 
 		if (!isBrake) {
-			// accelerate
-			currentSpeed += ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isForward)
-					? ((currentSpeed < MAX_SPEED) ? RUN_SPEED : 0)
-					: (isAccelerate && isBackward) ? ((currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0)
-							: (!isAccelerate && currentSpeed > AVERAGE_SPEED) ? -RUN_SPEED
-									: (!isAccelerate && currentSpeed < -AVERAGE_SPEED) ? +RUN_SPEED : 0;
-			if ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isForward) {
+			// accelerate speed
+			if (isAccelerate && isForward) {
+				currentSpeed += (currentSpeed < MAX_SPEED) ? RUN_SPEED : 0;
 				setOption(6);
 				setOption(true);
-			} else if ((isAccelerate || isPressButton(-0.52, -0.65, -0.63, -0.43)) && isBackward) {
+			} else if (isAccelerate && isBackward) {
+				currentSpeed += (currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0;
 				setOption(6);
 				setOption(true);
+			} else if (!isAccelerate && currentSpeed > AVERAGE_SPEED) {
+				currentSpeed += -RUN_SPEED;
+			} else if (isAccelerate && currentSpeed < -AVERAGE_SPEED) {
+				currentSpeed += RUN_SPEED;
 			}
 
 			// direction movement
@@ -101,14 +94,16 @@ public class Player extends Entity {
 			}
 
 			// turn movement
-			currentTurnSpeed = (currentSpeed != 0 && isRight) ? -TURN_SPEED
-					: (currentSpeed != 0 && isLeft) ? TURN_SPEED : 0;
-			if (isRight || isPressButton(0.83, 0.74, -0.55, -0.42)) {
+			if (currentSpeed != 0 && isRight) {
+				currentTurnSpeed = -TURN_SPEED;
 				setArrowLR(3);
 				setActiveLR(true);
-			} else if (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42)) {
+			} else if (currentSpeed != 0 && isLeft) {
+				currentTurnSpeed = TURN_SPEED;
 				setArrowLR(4);
 				setActiveLR(true);
+			} else {
+				currentTurnSpeed = 0;
 			}
 
 		} else {
@@ -120,7 +115,6 @@ public class Player extends Entity {
 							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
 			setOption(5);
 			setOption(true);
-
 		}
 	}
 

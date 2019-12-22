@@ -42,6 +42,8 @@ public class Controller extends WindowDisplay {
 			if (!isCrashed()) {
 				camera.move();
 				player.move();
+				checkButtonClicked();
+				
 				if (player.getCurrentSpeed() != 0) {
 					sendMove(player.getPosition());
 				}
@@ -60,7 +62,6 @@ public class Controller extends WindowDisplay {
 		conHandler = ((ControllerHandler) handler);
 		if (!isCrashed()) {
 			conHandler.gaugeRender(player.getCurrentSpeed());
-			checkButtonClicked();
 		} else {
 			conHandler.textRender();
 			if (!conHandler.isAdded()) {
@@ -74,20 +75,23 @@ public class Controller extends WindowDisplay {
 		int arrow = player.getArrow();
 		int arrowLR = player.getArrowLR();
 		int option = player.getOption();
+
 		if (player.getActive()) {
-			conHandler.changeButtonGUIs(arrow);
+			conHandler.setBtnActive(arrow);
 		} else {
-			conHandler.changeButtonGUIsBack(arrow);
+			conHandler.setBtnInactive(arrow);
 		}
+
 		if (player.getActiveLR()) {
-			conHandler.changeButtonGUIs(arrowLR);
+			conHandler.setBtnActive(arrowLR);
 		} else {
-			conHandler.changeButtonGUIsBack(arrowLR);
+			conHandler.setBtnInactive(arrowLR);
 		}
+
 		if (player.getOptionActive()) {
-			conHandler.changeButtonGUIs(option);
+			conHandler.setBtnActive(option);
 		} else {
-			conHandler.changeButtonGUIsBack(option);
+			conHandler.setBtnInactive(option);
 		}
 	}
 
