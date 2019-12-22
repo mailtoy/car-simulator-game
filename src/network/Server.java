@@ -194,7 +194,6 @@ public class Server extends Thread {
 		}
 	}
 
-
 	/**
 	 * Handle a crash situation occurred by two or more controllers' car. Set a
 	 * frame of each car based on its position and then check if their frames are
@@ -216,7 +215,14 @@ public class Server extends Thread {
 				float nextPlayerPosX = controllers.get(j).getFrame().getX();
 				float nextPlayerPosZ = controllers.get(j).getFrame().getZ();
 
-				// logic here pls
+				// Thinking of two rectangles first is when the edge of first car(playerFrameX)
+				// intersect to the second car headline (nextPlayerPosX,
+				// nextPlayerPosX+carWidth)
+				// next if is when first car's side (playerFrameZ) intersect to second car side
+				// (nextPlayerPosZ , nextPlayerPosZ +carHeight)
+				// it will looking two rectangle is intersect each other
+				// if you need a better explain, you can follow this tutorial
+				// https://www.youtube.com/watch?v=6cw4jFSmZdk
 				if ((playerFrameX >= nextPlayerPosX && playerFrameX <= nextPlayerPosX + carWidth)
 						|| (playerFrameX + carWidth >= nextPlayerPosX
 								&& playerFrameX + carWidth <= nextPlayerPosX + carWidth)) {

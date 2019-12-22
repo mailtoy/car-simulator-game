@@ -49,6 +49,12 @@ public class ControllerCamera extends Camera {
 		return (float) (distanceFromPlayer * Math.sin(Math.toRadians(pitch)));
 	}
 
+	/**
+	 * 
+	 * Make controller can zoom in and out with wheel on mouse and create limit
+	 * position of both function.
+	 * 
+	 */
 	private void calculateZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
