@@ -72,9 +72,9 @@ public class Controller extends WindowDisplay {
 	}
 
 	private void renderBtns() {
-		int arrow = player.getArrow();
-		int arrowLR = player.getArrowLR();
-		int option = player.getOption();
+		String arrow = player.getArrow();
+		String arrowLR = player.getArrowLR();
+		String option = player.getOption();
 
 		if (player.getActive()) {
 			conHandler.setBtnActive(arrow);

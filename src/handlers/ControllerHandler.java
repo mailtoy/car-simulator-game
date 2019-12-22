@@ -17,8 +17,8 @@ public class ControllerHandler extends Handler {
 	private ArrayList<GuiTexture> carCrashGUIs;
 	private boolean isAdded = false;
 	private boolean isActive = false;
-	private GuiTexture forwardActive, backwardActive, rightActive, leftActive, accActive, breakActive;
-	private GuiTexture forward, backward, right, left, acc, breakdown;
+	private GuiTexture forwardActive, backwardActive, rightActive, leftActive, accActive, brakeActive;
+	private GuiTexture forward, backward, right, left, acc, brake;
 
 	public ControllerHandler(WindowDisplay windowDisplay) {
 		super(windowDisplay);
@@ -35,7 +35,7 @@ public class ControllerHandler extends Handler {
 		left = new GuiTexture(loader.loadTexture("LBTN"), new Vector2f(0.55f, -0.5f), new Vector2f(0.06f, 0.08f));
 		right = new GuiTexture(loader.loadTexture("RBTN"), new Vector2f(0.8f, -0.5f), new Vector2f(0.06f, 0.08f));
 		acc = new GuiTexture(loader.loadTexture("AccBTN"), new Vector2f(-0.58f, -0.62f), new Vector2f(0.08f, 0.2f));
-		breakdown = new GuiTexture(loader.loadTexture("BreakBTN"), new Vector2f(-0.7f, -0.55f),
+		brake = new GuiTexture(loader.loadTexture("BrakeBTN"), new Vector2f(-0.7f, -0.55f),
 				new Vector2f(0.1f, 0.1f));
 
 		guis.add(forward);
@@ -43,7 +43,7 @@ public class ControllerHandler extends Handler {
 		guis.add(right);
 		guis.add(left);
 		guis.add(acc);
-		guis.add(breakdown);
+		guis.add(brake);
 
 		GuiTexture bg = new GuiTexture(loader.loadTexture("f"), new Vector2f(0.1f, 0.0f), new Vector2f(0.5f, 0.5f));
 		GuiTexture replay = new GuiTexture(loader.loadTexture("ReplayBTN"), new Vector2f(-0.1f, 0.1f),
@@ -67,7 +67,7 @@ public class ControllerHandler extends Handler {
 
 		accActive = new GuiTexture(loader.loadTexture("ClickedAccBTN"), new Vector2f(-0.58f, -0.62f),
 				new Vector2f(0.08f, 0.2f));
-		breakActive = new GuiTexture(loader.loadTexture("ClickedBreakBTN"), new Vector2f(-0.7f, -0.55f),
+		brakeActive = new GuiTexture(loader.loadTexture("ClickedBrakeBTN"), new Vector2f(-0.7f, -0.55f),
 				new Vector2f(0.1f, 0.1f));
 
 		guiRenderer = new GuiRenderer(loader);
@@ -84,24 +84,24 @@ public class ControllerHandler extends Handler {
 		isAdded = false;
 	}
 
-	public void setBtnActive(int arrow) {
+	public void setBtnActive(String arrow) {
 		switch (arrow) {
-		case 1:
+		case "forward":
 			switchActive(forward, forwardActive);
 			break;
-		case 2:
+		case "backward":
 			switchActive(backward, backwardActive);
 			break;
-		case 3:
+		case "right":
 			switchActive(right, rightActive);
 			break;
-		case 4:
+		case "left":
 			switchActive(left, leftActive);
 			break;
-		case 5:
-			switchActive(breakdown, breakActive);
+		case "brake":
+			switchActive(brake, brakeActive);
 			break;
-		case 6:
+		case "acc":
 			switchActive(acc, accActive);
 			break;
 		default:
@@ -109,24 +109,24 @@ public class ControllerHandler extends Handler {
 		}
 	}
 
-	public void setBtnInactive(int arrow) {
+	public void setBtnInactive(String arrow) {
 		switch (arrow) {
-		case 1:
+		case "forward":
 			switchActive(forwardActive, forward);
 			break;
-		case 2:
+		case "backward":
 			switchActive(backwardActive, backward);
 			break;
-		case 3:
+		case "right":
 			switchActive(rightActive, right);
 			break;
-		case 4:
+		case "left":
 			switchActive(leftActive, left);
 			break;
-		case 5:
-			switchActive(breakActive, breakdown);
+		case "brake":
+			switchActive(brakeActive, brake);
 			break;
-		case 6:
+		case "acc":
 			switchActive(accActive, acc);
 			break;
 		default:
