@@ -3,7 +3,6 @@ package main;
 import org.lwjgl.opengl.Display;
 
 import entities.SimulatorCamera;
-import handlers.ControllerHandler;
 import handlers.SimulatorHandler;
 import network.packet.ConnectPacket;
 import renderEngine.DisplayManager;
