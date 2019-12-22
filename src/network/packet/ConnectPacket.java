@@ -6,7 +6,7 @@ import network.Client;
 import network.Server;
 
 /**
- * Packet that contains essential connection information.
+ * A packet contained essential connection information.
  * 
  * @author Issaree Srisomboon
  *
@@ -17,7 +17,7 @@ public class ConnectPacket extends Packet {
 	private float rotX, rotY, rotZ, scale;
 
 	/**
-	 * Constructor of ConnectPacket with provided data in bytes. Define an ID as 00;
+	 * Constructor of ConnectPacket with provided data in bytes. Define an ID as 00.
 	 * 
 	 * @param data Connection information in bytes.
 	 */
@@ -45,9 +45,9 @@ public class ConnectPacket extends Packet {
 
 	/**
 	 * Constructor of ConnectPacket for the simulator which only needs to store type
-	 * and map of it. Define a default ID as 00;
+	 * and map of it. Define a default ID as 00.
 	 * 
-	 * @param type Specific name of the simulator that wants to connect.
+	 * @param type Specific name of the simulator that requires a connection.
 	 * @param map  Map showed in the window displaying.
 	 */
 	public ConnectPacket(String type, String map) {
@@ -58,9 +58,9 @@ public class ConnectPacket extends Packet {
 
 	/**
 	 * Constructor of ConnectPacket for the controller which needs the player (car)
-	 * information in order to be stored in the server. Define a default ID as 00;
+	 * information in order to be stored in the server. Define a default ID as 00.
 	 * 
-	 * @param type     Specific name of the controller that wants to connect
+	 * @param type     Specific name of the controller that requires a connection
 	 * @param map      Map showed in the window displaying
 	 * @param carColor Color of the car model
 	 * @param position Initial position of the car
