@@ -107,15 +107,6 @@ public abstract class WindowDisplay {
 		terrains = new ArrayList<Terrain>();
 		loadMap();
 
-		TexturedModel grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
-				new ModelTexture(loader.loadTexture("grassTexture")));
-		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
-				new ModelTexture(loader.loadTexture("fern")));
-
-		grassModel.getTexture().setHasTransparency(true);
-		fernModel.getTexture().setUseFakeLighting(true);
-		fernModel.getTexture().setHasTransparency(true);
-
 		entities = new ArrayList<Entity>();
 		light = new Light(new Vector3f(20000, 20000, 2000), new Vector3f(1, 1, 1));
 
