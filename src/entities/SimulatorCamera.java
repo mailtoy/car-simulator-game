@@ -5,8 +5,6 @@ import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
 
-import android.R.bool;
-
 public class SimulatorCamera extends Camera {
 	private Vector3f position = new Vector3f(765, 500, 800);
 	private Boolean isClicked;

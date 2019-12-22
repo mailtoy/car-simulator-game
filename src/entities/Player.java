@@ -10,6 +10,7 @@ import models.TexturedModel;
 import renderEngine.DisplayManager;
 
 /**
+ * Player is a car on display that it is controlled by user as controller.
  * 
  * @author Kanchanok Kannee
  *
@@ -167,86 +168,197 @@ public class Player extends Entity {
 		}
 	}
 
+	/**
+	 * Update player's position
+	 * 
+	 * @param x
+	 *            x-axis
+	 * @param y
+	 *            y-axis
+	 * @param z
+	 *            z-axis
+	 */
 	public void updatePlayerPosition(float x, float y, float z) {
 		setPosition(new Vector3f(x, y, z));
 	}
 
+	/**
+	 * Setting forward and backward active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActive(boolean active) {
 		this.isActive = active;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getActive() {
 		return this.isActive;
 	}
 
+	/**
+	 * Setting destination of the play for forward and backward
+	 * 
+	 * @param arrow
+	 *            name of destination
+	 */
 	public void setArrow(String arrow) {
 		this.arrow = arrow;
 	}
 
+	/**
+	 * Return name of destination
+	 * 
+	 * @return destination
+	 */
 	public String getArrow() {
 		return this.arrow;
 	}
 
+	/**
+	 * Setting left and right active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActiveLR(boolean active) {
 		this.isActiveLR = active;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getActiveLR() {
 		return this.isActiveLR;
 	}
 
+	/**
+	 * Setting destination of the play for left and right
+	 * 
+	 * @param arrow
+	 *            name of destination
+	 */
 	public void setArrowLR(String arrow) {
 		this.arrowLR = arrow;
 	}
 
+	/**
+	 * Return name of destination
+	 * 
+	 * @return destination
+	 */
 	public String getArrowLR() {
 		return this.arrowLR;
 	}
 
+	/**
+	 * Setting accelerate and brake active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActiveOption(boolean option) {
 		this.isOption = option;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getOptionActive() {
 		return this.isOption;
 	}
 
+	/**
+	 * Setting option of the play for brake and accelerate
+	 * 
+	 * @param arrow
+	 *            name of options
+	 */
 	public void setOption(String option) {
 		this.option = option;
 	}
 
+	/**
+	 * Return name of option
+	 * 
+	 * @return options
+	 */
 	public String getOption() {
 		return this.option;
 	}
 
+	/**
+	 * Create a frame of player
+	 */
 	public void setFrame() {
 		frame = new Vector3f(getPosition().getX() - 3.5f, 0, getPosition().getZ() - 7.5f);
 	}
 
+	/**
+	 * Return a frame of player
+	 * 
+	 * @return
+	 */
 	public Vector3f getFrame() {
 		return this.frame;
 	}
 
+	/**
+	 * Return name of player
+	 * 
+	 * @return name
+	 */
 	public String getType() {
 		return this.type;
 	}
 
+	/**
+	 * Get color of play
+	 * 
+	 * @return color
+	 */
 	public String getColor() {
 		return this.color;
 	}
 
+	/**
+	 * Setting current speed of player
+	 * 
+	 * @param currentSpeed
+	 */
 	public void setCurrentSpeed(float currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 
+	/**
+	 * Return current speed of player
+	 * 
+	 * @return current speed
+	 */
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
 	}
 
+	/**
+	 * Checking the replay button is clicked or not.
+	 * 
+	 * @return boolean, true when click and put mouse on correct position
+	 */
 	public boolean isReplay() {
 		return isPressButton(-0.06, -0.3, 0.06, 0.3);
 	}
 
+	/**
+	 * Checking the quit button is clicked or not.
+	 * 
+	 * @return boolean, true when click and put mouse on correct position
+	 */
 	public boolean isQuit() {
 		return isPressButton(0.28, 0.05, 0.06, 0.3);
 	}
