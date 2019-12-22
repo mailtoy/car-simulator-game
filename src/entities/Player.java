@@ -30,9 +30,9 @@ public class Player extends Entity {
 	private boolean isActive = false;
 	private boolean isActiveLR = false;
 	private boolean isOption = false;
-	private int arrow;
-	private int arrowLR;
-	private int option;
+	private String arrow = "none";
+	private String arrowLR = "none";
+	private String option = "none";
 
 	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
@@ -67,11 +67,11 @@ public class Player extends Entity {
 			// accelerate speed
 			if (isAccelerate && isForward) {
 				currentSpeed += (currentSpeed < MAX_SPEED) ? RUN_SPEED : 0;
-				setOption(6);
+				setOption("acc");
 				setOption(true);
 			} else if (isAccelerate && isBackward) {
 				currentSpeed += (currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0;
-				setOption(6);
+				setOption("acc");
 				setOption(true);
 			} else if (!isAccelerate && currentSpeed > AVERAGE_SPEED) {
 				currentSpeed += -RUN_SPEED;
@@ -83,25 +83,25 @@ public class Player extends Entity {
 			if (isForward) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
 				direction = FORWARD;
-				setArrow(1);
+				setArrow("forward");
 				setActive(true);
 			} else if (isBackward) {
 				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
 				direction = BACKWARD;
-				setArrow(2);
+				setArrow("backward");
 				setActive(true);
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
 
 			// turn movement
-			if (currentSpeed != 0 && isRight) {
+			if (currentSpeed != 0 && isRight && !isLeft) {
 				currentTurnSpeed = -TURN_SPEED;
-				setArrowLR(3);
+				setArrowLR("right");
 				setActiveLR(true);
-			} else if (currentSpeed != 0 && isLeft) {
+			} else if (currentSpeed != 0 && isLeft && !isRight) {
 				currentTurnSpeed = TURN_SPEED;
-				setArrowLR(4);
+				setArrowLR("left");
 				setActiveLR(true);
 			} else {
 				currentTurnSpeed = 0;
@@ -114,7 +114,7 @@ public class Player extends Entity {
 							: (currentSpeed == RUN_SPEED) ? -RUN_SPEED : -RUN_SPEED * 3)
 					: (currentSpeed < 0) ? (currentSpeed == -RUN_SPEED * 2 ? RUN_SPEED * 2
 							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
-			setOption(5);
+			setOption("brake");
 			setOption(true);
 		}
 	}
@@ -142,11 +142,11 @@ public class Player extends Entity {
 		return this.isActive;
 	}
 
-	public void setArrow(int arrow) {
+	public void setArrow(String arrow) {
 		this.arrow = arrow;
 	}
 
-	public int getArrow() {
+	public String getArrow() {
 		return this.arrow;
 	}
 
@@ -158,11 +158,11 @@ public class Player extends Entity {
 		return this.isActiveLR;
 	}
 
-	public void setArrowLR(int arrow) {
+	public void setArrowLR(String arrow) {
 		this.arrowLR = arrow;
 	}
 
-	public int getArrowLR() {
+	public String getArrowLR() {
 		return this.arrowLR;
 	}
 
@@ -174,11 +174,11 @@ public class Player extends Entity {
 		return this.isOption;
 	}
 
-	public void setOption(int option) {
+	public void setOption(String option) {
 		this.option = option;
 	}
 
-	public int getOption() {
+	public String getOption() {
 		return this.option;
 	}
 
