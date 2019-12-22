@@ -129,14 +129,10 @@ public class Player extends Entity {
 	/**
 	 * Checking the button is clicked or not.
 	 * 
-	 * @param x1
-	 *            maximum value of x-axis
-	 * @param x2
-	 *            minimum value of x-axis
-	 * @param y1
-	 *            minimum value of y-axis
-	 * @param y2
-	 *            maximum value of y-axis
+	 * @param x1 maximum value of x-axis
+	 * @param x2 minimum value of x-axis
+	 * @param y1 minimum value of y-axis
+	 * @param y2 maximum value of y-axis
 	 * @return boolean, true when click and put mouse on correct position
 	 */
 	private boolean isPressButton(double x1, double x2, double y1, double y2) {
@@ -146,6 +142,11 @@ public class Player extends Entity {
 		return (mouseXCoords <= x1 && mouseXCoords >= x2 && mouseYCoords >= y1 && mouseYCoords <= y2 && isBtnDown);
 	}
 
+	/**
+	 * To check when the car is hit the end of map. 
+	 * So the car cannot be run out map.
+	 * 
+	 */
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
@@ -167,6 +168,13 @@ public class Player extends Entity {
 		}
 	}
 
+	/**
+	 * For easy to update player position when it needed.
+	 * 
+	 * @param x for x position
+	 * @param y for y position
+	 * @param z for z position
+	 */
 	public void updatePlayerPosition(float x, float y, float z) {
 		setPosition(new Vector3f(x, y, z));
 	}
