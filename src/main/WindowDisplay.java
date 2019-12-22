@@ -27,6 +27,13 @@ import textures.ModelTexture;
 import textures.TerrainTexture;
 import textures.TerrainTexturePack;
 
+/**
+ * Abstract class of clients used for initializing, rendering and displaying all
+ * components such as terrains and entities in the server using LWJGL2 library.
+ * 
+ * @author Issare Srisomboon
+ *
+ */
 public abstract class WindowDisplay {
 	private Loader loader;
 	private TerrainTexturePack texturePack;
@@ -54,6 +61,9 @@ public abstract class WindowDisplay {
 	protected int round = 3;
 	protected final String type = this.getClass().toString().substring(11) + new Random().nextInt(100); // for now
 
+	/**
+	 * Create an instance of client and initialize all components.
+	 */
 	public WindowDisplay() {
 		this.client = new Client(this);
 		this.client.start();
@@ -61,10 +71,19 @@ public abstract class WindowDisplay {
 		initComponents();
 	}
 
+	/**
+	 * Display the window.
+	 */
 	protected abstract void run();
 
+	/**
+	 * Render components based on each client.
+	 */
 	protected abstract void render();
 
+	/**
+	 * Initialize all necessary LWJGL2 components.
+	 */
 	private void initComponents() {
 		DisplayManager.createDisplay("Car " + type);
 		loader = new Loader();
@@ -88,8 +107,6 @@ public abstract class WindowDisplay {
 		terrains = new ArrayList<Terrain>();
 		loadMap();
 
-		TexturedModel staticModel = new TexturedModel(OBJLoader.loadObjModel("tree", loader),
-				new ModelTexture(loader.loadTexture("tree")));
 		TexturedModel grassModel = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader),
 				new ModelTexture(loader.loadTexture("grassTexture")));
 		TexturedModel fernModel = new TexturedModel(OBJLoader.loadObjModel("fern", loader),
@@ -107,6 +124,9 @@ public abstract class WindowDisplay {
 		car = new TexturedModel(carModel, new ModelTexture(loader.loadTexture(carColor)));
 	}
 
+	/**
+	 * Add terrain components to the map
+	 */
 	private void loadMap() {
 		blendMap = new TerrainTexture(loader.loadTexture(map));
 		terrains.add(new Terrain(0, 0, loader, texturePack, blendMap));
@@ -129,6 +149,12 @@ public abstract class WindowDisplay {
 		}
 	}
 
+	/**
+	 * Get the index of MultiplePlayer from provided specific type of client.
+	 * 
+	 * @param type Specific type of client
+	 * @return The index of MultiplePlayer stored in entities ArrayList
+	 */
 	private int getMultiplayerIndex(String type) {
 		int index = 0;
 		for (Entity entity : entities) {
@@ -140,6 +166,10 @@ public abstract class WindowDisplay {
 		return index;
 	}
 
+	/**
+	 * Check whether the map is changed from the default map or not. If it does,
+	 * then reload a new map with new terrains.
+	 */
 	private void checkMapChanged() {
 		if (!map.equals(defaultMap) && !isMapChanged) {
 			terrains.clear();
@@ -148,6 +178,11 @@ public abstract class WindowDisplay {
 		}
 	}
 
+	/**
+	 * Check if the player's car color is already set followed by its attribute or
+	 * not. If not, then add color texture to its model in order to show different
+	 * color cars in the server.
+	 */
 	private void checkModelsColor() {
 		for (Map.Entry<String, Boolean> playerCar : carColorMap.entrySet()) {
 			if (!playerCar.getValue()) {
@@ -158,12 +193,19 @@ public abstract class WindowDisplay {
 		}
 	}
 
+	/**
+	 * Check whether the server forces the client to disconnect or not. If it does,
+	 * then close the window.
+	 */
 	private void checkForceQuit() {
 		if (isKicked) {
 			closeqRequest();
 		}
 	}
 
+	/**
+	 * Render all basic components.
+	 */
 	protected void renderComponents() {
 		for (Terrain terrain : terrains) {
 			renderer.processTerrain(terrain);
@@ -175,6 +217,9 @@ public abstract class WindowDisplay {
 		handler.render();
 	}
 
+	/**
+	 * Close the display and send disconnection to the server from this client.
+	 */
 	public void closeqRequest() {
 		renderer.cleanUp();
 		loader.cleanUp();
@@ -185,26 +230,58 @@ public abstract class WindowDisplay {
 		disconnectPacket.writeData(client);
 	}
 
+	/**
+	 * Check if the window display all components correctly or not.
+	 */
 	protected void check() {
 		checkMapChanged();
 		checkModelsColor();
 		checkForceQuit();
 	}
 
+	/**
+	 * Add a new player (car) in the window displaying in case there is a new client
+	 * connected in the server.
+	 * 
+	 * @param player A new player's car
+	 */
 	public void addMultiplePlayer(MultiplePlayer player) {
 		entities.add(player);
 		carColorMap.put(player.getType(), false);
 	}
 
+	/**
+	 * Remove a player's car from the window displaying when the player disconnect
+	 * from the server.
+	 * 
+	 * @param type Type of client
+	 */
 	public void removeMultiplePlayer(String type) {
 		entities.remove(getMultiplayerIndex(type));
 		carColorMap.remove(type);
 	}
 
+	/**
+	 * Check whether the provided type of client is already added to the window or
+	 * not.
+	 * 
+	 * @param type Type of client
+	 * @return boolean True if it is already added in the window displaying
+	 *         otherwise, return false.
+	 */
 	public boolean isAdded(String type) {
 		return (getMultiplayerIndex(type) == entities.size()) ? false : true;
 	}
 
+	/**
+	 * Move the provided type of player's car to the provided position.
+	 * 
+	 * @param type     Type of client
+	 * @param position New position of player's car
+	 * @param rotX     New rotation in X axis of player's car
+	 * @param rotY     New rotation in Y axis of player's car
+	 * @param rotZ     New rotation in Z axis of player's car
+	 */
 	public void movePlayer(String type, Vector3f position, float rotX, float rotY, float rotZ) {
 		int index = getMultiplayerIndex(type);
 		MultiplePlayer player = (MultiplePlayer) entities.get(index);
@@ -214,42 +291,95 @@ public abstract class WindowDisplay {
 		player.setRotZ(rotZ);
 	}
 
+	/**
+	 * Get the loader
+	 * 
+	 * @return Loader
+	 */
 	public Loader getLoader() {
 		return this.loader;
 	}
 
+	/**
+	 * Get the model of car
+	 * 
+	 * @return Model of car
+	 */
 	public TexturedModel getCarModel() {
 		return this.car;
 	}
 
+	/**
+	 * Set the map to the provided map name.
+	 * 
+	 * @param map New map
+	 */
 	public void setMap(String map) {
 		this.map = map;
 	}
 
+	/**
+	 * Get the default of the map.
+	 * 
+	 * @return The default map
+	 */
 	public String getDefaultMap() {
 		return this.defaultMap;
 	}
 
+	/**
+	 * Get the specific type of the client.
+	 * 
+	 * @return Type of client
+	 */
 	public String getType() {
 		return this.type;
 	}
 
+	/**
+	 * Set player to the provided player.
+	 * 
+	 * @param player New player
+	 */
 	public void setPlayer(Player player) {
 		this.player = player;
 	}
 
+	/**
+	 * Check if the player's car is crashing or not.
+	 * 
+	 * @return boolean True if the car is crashed otherwise, return false.
+	 */
 	public boolean isCrashed() {
 		return this.isCrashed;
 	}
 
+	/**
+	 * Set status of crashing of the car.
+	 * 
+	 * @param crashStatus True means the car is currently crashing and false means
+	 *                    the car's still driving properly.
+	 */
 	public void setCrash(boolean crashStatus) {
 		this.isCrashed = crashStatus;
 	}
 
+	/**
+	 * Set status of forcing quit from the server.
+	 * 
+	 * @param kickStatus True means the server is now forcing the client to
+	 *                   disconnect and false means the client is either not removed
+	 *                   yet or never removed from the server.
+	 */
 	public void setKick(boolean kickStatus) {
 		this.isKicked = kickStatus;
 	}
 
+	/**
+	 * Get a handler for each client.
+	 * 
+	 * @return The Handler
+	 */
 	public Handler getHandler() {
 		return handler;
 	}

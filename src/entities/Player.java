@@ -147,6 +147,11 @@ public class Player extends Entity {
 		return (mouseXCoords <= x1 && mouseXCoords >= x2 && mouseYCoords >= y1 && mouseYCoords <= y2 && isBtnDown);
 	}
 
+	/**
+	 * To check when the car is hit the end of map. So the car cannot be run out
+	 * map.
+	 * 
+	 */
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
@@ -169,14 +174,14 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * Update player's position
+	 * For easy to update player position when it needed.
 	 * 
 	 * @param x
-	 *            x-axis
+	 *            for x position
 	 * @param y
-	 *            y-axis
+	 *            for y position
 	 * @param z
-	 *            z-axis
+	 *            for z position
 	 */
 	public void updatePlayerPosition(float x, float y, float z) {
 		setPosition(new Vector3f(x, y, z));
