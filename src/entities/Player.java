@@ -42,6 +42,7 @@ public class Player extends Entity {
 		float dx = (float) (distance * Math.sin(Math.toRadians(super.getRotY())));
 		float dz = (float) (distance * Math.cos(Math.toRadians(super.getRotY())));
 		super.increasePosition(dx, 0, dz);
+		System.out.println(currentSpeed);
 	}
 
 	protected void checkInputs() {
@@ -68,14 +69,17 @@ public class Player extends Entity {
 			// direction movement
 			if (isForward || isPressButton(0.73, 0.64, -0.39, -0.27)) {
 				currentSpeed += ((currentSpeed < AVERAGE_SPEED) ? RUN_SPEED : 0);
-				direction = FORWARD;
+				if(currentSpeed > 0) {
+					direction = FORWARD;
+				}
 			} else if (isBackward || isPressButton(0.73, 0.64, -0.69, -0.57)) {
 				currentSpeed += ((currentSpeed > -AVERAGE_SPEED) ? -RUN_SPEED : 0);
-				direction = BACKWARD;
+				if(currentSpeed < 0) {
+					direction = BACKWARD;
+				}
 			} else {
 				currentSpeed += ((currentSpeed > 0) ? -RUN_SPEED : (currentSpeed < 0) ? RUN_SPEED : 0);
 			}
-
 			// turn movement
 			currentTurnSpeed = (currentSpeed != 0 && (isRight || isPressButton(0.83, 0.74, -0.55, -0.42))) ? -TURN_SPEED
 					: (currentSpeed != 0 && (isLeft || isPressButton(0.69, 0.49, -0.55, -0.42))) ? TURN_SPEED : 0;
@@ -99,8 +103,14 @@ public class Player extends Entity {
 	private void checkEndMap() {
 		float x = getPosition().getX();
 		float z = getPosition().getZ();
-		if (x <= 8 || z <= 8 || x >= 3192 || z >= 3192) {
-			currentSpeed = (direction.equals(FORWARD)) ? -5 : (direction.equals(BACKWARD)) ? 5 : 0;
+		if (x < 8 || z < 8 || x > 3192 || z > 3192) {
+//			currentSpeed = (direction.equals(FORWARD)) ? -5 : (direction.equals(BACKWARD)) ? 5 : 0;
+			if (direction.equals(FORWARD)) {
+				currentSpeed = -5;
+			}
+			if (direction.equals(BACKWARD)) {
+				currentSpeed = 5;
+			}
 		}
 	}
 
