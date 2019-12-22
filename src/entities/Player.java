@@ -9,6 +9,11 @@ import org.lwjgl.util.vector.Vector3f;
 import models.TexturedModel;
 import renderEngine.DisplayManager;
 
+/**
+ * 
+ * @author Kanchanok Kannee
+ *
+ */
 public class Player extends Entity {
 	private static final float RUN_SPEED = 1f;
 	private static final float TURN_SPEED = 45;
@@ -34,6 +39,9 @@ public class Player extends Entity {
 	private String arrowLR = "none";
 	private String option = "none";
 
+	/**
+	 * Constructor of the Player
+	 */
 	public Player(String type, String color, TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ,
 			float scale) {
 		super(model, position, rotX, rotY, rotZ, scale);
@@ -41,6 +49,9 @@ public class Player extends Entity {
 		this.color = color;
 	}
 
+	/**
+	 * Calculating the position of player
+	 */
 	public void move() {
 		checkInputs();
 		checkEndMap();
@@ -51,10 +62,13 @@ public class Player extends Entity {
 		super.increasePosition(dx, 0, dz);
 	}
 
+	/**
+	 * Checking the input command from keyboard and mouse that click on screen.
+	 */
 	protected void checkInputs() {
 		setActive(false);
 		setActiveLR(false);
-		setOption(false);
+		setActiveOption(false);
 
 		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP) || isPressButton(0.73, 0.64, -0.39, -0.27);
 		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || isPressButton(0.73, 0.64, -0.69, -0.57);
@@ -68,11 +82,11 @@ public class Player extends Entity {
 			if (isAccelerate && isForward) {
 				currentSpeed += (currentSpeed < MAX_SPEED) ? RUN_SPEED : 0;
 				setOption("acc");
-				setOption(true);
+				setActiveOption(true);
 			} else if (isAccelerate && isBackward) {
 				currentSpeed += (currentSpeed > -MAX_SPEED) ? -RUN_SPEED : 0;
 				setOption("acc");
-				setOption(true);
+				setActiveOption(true);
 			} else if (!isAccelerate && currentSpeed > AVERAGE_SPEED) {
 				currentSpeed += -RUN_SPEED;
 			} else if (isAccelerate && currentSpeed < -AVERAGE_SPEED) {
@@ -115,15 +129,28 @@ public class Player extends Entity {
 					: (currentSpeed < 0) ? (currentSpeed == -RUN_SPEED * 2 ? RUN_SPEED * 2
 							: (currentSpeed == -RUN_SPEED) ? RUN_SPEED : RUN_SPEED * 3) : 0;
 			setOption("brake");
-			setOption(true);
+			setActiveOption(true);
 		}
 	}
 
-	private boolean isPressButton(double d, double e, double f, double g) {
+	/**
+	 * Checking the button is clicked or not.
+	 * 
+	 * @param x1
+	 *            maximum value of x-axis
+	 * @param x2
+	 *            minimum value of x-axis
+	 * @param y1
+	 *            minimum value of y-axis
+	 * @param y2
+	 *            maximum value of y-axis
+	 * @return boolean, true when click and put mouse on correct position
+	 */
+	private boolean isPressButton(double x1, double x2, double y1, double y2) {
 		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
 		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
 		boolean isBtnDown = Mouse.isButtonDown(0);
-		return (mouseXCoords <= d && mouseXCoords >= e && mouseYCoords >= f && mouseYCoords <= g && isBtnDown);
+		return (mouseXCoords <= x1 && mouseXCoords >= x2 && mouseYCoords >= y1 && mouseYCoords <= y2 && isBtnDown);
 	}
 
 	private void checkEndMap() {
@@ -166,7 +193,7 @@ public class Player extends Entity {
 		return this.arrowLR;
 	}
 
-	public void setOption(boolean option) {
+	public void setActiveOption(boolean option) {
 		this.isOption = option;
 	}
 
