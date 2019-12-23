@@ -10,6 +10,7 @@ import models.TexturedModel;
 import renderEngine.DisplayManager;
 
 /**
+ * Player is a car on display that it is controlled by user as controller.
  * 
  * @author Kanchanok Kannee
  *
@@ -65,6 +66,11 @@ public class Player extends Entity {
 		setActive(false);
 		setActiveLR(false);
 		setActiveOption(false);
+
+		float mouseXCoords = (2f * Mouse.getX()) / Display.getWidth() - 1f;
+		float mouseYCoords = (2f * Mouse.getY()) / Display.getHeight() - 1f;
+		System.out.println("x:" + mouseXCoords);
+		System.out.println("y:" + mouseYCoords);
 
 		boolean isForward = Keyboard.isKeyDown(Keyboard.KEY_UP) || isPressButton(0.73, 0.64, -0.39, -0.27);
 		boolean isBackward = Keyboard.isKeyDown(Keyboard.KEY_DOWN) || isPressButton(0.73, 0.64, -0.69, -0.57);
@@ -129,10 +135,14 @@ public class Player extends Entity {
 	/**
 	 * Checking the button is clicked or not.
 	 * 
-	 * @param x1 maximum value of x-axis
-	 * @param x2 minimum value of x-axis
-	 * @param y1 minimum value of y-axis
-	 * @param y2 maximum value of y-axis
+	 * @param x1
+	 *            maximum value of x-axis
+	 * @param x2
+	 *            minimum value of x-axis
+	 * @param y1
+	 *            minimum value of y-axis
+	 * @param y2
+	 *            maximum value of y-axis
 	 * @return boolean, true when click and put mouse on correct position
 	 */
 	private boolean isPressButton(double x1, double x2, double y1, double y2) {
@@ -143,8 +153,8 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * To check when the car is hit the end of map. 
-	 * So the car cannot be run out map.
+	 * To check when the car is hit the end of map. So the car cannot be run out
+	 * map.
 	 * 
 	 */
 	private void checkEndMap() {
@@ -171,92 +181,196 @@ public class Player extends Entity {
 	/**
 	 * For easy to update player position when it needed.
 	 * 
-	 * @param x for x position
-	 * @param y for y position
-	 * @param z for z position
+	 * @param x
+	 *            for x position
+	 * @param y
+	 *            for y position
+	 * @param z
+	 *            for z position
 	 */
 	public void updatePlayerPosition(float x, float y, float z) {
 		setPosition(new Vector3f(x, y, z));
 	}
 
+	/**
+	 * Setting forward and backward active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActive(boolean active) {
 		this.isActive = active;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getActive() {
 		return this.isActive;
 	}
 
+	/**
+	 * Setting destination of the play for forward and backward
+	 * 
+	 * @param arrow
+	 *            name of destination
+	 */
 	public void setArrow(String arrow) {
 		this.arrow = arrow;
 	}
 
+	/**
+	 * Return name of destination
+	 * 
+	 * @return destination
+	 */
 	public String getArrow() {
 		return this.arrow;
 	}
 
+	/**
+	 * Setting left and right active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActiveLR(boolean active) {
 		this.isActiveLR = active;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getActiveLR() {
 		return this.isActiveLR;
 	}
 
+	/**
+	 * Setting destination of the play for left and right
+	 * 
+	 * @param arrow
+	 *            name of destination
+	 */
 	public void setArrowLR(String arrow) {
 		this.arrowLR = arrow;
 	}
 
+	/**
+	 * Return name of destination
+	 * 
+	 * @return destination
+	 */
 	public String getArrowLR() {
 		return this.arrowLR;
 	}
 
+	/**
+	 * Setting accelerate and brake active or not.
+	 * 
+	 * @param active
+	 */
 	public void setActiveOption(boolean option) {
 		this.isOption = option;
 	}
 
+	/**
+	 * Return true if button is clicked otherwise, return false.
+	 * 
+	 * @return boolean
+	 */
 	public boolean getOptionActive() {
 		return this.isOption;
 	}
 
+	/**
+	 * Setting option of the play for brake and accelerate
+	 * 
+	 * @param arrow
+	 *            name of options
+	 */
 	public void setOption(String option) {
 		this.option = option;
 	}
 
+	/**
+	 * Return name of option
+	 * 
+	 * @return options
+	 */
 	public String getOption() {
 		return this.option;
 	}
 
+	/**
+	 * Create a frame of player
+	 */
 	public void setFrame() {
 		frame = new Vector3f(getPosition().getX() - 3.5f, 0, getPosition().getZ() - 7.5f);
 	}
 
+	/**
+	 * Return a frame of player
+	 * 
+	 * @return
+	 */
 	public Vector3f getFrame() {
 		return this.frame;
 	}
 
+	/**
+	 * Return name of player
+	 * 
+	 * @return name
+	 */
 	public String getType() {
 		return this.type;
 	}
 
+	/**
+	 * Get color of play
+	 * 
+	 * @return color
+	 */
 	public String getColor() {
 		return this.color;
 	}
 
+	/**
+	 * Setting current speed of player
+	 * 
+	 * @param currentSpeed
+	 */
 	public void setCurrentSpeed(float currentSpeed) {
 		this.currentSpeed = currentSpeed;
 	}
 
+	/**
+	 * Return current speed of player
+	 * 
+	 * @return current speed
+	 */
 	public float getCurrentSpeed() {
 		return this.currentSpeed;
 	}
 
+	/**
+	 * Checking the replay button is clicked or not.
+	 * 
+	 * @return boolean, true when click and put mouse on correct position
+	 */
 	public boolean isReplay() {
-		return isPressButton(-0.06, -0.3, 0.06, 0.3);
+		return isPressButton(-0.06, -0.3, -0.086, 0.14);
 	}
 
+	/**
+	 * Checking the quit button is clicked or not.
+	 * 
+	 * @return boolean, true when click and put mouse on correct position
+	 */
 	public boolean isQuit() {
-		return isPressButton(0.28, 0.05, 0.06, 0.3);
+		return isPressButton(0.28, 0.05, -0.086, 0.14);
 	}
 
 }

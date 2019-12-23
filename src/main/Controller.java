@@ -29,8 +29,7 @@ public class Controller extends WindowDisplay {
 
 	/**
 	 * 
-	 * Create player with position and scale55555`, handler, camera ,and
-	 * connectpacket
+	 * Create player with position and scale, handler, camera ,and connectpacket
 	 * 
 	 */
 	public Controller() {
