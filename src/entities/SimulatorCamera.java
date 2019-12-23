@@ -13,7 +13,7 @@ import org.lwjgl.util.vector.Vector3f;
  *
  */
 public class SimulatorCamera extends Camera {
-	private Vector3f position = new Vector3f(765, 500, 800);
+	private Vector3f position = new Vector3f(600, 500, 400);
 	private Boolean isClicked;
 	private String whatButton;
 
