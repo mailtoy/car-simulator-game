@@ -1,6 +1,6 @@
 # Car Simulator
 This project is a part of Cooperative Education at Kookmin University.
-* [Document] (https://coda.io/d/Car-Simulator_dBjPA-tyC1L)
+* ![Document] (https://coda.io/d/Car-Simulator_dBjPA-tyC1L)
 
 ##### Contributors
 1. Issaree Srisomboon / 스리솜분 이싸리 ([boranoben](https://github.com/boranorben))
